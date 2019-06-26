@@ -1,4 +1,5 @@
 package com.example.votaciones.RecyclerViews;
+import android.content.Context;
 import android.graphics.Color;
 import android.media.Image;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.votaciones.R;
 import com.example.votaciones.objetos.Planchas;
 
@@ -21,7 +23,7 @@ public class RvAdaptadorPlancha extends RecyclerView.Adapter<RvAdaptadorPlancha.
 
     List<Planchas> planchasList;
     private final OnItemClickListener onItemClickListener;
-
+    private Context context;
     public interface OnItemClickListener{
         void OnItemClick(int posicion, long id);
     }
@@ -33,6 +35,7 @@ public class RvAdaptadorPlancha extends RecyclerView.Adapter<RvAdaptadorPlancha.
     @NonNull
     @Override
     public PlanchaHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        this.context=parent.getContext();
         LayoutInflater inflater=LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.item_plancha, parent, false);
         PlanchaHolder planchaHolder = new PlanchaHolder(view);
@@ -45,7 +48,7 @@ public class RvAdaptadorPlancha extends RecyclerView.Adapter<RvAdaptadorPlancha.
         holder.tvAcronimo.setText(planchasList.get(position).getAcronimo());
         holder.tvVotos.setText("0%");
         holder.cv.setCardBackgroundColor(Color.parseColor(planchasList.get(position).getColor()));
-
+        Glide.with(context).load("http://10.0.2.2:8000/uploads/images/"+ planchasList.get(position).getImagen()).into(holder.ip);
     }
 
     @Override
@@ -61,6 +64,7 @@ public class RvAdaptadorPlancha extends RecyclerView.Adapter<RvAdaptadorPlancha.
         private Button btnIntegranes;
         private CardView cv;
         private ImageView ip;
+
 
         public PlanchaHolder(@NonNull View itemView) {
             super(itemView);
