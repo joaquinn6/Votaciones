@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <androidx.cardview.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/cvPlancha"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/ivPlancha"
+                android:layout_width="89dp"
+                android:layout_height="83dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:srcCompat="@tools:sample/avatars" />
+
+            <TextView
+                android:id="@+id/tvNombrePlancha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="Nombre Plancha"
+                app:layout_constraintStart_toEndOf="@+id/ivPlancha"
+                app:layout_constraintTop_toTopOf="@+id/ivPlancha" />
+
+            <TextView
+                android:id="@+id/tvPorcentajeVotos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="15dp"
+                android:text="100%"
+                app:layout_constraintBottom_toBottomOf="@+id/ivPlancha"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/ivPlancha" />
+
+            <Button
+                android:id="@+id/btnIntegrantes"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="Integrantes"
+                android:textColor="#EBF1EB"
+                app:layout_constraintBottom_toBottomOf="@+id/ivPlancha"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvPorcentajeVotos" />
+
+            <Button
+                android:id="@+id/btnPropuestas"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="Propuestas"
+                android:textColor="#F3F5F7"
+                app:layout_constraintBottom_toBottomOf="@+id/btnIntegrantes"
+                app:layout_constraintEnd_toStartOf="@+id/btnIntegrantes"
+                app:layout_constraintTop_toTopOf="@+id/btnIntegrantes" />
+
+            <TextView
+                android:id="@+id/tvAcronimo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="NP"
+                app:layout_constraintStart_toEndOf="@+id/ivPlancha"
+                app:layout_constraintTop_toBottomOf="@+id/tvNombrePlancha" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
