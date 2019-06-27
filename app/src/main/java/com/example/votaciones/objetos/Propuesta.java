@@ -1,6 +1,8 @@
 package com.example.votaciones.objetos;
 
-public class Propuesta {
+import java.io.Serializable;
+
+public class Propuesta implements Serializable {
     private String id;
     private String titulo;
     private String contenido;

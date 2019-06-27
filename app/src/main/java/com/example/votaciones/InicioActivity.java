@@ -4,12 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
 import com.example.votaciones.RecyclerViews.RvAdaptadorPlancha;
 import com.example.votaciones.objetos.Planchas;
 
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +23,7 @@ import retrofit2.Response;
 public class InicioActivity extends AppCompatActivity {
     private List<Planchas> planchasList = new ArrayList<>();
     private RvAdaptadorPlancha adapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +55,12 @@ public class InicioActivity extends AppCompatActivity {
             @Override
             public void OnItemClick(int posicion, long id) {
                 if(id==R.id.btnPropuestas){
-                    Toast.makeText(InicioActivity.this, "Propuestas", Toast.LENGTH_SHORT).show();
-                }
+                    Intent intent = new Intent(InicioActivity.this,PropuestasActivity.class);
+                    Bundle x = new Bundle();
+                    x.putSerializable("Propuestas", (Serializable) planchasList.get(posicion).getPropuestas());
+                    intent.putExtras(x);
+                    startActivity(intent);
+                    }
                 else{
                     Toast.makeText(InicioActivity.this, "Integrates", Toast.LENGTH_SHORT).show();
                 }

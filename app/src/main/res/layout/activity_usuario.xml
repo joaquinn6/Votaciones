@@ -59,7 +59,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/etInformacion" />
 
             <EditText
-                android:id="@+id/etContraseña"
+                android:id="@+id/etContrasena"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -72,7 +72,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
             <EditText
-                android:id="@+id/etRepetirContraseña"
+                android:id="@+id/etRepetirContrasena"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -82,7 +82,7 @@
                 android:inputType="textPassword"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/etContraseña" />
+                app:layout_constraintTop_toBottomOf="@+id/etContrasena" />
 
             <TextView
                 android:id="@+id/textView4"
@@ -91,7 +91,7 @@
                 android:layout_marginStart="8dp"
                 android:text="Redes Sociales:"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/etRepetirContraseña" />
+                app:layout_constraintTop_toBottomOf="@+id/etRepetirContrasena" />
 
             <EditText
                 android:id="@+id/etFacebook"
