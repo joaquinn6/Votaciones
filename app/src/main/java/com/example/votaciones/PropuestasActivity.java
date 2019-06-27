@@ -4,18 +4,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 
-import com.example.votaciones.RecyclerViews.RvAdapterPropuestas;
+import com.example.votaciones.RecyclerViews.RvAdaptadorPropuestas;
 import com.example.votaciones.objetos.Propuesta;
 
 import java.util.List;
 
 public class PropuestasActivity extends AppCompatActivity {
     private List<Propuesta> propuestaList;
-    private RvAdapterPropuestas adapter;
+    private RvAdaptadorPropuestas adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,11 +24,10 @@ public class PropuestasActivity extends AppCompatActivity {
         Bundle extras= getIntent().getExtras();
         if(extras!=null){
             propuestaList = (List<Propuesta>) extras.getSerializable("Propuestas");
-            adapter= new RvAdapterPropuestas(propuestaList);
+            adapter= new RvAdaptadorPropuestas(propuestaList);
             GridLayoutManager manager = new GridLayoutManager(this, 1);
             rvPropuestas.setLayoutManager(manager);
             rvPropuestas.setAdapter(adapter);
-            Toast.makeText(this, "Recibido", Toast.LENGTH_SHORT).show();
         }
     }
 }

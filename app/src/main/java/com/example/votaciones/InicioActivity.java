@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.example.votaciones.RecyclerViews.RvAdaptadorPlancha;
+import com.example.votaciones.objetos.Integrante;
 import com.example.votaciones.objetos.Planchas;
 
 
@@ -62,7 +63,18 @@ public class InicioActivity extends AppCompatActivity {
                     startActivity(intent);
                     }
                 else{
-                    Toast.makeText(InicioActivity.this, "Integrates", Toast.LENGTH_SHORT).show();
+                    List<Integrante> integranteList = new ArrayList<>();
+
+                    integranteList.add(new Integrante("Presidente", planchasList.get(posicion).getPresidente()));
+                    integranteList.add(new Integrante("Vicepresidente", planchasList.get(posicion).getVicepresidente()));
+                    integranteList.add(new Integrante("Tesorero", planchasList.get(posicion).getTesorero()));
+                    integranteList.add(new Integrante("Secretario", planchasList.get(posicion).getSecretario()));
+
+                    Intent intent = new Intent(InicioActivity.this,IntegrantesActivity.class);
+                    Bundle x = new Bundle();
+                    x.putSerializable("Integrantes", (Serializable) integranteList);
+                    intent.putExtras(x);
+                    startActivity(intent);
                 }
             }
         };

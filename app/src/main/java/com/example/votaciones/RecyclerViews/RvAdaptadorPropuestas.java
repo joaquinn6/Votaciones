@@ -13,11 +13,11 @@ import com.example.votaciones.objetos.Propuesta;
 
 import java.util.List;
 
-public class RvAdapterPropuestas extends RecyclerView.Adapter<RvAdapterPropuestas.PropuestaHolder> {
+public class RvAdaptadorPropuestas extends RecyclerView.Adapter<RvAdaptadorPropuestas.PropuestaHolder> {
 
     List<Propuesta> propuestaList;
 
-    public RvAdapterPropuestas(List<Propuesta> propuestaList) {
+    public RvAdaptadorPropuestas(List<Propuesta> propuestaList) {
         this.propuestaList = propuestaList;
     }
 
