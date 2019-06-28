@@ -5,13 +5,15 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.votaciones.RecyclerViews.RvAdaptadorPlancha;
 import com.example.votaciones.objetos.Integrante;
 import com.example.votaciones.objetos.Planchas;
-
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -24,13 +26,17 @@ import retrofit2.Response;
 public class InicioActivity extends AppCompatActivity {
     private List<Planchas> planchasList = new ArrayList<>();
     private RvAdaptadorPlancha adapter;
-
+    private String carnet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio);
 
+        Bundle extras= getIntent().getExtras();
+        if(extras!=null){
+            carnet=extras.getString("carnet");
+        }
         RecyclerView rvPlanchas = findViewById(R.id.rvPlanchas);
 
         final Call<List<Planchas>> planchas= ServicioApi.getInstancia().obtenerPlanchas();
@@ -62,7 +68,7 @@ public class InicioActivity extends AppCompatActivity {
                     intent.putExtras(x);
                     startActivity(intent);
                     }
-                else{
+                else if(id==R.id.btnIntegrantes){
                     List<Integrante> integranteList = new ArrayList<>();
 
                     integranteList.add(new Integrante("Presidente", planchasList.get(posicion).getPresidente()));
@@ -75,6 +81,30 @@ public class InicioActivity extends AppCompatActivity {
                     x.putSerializable("Integrantes", (Serializable) integranteList);
                     intent.putExtras(x);
                     startActivity(intent);
+                }else if(id==R.id.ivTwitter){
+                    if(planchasList.get(posicion).getTwitter().isEmpty() || planchasList.get(posicion).getTwitter()==null){
+
+                    }else{
+                        Uri uri = Uri.parse("http://www.twitter.com/"+planchasList.get(posicion).getTwitter());
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                        startActivity(intent);
+                    }
+                }else if(id==R.id.ivFacebook){
+                    if(planchasList.get(posicion).getFacebook().isEmpty() || planchasList.get(posicion).getFacebook()==null){
+
+                    }else {
+                        Uri uri = Uri.parse("http://www.facebook.com/" + planchasList.get(posicion).getFacebook());
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                        startActivity(intent);
+                    }
+                }else{
+                    if(planchasList.get(posicion).getInstagram().isEmpty() || planchasList.get(posicion).getInstagram()==null){
+
+                    }else {
+                        Uri uri = Uri.parse("http://www.instagram.com/" + planchasList.get(posicion).getInstagram());
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                        startActivity(intent);
+                    }
                 }
             }
         };
@@ -87,4 +117,22 @@ public class InicioActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_inicial, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.mnUsuario:
+                Intent intent = new Intent(InicioActivity.this, UsuarioActivity.class);
+                intent.putExtra("carnet", carnet);
+                startActivity(intent);
+
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

@@ -1,6 +1,8 @@
 package com.example.votaciones.RecyclerViews;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,6 +65,9 @@ public class RvAdaptadorPlancha extends RecyclerView.Adapter<RvAdaptadorPlancha.
         private Button btnIntegranes;
         private CardView cv;
         private ImageView ip;
+        private ImageView ivFacebook;
+        private ImageView ivTwitter;
+        private ImageView ivInstagram;
 
 
         public PlanchaHolder(@NonNull View itemView) {
@@ -74,6 +79,13 @@ public class RvAdaptadorPlancha extends RecyclerView.Adapter<RvAdaptadorPlancha.
             btnPropuestas=itemView.findViewById(R.id.btnPropuestas);
             cv=itemView.findViewById(R.id.cvPlancha);
             ip=itemView.findViewById(R.id.ivPlancha);
+            ivFacebook= itemView.findViewById(R.id.ivFacebook);
+            ivInstagram=itemView.findViewById(R.id.ivInstagram);
+            ivTwitter=itemView.findViewById(R.id.ivTwitter);
+
+            ivFacebook.setOnClickListener(this);
+            ivTwitter.setOnClickListener(this);
+            ivInstagram.setOnClickListener(this);
             btnPropuestas.setOnClickListener(this);
             btnIntegranes.setOnClickListener(this);
 

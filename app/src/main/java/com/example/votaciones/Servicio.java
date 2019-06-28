@@ -10,6 +10,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 public interface Servicio {
     @GET("api/plancha/mostrar")
@@ -18,4 +19,6 @@ public interface Servicio {
     @POST("api/usuario/IniciarSesion")
     Call<Respuesta> iniciarSesion(@Body Usuario usuario);
 
+    @GET("api/usuario/Buscar/{carnet}")
+    Call<Usuario> obtenerUsuarioCarnet(@Path("carnet") String carnet);
 }

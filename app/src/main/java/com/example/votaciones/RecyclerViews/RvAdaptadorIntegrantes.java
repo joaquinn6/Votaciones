@@ -46,7 +46,7 @@ public class RvAdaptadorIntegrantes extends RecyclerView.Adapter<RvAdaptadorInte
     }
 
     public interface OnItemClickListener{
-        void OnItemClick(int posicion);
+        void OnItemClick(int posicion, long id);
     }
 
     public RvAdaptadorIntegrantes(List<Integrante> integrantesList, OnItemClickListener onItemClickListener) {
@@ -55,10 +55,14 @@ public class RvAdaptadorIntegrantes extends RecyclerView.Adapter<RvAdaptadorInte
     }
 
     public class IntegranteHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        ImageView ivIntegrante;
-        TextView tvNombre;
-        TextView tvCarrera;
-        TextView tvPuesto;
+        private ImageView ivIntegrante;
+        private TextView tvNombre;
+        private TextView tvCarrera;
+        private TextView tvPuesto;
+        private ImageView ivFacebook;
+        private ImageView ivTwitter;
+        private ImageView ivInstagram;
+
 
         public IntegranteHolder(@NonNull View itemView) {
             super(itemView);
@@ -66,12 +70,19 @@ public class RvAdaptadorIntegrantes extends RecyclerView.Adapter<RvAdaptadorInte
             tvNombre= itemView.findViewById(R.id.tvNombreIntegrante);
             tvCarrera= itemView.findViewById(R.id.tvCarrera);
             tvPuesto=itemView.findViewById(R.id.tvPuesto);
+            ivFacebook= itemView.findViewById(R.id.ivFacebook);
+            ivInstagram=itemView.findViewById(R.id.ivInstagram);
+            ivTwitter=itemView.findViewById(R.id.ivTwitter);
+
+            ivFacebook.setOnClickListener(this);
+            ivTwitter.setOnClickListener(this);
+            ivInstagram.setOnClickListener(this);
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            onItemClickListener.OnItemClick(getAdapterPosition());
+            onItemClickListener.OnItemClick(getAdapterPosition(), view.getId());
         }
     }
 }
