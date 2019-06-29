@@ -130,8 +130,11 @@ public class InicioActivity extends AppCompatActivity {
                 Intent intent = new Intent(InicioActivity.this, UsuarioActivity.class);
                 intent.putExtra("carnet", carnet);
                 startActivity(intent);
-
                 break;
+            case R.id.mnVoto:
+                Intent intent1 =new Intent(InicioActivity.this,VotarActivity.class);
+                intent1.putExtra("carnet",carnet);
+                startActivity(intent1);
         }
         return super.onOptionsItemSelected(item);
     }

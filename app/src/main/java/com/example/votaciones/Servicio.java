@@ -3,6 +3,7 @@ package com.example.votaciones;
 import com.example.votaciones.objetos.Planchas;
 import com.example.votaciones.objetos.Respuesta;
 import com.example.votaciones.objetos.Usuario;
+import com.example.votaciones.objetos.Voto;
 
 import java.util.List;
 
@@ -21,4 +22,19 @@ public interface Servicio {
 
     @GET("api/usuario/Buscar/{carnet}")
     Call<Usuario> obtenerUsuarioCarnet(@Path("carnet") String carnet);
+
+    @POST("api/usuario/Editar")
+    Call<String>editarUsuario(@Body Usuario usuario);
+
+    @POST("api/votar/guardar")
+    Call<Respuesta> votar(@Body Voto voto);
+
+    @POST("api/votar/votante")
+    Call<String> votante(@Body Usuario usuario);
+
+    @POST("api/votar/verificar")
+    Call<Respuesta> verficarVotante(@Body Usuario usuario);
+
+
+
 }

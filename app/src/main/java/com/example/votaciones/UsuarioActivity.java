@@ -2,7 +2,10 @@ package com.example.votaciones;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -59,5 +62,61 @@ public class UsuarioActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_usuario, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        final EditText etinformacion = findViewById(R.id.etInformacion);
+        EditText etContrasena = findViewById(R.id.etContrasena);
+        EditText etRepetirContrasena = findViewById(R.id.etRepetirContrasena);
+        final EditText etFacebook = findViewById(R.id.etFacebook);
+        final EditText etTwitter = findViewById(R.id.etTwitter);
+        final EditText etInstagram = findViewById(R.id.etInstagram);
+        final TextView tvNombre = findViewById(R.id.etNombre);
+        boolean contra=true;
+        switch (item.getItemId()){
+            case R.id.mnAceptar:
+                if (!(etContrasena.getText().toString().isEmpty() && etRepetirContrasena.getText().toString().isEmpty())) {
+                    if (!(etContrasena.getText().toString().equals(etRepetirContrasena.getText().toString())))
+                    {
+                        etContrasena.setError("Contraseñas no coiniciden");
+                        etRepetirContrasena.setError("Contraseñas no coiniciden");
+                        contra=false;
+                    }
+                }
+                if (contra){
+
+                Usuario usuario=new Usuario("",tvNombre.getText().toString(),"","",etContrasena.getText().toString(),carnet,"","","",etinformacion.getText().toString(),true,"","",etTwitter.getText().toString(),etInstagram.getText().toString(),etFacebook.getText().toString(),false);
+                Call<String> user = ServicioApi.getInstancia().editarUsuario(usuario);
+            user.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if(response.isSuccessful()){
+                    Toast.makeText(UsuarioActivity.this, "Cambios Guardados", Toast.LENGTH_SHORT).show();
+                }else
+                    Toast.makeText(UsuarioActivity.this, "Sorry", Toast.LENGTH_SHORT).show();
+            }
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    Toast.makeText(UsuarioActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+                }
+                break;
+            case R.id.mnCancelar:
+                onBackPressed();
+                break;
+            case R.id.mnLogout:
+                Intent intent = new Intent(UsuarioActivity.this, InicioActivity.class);
+                startActivity(intent);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
