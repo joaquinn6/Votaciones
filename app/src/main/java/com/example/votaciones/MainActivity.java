@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
                                 intent[0] = new Intent(MainActivity.this, InicioActivity.class);
                                 intent[0].putExtra("carnet", etCarnet.getText().toString());
                                 startActivity(intent[0]);
+                                finish();
                             }else{
                                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                                 builder.setTitle("Error");

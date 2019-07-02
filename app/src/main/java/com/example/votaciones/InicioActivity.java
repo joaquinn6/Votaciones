@@ -33,6 +33,35 @@ public class InicioActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio);
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_inicial, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.mnUsuario:
+                Intent intent = new Intent(InicioActivity.this, UsuarioActivity.class);
+                intent.putExtra("carnet", carnet);
+                startActivity(intent);
+                break;
+            case R.id.mnVoto:
+                Intent intent1 =new Intent(InicioActivity.this,VotarActivity.class);
+                intent1.putExtra("carnet",carnet);
+                startActivity(intent1);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        planchasList.clear();
         Bundle extras= getIntent().getExtras();
         if(extras!=null){
             carnet=extras.getString("carnet");
@@ -67,7 +96,7 @@ public class InicioActivity extends AppCompatActivity {
                     x.putSerializable("Propuestas", (Serializable) planchasList.get(posicion).getPropuestas());
                     intent.putExtras(x);
                     startActivity(intent);
-                    }
+                }
                 else if(id==R.id.btnIntegrantes){
                     List<Integrante> integranteList = new ArrayList<>();
 
@@ -114,28 +143,5 @@ public class InicioActivity extends AppCompatActivity {
         rvPlanchas.setLayoutManager(manager);
         rvPlanchas.setAdapter(adapter);
 
-
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_inicial, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.mnUsuario:
-                Intent intent = new Intent(InicioActivity.this, UsuarioActivity.class);
-                intent.putExtra("carnet", carnet);
-                startActivity(intent);
-                break;
-            case R.id.mnVoto:
-                Intent intent1 =new Intent(InicioActivity.this,VotarActivity.class);
-                intent1.putExtra("carnet",carnet);
-                startActivity(intent1);
-        }
-        return super.onOptionsItemSelected(item);
     }
 }

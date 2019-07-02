@@ -12,7 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.votaciones.objetos.Planchas;
 import com.example.votaciones.objetos.Usuario;
 
 import retrofit2.Call;
