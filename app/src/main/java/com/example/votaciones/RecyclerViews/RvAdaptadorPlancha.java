@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.example.votaciones.R;
 import com.example.votaciones.objetos.Planchas;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class RvAdaptadorPlancha extends RecyclerView.Adapter<RvAdaptadorPlancha.PlanchaHolder> {
@@ -47,7 +48,8 @@ public class RvAdaptadorPlancha extends RecyclerView.Adapter<RvAdaptadorPlancha.
     public void onBindViewHolder(@NonNull PlanchaHolder holder, int position) {
         holder.tvNombrePlancha.setText(planchasList.get(position).getNombrePlancha());
         holder.tvAcronimo.setText(planchasList.get(position).getAcronimo());
-        holder.tvVotos.setText("0%");
+        DecimalFormat format= new DecimalFormat("#.##");
+        holder.tvVotos.setText(String.valueOf(format.format(planchasList.get(position).getVotos()))+"%");
         holder.cv.setCardBackgroundColor(Color.parseColor(planchasList.get(position).getColor()));
         Glide.with(context).load("http://10.0.2.2:8000/uploads/images/"+ planchasList.get(position).getImagen()).into(holder.ip);
     }

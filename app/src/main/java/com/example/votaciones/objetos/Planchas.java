@@ -16,8 +16,9 @@ public class Planchas {
     private String facebook;
     private String acronimo;
     private List<Propuesta> propuestas;
+    private float votos;
 
-    public Planchas(String id, Usuario presidente, Usuario vicepresidente, Usuario secretario, Usuario tesorero, String color, String nombrePlancha, String imagen, String twitter, String instagram, String facebook, String acronimo, List<Propuesta> propuestas) {
+    public Planchas(String id, Usuario presidente, Usuario vicepresidente, Usuario secretario, Usuario tesorero, String color, String nombrePlancha, String imagen, String twitter, String instagram, String facebook, String acronimo, List<Propuesta> propuestas, float votos) {
         this.id = id;
         this.presidente = presidente;
         this.vicepresidente = vicepresidente;
@@ -31,9 +32,18 @@ public class Planchas {
         this.facebook = facebook;
         this.acronimo = acronimo;
         this.propuestas = propuestas;
+        this.votos = votos;
     }
 
     public Planchas() {
+    }
+
+    public float getVotos() {
+        return votos;
+    }
+
+    public void setVotos(float votos) {
+        this.votos = votos;
     }
 
     public String getId() {
