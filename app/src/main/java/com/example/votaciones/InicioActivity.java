@@ -3,6 +3,7 @@ package com.example.votaciones;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -66,6 +67,17 @@ public class InicioActivity extends AppCompatActivity {
         if(extras!=null){
             carnet=extras.getString("carnet");
         }
+
+        final SwipeRefreshLayout srlRecargar= findViewById(R.id.srlRecargar);
+
+        srlRecargar.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                onResume();
+                srlRecargar.setRefreshing(false);
+            }
+        });
+
         RecyclerView rvPlanchas = findViewById(R.id.rvPlanchas);
 
         final Call<List<Planchas>> planchas= ServicioApi.getInstancia().obtenerPlanchas();
@@ -144,4 +156,7 @@ public class InicioActivity extends AppCompatActivity {
         rvPlanchas.setAdapter(adapter);
 
     }
+
+
+
 }

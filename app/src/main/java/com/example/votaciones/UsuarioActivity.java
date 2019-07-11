@@ -3,6 +3,7 @@ package com.example.votaciones;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,6 +21,8 @@ import retrofit2.Response;
 
 public class UsuarioActivity extends AppCompatActivity {
     private String carnet;
+    private final String SESION="VariabesDeSesion";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,8 +115,12 @@ public class UsuarioActivity extends AppCompatActivity {
                 onBackPressed();
                 break;
             case R.id.mnLogout:
-                Intent intent = new Intent(UsuarioActivity.this, InicioActivity.class);
+                SharedPreferences.Editor editor = getSharedPreferences(SESION, MODE_PRIVATE).edit();
+                editor.clear();
+                editor.apply();
+                Intent intent = new Intent(UsuarioActivity.this, MainActivity.class);
                 startActivity(intent);
+                finish();
                 break;
         }
         return super.onOptionsItemSelected(item);
