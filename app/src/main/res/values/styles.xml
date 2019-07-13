@@ -6,6 +6,6 @@
         <item name="colorPrimary">@color/prueba</item>
         <item name="colorPrimaryDark">@color/prueba2</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:navigationBarColor">@color/prueba</item>
     </style>
-
 </resources>

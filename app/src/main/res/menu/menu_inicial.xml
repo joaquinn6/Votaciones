@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:title="Votar" android:id="@+id/mnVoto" android:icon="@drawable/ic_vote" app:showAsAction="always"></item>
-    <item android:title="Nuevo usuario" android:id="@+id/mnUsuario" android:icon="@drawable/ic_user" app:showAsAction="always"></item>
+    <item android:title="Votar" android:id="@+id/mnVoto" android:icon="@drawable/ic_votar" app:showAsAction="always"></item>
+    <item android:title="Nuevo usuario" android:id="@+id/mnUsuario" android:icon="@drawable/ic_usuario" app:showAsAction="always"></item>
 
 </menu>

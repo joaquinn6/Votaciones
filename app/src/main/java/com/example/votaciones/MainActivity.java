@@ -35,44 +35,32 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         etCarnet = findViewById(R.id.etCarnet);
         etContrasena = findViewById(R.id.etContrasena);
-        SharedPreferences spSesion=getSharedPreferences(SESION, MODE_PRIVATE);
-        Map<String, ?> recuperarTexto = spSesion.getAll();
-        if(!((Map) recuperarTexto).isEmpty()){
-            usuario.setCarnet(spSesion.getString("carnet", null));
-            usuario.setContraseña(spSesion.getString("contraseña",null));
-            IniciarSesion();
-        }else{
+        Button btnSesion = findViewById(R.id.btnSesion);
+        TextView tvCrearCenta = findViewById(R.id.tvCrearCuenta);
+        btnSesion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                usuario.setCarnet(etCarnet.getText().toString());
+                usuario.setContraseña(etContrasena.getText().toString());
+                SharedPreferences.Editor editor = getSharedPreferences(SESION, MODE_PRIVATE).edit();
+                editor.putString("carnet", etCarnet.getText().toString());
+                editor.putString("contraseña", etContrasena.getText().toString());
+                editor.apply();
+                IniciarSesion();
+            }
+        });
 
-            Button btnSesion = findViewById(R.id.btnSesion);
-            TextView tvCrearCenta = findViewById(R.id.tvCrearCuenta);
-
-            btnSesion.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    usuario.setCarnet(etCarnet.getText().toString());
-                    usuario.setContraseña(etContrasena.getText().toString());
-                    SharedPreferences.Editor editor = getSharedPreferences(SESION, MODE_PRIVATE).edit();
-                    editor.putString("carnet", etCarnet.getText().toString());
-                    editor.putString("contraseña", etContrasena.getText().toString());
-                    editor.apply();
-                    IniciarSesion();
-                }
-            });
-
-
-            tvCrearCenta.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Uri uri = Uri.parse("http://www.google.com/");
-                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                    startActivity(intent);
-                }
-            });
-        }
-
-
+        tvCrearCenta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Uri uri = Uri.parse("http://www.google.com/");
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+            }
+        });
     }
 
     public void IniciarSesion(){

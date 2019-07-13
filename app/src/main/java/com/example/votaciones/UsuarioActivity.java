@@ -118,8 +118,7 @@ public class UsuarioActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = getSharedPreferences(SESION, MODE_PRIVATE).edit();
                 editor.clear();
                 editor.apply();
-                Intent intent = new Intent(UsuarioActivity.this, MainActivity.class);
-                startActivity(intent);
+                startActivity(new Intent(getBaseContext(), MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
                 finish();
                 break;
         }
