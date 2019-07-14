@@ -1,8 +1,9 @@
 package com.example.votaciones.objetos;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Planchas {
+public class Planchas implements Serializable {
     private String id;
     private Usuario presidente;
     private Usuario vicepresidente;

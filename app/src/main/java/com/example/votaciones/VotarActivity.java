@@ -108,6 +108,7 @@ public class VotarActivity extends AppCompatActivity {
                                                                     Toast.makeText(VotarActivity.this, "Gracias por votar", Toast.LENGTH_SHORT).show();
                                                                     Intent intent = new Intent(VotarActivity.this, InicioActivity.class);
                                                                     startActivity(intent);
+                                                                    finish();
                                                                 }else
                                                                     Toast.makeText(VotarActivity.this, "No se pudo realizar el voto, intente de nuevo por favor.", Toast.LENGTH_SHORT).show();
                                                             }

@@ -54,6 +54,14 @@ public class InicioActivity extends AppCompatActivity {
                 Intent intent1 =new Intent(InicioActivity.this,VotarActivity.class);
                 intent1.putExtra("carnet",carnet);
                 startActivity(intent1);
+                break;
+            case R.id.mnGrafica:
+                Intent intent2= new Intent(InicioActivity.this,GraficaActivity.class);
+                Bundle x = new Bundle();
+                x.putSerializable("Planchas", (Serializable) planchasList);
+                intent2.putExtras(x);
+                startActivity(intent2);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

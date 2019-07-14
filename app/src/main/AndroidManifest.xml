@@ -12,7 +12,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".CargaActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name=".GraficaActivity">
+        </activity>
+        <activity
+            android:name=".CargaActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,10 +26,9 @@
         <activity android:name=".PropuestasActivity" />
         <activity android:name=".IntegrantesActivity" />
         <activity android:name=".VotarActivity" />
-        <activity android:name=".InicioActivity"></activity>
+        <activity android:name=".InicioActivity" />
         <activity android:name=".UsuarioActivity" />
-        <activity android:name=".MainActivity">
-        </activity>
+        <activity android:name=".MainActivity"></activity>
     </application>
 
 </manifest>
