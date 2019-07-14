@@ -16,8 +16,6 @@ import android.widget.Toast;
 import com.example.votaciones.objetos.Respuesta;
 import com.example.votaciones.objetos.Usuario;
 
-import java.util.Map;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

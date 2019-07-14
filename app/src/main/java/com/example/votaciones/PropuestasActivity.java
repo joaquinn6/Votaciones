@@ -15,6 +15,7 @@ public class PropuestasActivity extends AppCompatActivity {
     private List<Propuesta> propuestaList;
     private RvAdaptadorPropuestas adapter;
 
+    private String color;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,7 +25,8 @@ public class PropuestasActivity extends AppCompatActivity {
         Bundle extras= getIntent().getExtras();
         if(extras!=null){
             propuestaList = (List<Propuesta>) extras.getSerializable("Propuestas");
-            adapter= new RvAdaptadorPropuestas(propuestaList);
+            color=extras.getString("color");
+            adapter= new RvAdaptadorPropuestas(propuestaList, color);
             GridLayoutManager manager = new GridLayoutManager(this, 1);
             rvPropuestas.setLayoutManager(manager);
             rvPropuestas.setAdapter(adapter);

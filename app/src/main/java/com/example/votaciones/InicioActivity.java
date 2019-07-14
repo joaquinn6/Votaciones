@@ -115,6 +115,7 @@ public class InicioActivity extends AppCompatActivity {
                     Bundle x = new Bundle();
                     x.putSerializable("Propuestas", (Serializable) planchasList.get(posicion).getPropuestas());
                     intent.putExtras(x);
+                    intent.putExtra("color",planchasList.get(posicion).getColor());
                     startActivity(intent);
                 }
                 else if(id==R.id.btnIntegrantes){

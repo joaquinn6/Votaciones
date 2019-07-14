@@ -8,13 +8,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Toast;
 
 import com.example.votaciones.RecyclerViews.RvAdaptadorIntegrantes;
-import com.example.votaciones.RecyclerViews.RvAdaptadorPropuestas;
 import com.example.votaciones.objetos.Integrante;
-import com.example.votaciones.objetos.Propuesta;
 
 import java.util.ArrayList;
 import java.util.List;

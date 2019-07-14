@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.example.votaciones.RecyclerViews.RVAdaptadorVotar;
 import com.example.votaciones.objetos.Planchas;
 import com.example.votaciones.objetos.Respuesta;
