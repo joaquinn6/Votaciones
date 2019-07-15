@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.votaciones.R;
+import com.example.votaciones.ServicioApi;
 import com.example.votaciones.objetos.Planchas;
 
 import java.text.DecimalFormat;
@@ -49,7 +50,7 @@ public class RvAdaptadorPlancha extends RecyclerView.Adapter<RvAdaptadorPlancha.
         DecimalFormat format= new DecimalFormat("#.##");
         holder.tvVotos.setText(String.valueOf(format.format(planchasList.get(position).getVotos()))+"%");
         holder.cv.setCardBackgroundColor(Color.parseColor(planchasList.get(position).getColor()));
-        Glide.with(context).load("http://10.0.2.2:8000/uploads/images/"+ planchasList.get(position).getImagen()).into(holder.ip);
+        Glide.with(context).load(ServicioApi.HTTP+"/uploads/images/"+ planchasList.get(position).getImagen()).into(holder.ip);
     }
 
     @Override

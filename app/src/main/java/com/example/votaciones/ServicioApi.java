@@ -5,11 +5,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ServicioApi {
     public static Servicio INSTANCIA;
-
+    public static String HTTP="http://192.168.1.4:8000";
     public static Servicio getInstancia(){
         if(INSTANCIA==null){
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("http://10.0.2.2:8000")
+                    .baseUrl(HTTP)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
             INSTANCIA = retrofit.create(Servicio.class);

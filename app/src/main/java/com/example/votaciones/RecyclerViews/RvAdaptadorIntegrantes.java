@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.votaciones.R;
+import com.example.votaciones.ServicioApi;
 import com.example.votaciones.objetos.Integrante;
 
 import java.util.List;
@@ -37,7 +38,7 @@ public class RvAdaptadorIntegrantes extends RecyclerView.Adapter<RvAdaptadorInte
         holder.tvPuesto.setText(integrantesList.get(position).getPuesto());
         holder.tvCarrera.setText(integrantesList.get(position).getUsuario().getCarrera());
         holder.tvNombre.setText(integrantesList.get(position).getUsuario().getNombre()+" "+ integrantesList.get(position).getUsuario().getApellido());
-        Glide.with(context).load("http://10.0.2.2:8000/uploads/images/"+ integrantesList.get(position).getUsuario().getFoto()).into(holder.ivIntegrante);
+        Glide.with(context).load(ServicioApi.HTTP+"/uploads/images/"+ integrantesList.get(position).getUsuario().getFoto()).into(holder.ivIntegrante);
     }
 
     @Override

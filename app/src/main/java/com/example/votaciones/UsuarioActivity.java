@@ -45,7 +45,7 @@ public class UsuarioActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Usuario> call, Response<Usuario> response) {
                 if(response.isSuccessful()){
-                    Glide.with(UsuarioActivity.this).load("http://10.0.2.2:8000/uploads/images/"+ response.body().getFoto()).into(ivUsuario);
+                    Glide.with(UsuarioActivity.this).load(ServicioApi.HTTP+"/uploads/images/"+ response.body().getFoto()).into(ivUsuario);
 
                     etinformacion.setText(response.body().getAcercade());
                     etFacebook.setText(response.body().getFacebook());
