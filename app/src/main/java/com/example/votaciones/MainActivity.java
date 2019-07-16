@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         btnSesion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!(etCarnet.getText().toString().isEmpty() && etContrasena.getText().toString().isEmpty())){
+                if(!(etCarnet.getText().toString().isEmpty() || etContrasena.getText().toString().isEmpty())){
                     usuario.setCarnet(etCarnet.getText().toString());
                     usuario.setContraseña(etContrasena.getText().toString());
                     SharedPreferences.Editor editor = getSharedPreferences(SESION, MODE_PRIVATE).edit();
