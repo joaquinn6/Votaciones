@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -15,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.votaciones.R;
+import com.example.votaciones.ServicioApi;
 import com.example.votaciones.objetos.Planchas;
 
 import java.util.List;
@@ -48,7 +48,7 @@ public class RVAdaptadorVotar extends RecyclerView.Adapter<RVAdaptadorVotar.Vota
     public void onBindViewHolder(@NonNull VotarHolder holder, int position) {
         holder.tvNombrePlancha.setText(planchasList.get(position).getAcronimo());
         holder.cvVotar.setCardBackgroundColor(Color.parseColor(planchasList.get(position).getColor()));
-        Glide.with(context).load("http://10.0.2.2:8000/uploads/images/"+ planchasList.get(position).getImagen()).into(holder.ivPlancha);
+        Glide.with(context).load(ServicioApi.HTTP +"/uploads/images/"+ planchasList.get(position).getImagen()).into(holder.ivPlancha);
     }
 
     @Override

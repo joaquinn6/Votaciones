@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.votaciones.R;
 import com.example.votaciones.objetos.Propuesta;
 
-import java.util.Calendar;
 import java.util.List;
 
 public class RvAdaptadorPropuestas extends RecyclerView.Adapter<RvAdaptadorPropuestas.PropuestaHolder> {

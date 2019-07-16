@@ -1,5 +1,6 @@
 package com.example.votaciones;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -39,7 +40,7 @@ public class UsuarioActivity extends AppCompatActivity {
     private String carnet;
     private final String SESION="VariabesDeSesion";
     private String fotoguardada;
-    private int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE=1;
+    private static int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE=1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,39 +87,21 @@ public class UsuarioActivity extends AppCompatActivity {
         ivUsuario.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int permissionCheck = ContextCompat.checkSelfPermission(UsuarioActivity.this,
-                        Manifest.permission.READ_EXTERNAL_STORAGE);
-                if (ContextCompat.checkSelfPermission(UsuarioActivity.this,
-                        Manifest.permission.READ_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED) {
+                int permissionCheck = ContextCompat.checkSelfPermission(UsuarioActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE);
 
-                    // Should we show an explanation?
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(UsuarioActivity.this,
-                            Manifest.permission.READ_EXTERNAL_STORAGE)) {
-
-                        // Show an expanation to the user *asynchronously* -- don't block
-                        // this thread waiting for the user's response! After the user
-                        // sees the explanation, try again to request the permission.
-
+                if (ContextCompat.checkSelfPermission(UsuarioActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(UsuarioActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                        ActivityCompat.requestPermissions(UsuarioActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
                     } else {
-
-                        // No explanation needed, we can request the permission.
-
-                        ActivityCompat.requestPermissions(UsuarioActivity.this,
-                                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                                MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
-
-                        // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                        // app-defined int constant. The callback method gets the
-                        // result of the request.
+                        ActivityCompat.requestPermissions(UsuarioActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
                     }
+                }else {
+                    Intent intent = new Intent(Intent.ACTION_PICK);
+                    intent.setType("image/*");
+                    String[] mimeTypes = {"image/jpeg", "image/png"};
+                    intent.putExtra(Intent.EXTRA_MIME_TYPES,mimeTypes);
+                    startActivityForResult(intent,1234);
                 }
-
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType("image/*");
-                String[] mimeTypes = {"image/jpeg", "image/png"};
-                intent.putExtra(Intent.EXTRA_MIME_TYPES,mimeTypes);
-                startActivityForResult(intent,1234);
             }
         });
     }
@@ -223,4 +206,31 @@ public class UsuarioActivity extends AppCompatActivity {
             }
         }
     }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+            switch (requestCode) {
+                case 1: {
+                    // If request is cancelled, the result arrays are empty.
+                    if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        Intent intent = new Intent(Intent.ACTION_PICK);
+                        intent.setType("image/*");
+                        String[] mimeTypes = {"image/jpeg", "image/png"};
+                        intent.putExtra(Intent.EXTRA_MIME_TYPES,mimeTypes);
+                        startActivityForResult(intent,1234);
+                    } else {
+
+                        // permission denied, boo! Disable the
+                        // functionality that depends on this permission.
+                    }
+                    return;
+                }
+
+                // other 'case' lines to check for other
+                // permissions this app might request
+            }
+
+        }
 }
