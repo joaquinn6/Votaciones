@@ -28,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText etCarnet;
     private EditText etContrasena;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,13 +40,15 @@ public class MainActivity extends AppCompatActivity {
         btnSesion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                usuario.setCarnet(etCarnet.getText().toString());
-                usuario.setContraseña(etContrasena.getText().toString());
-                SharedPreferences.Editor editor = getSharedPreferences(SESION, MODE_PRIVATE).edit();
-                editor.putString("carnet", etCarnet.getText().toString());
-                editor.putString("contraseña", etContrasena.getText().toString());
-                editor.apply();
-                IniciarSesion();
+                if(!(etCarnet.getText().toString().isEmpty() && etContrasena.getText().toString().isEmpty())){
+                    usuario.setCarnet(etCarnet.getText().toString());
+                    usuario.setContraseña(etContrasena.getText().toString());
+                    SharedPreferences.Editor editor = getSharedPreferences(SESION, MODE_PRIVATE).edit();
+                    editor.putString("carnet", etCarnet.getText().toString());
+                    editor.putString("contraseña", etContrasena.getText().toString());
+                    editor.apply();
+                    IniciarSesion();
+                }
             }
         });
 
