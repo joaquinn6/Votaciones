@@ -1,16 +1,22 @@
 package com.example.votaciones;
 
+import com.example.votaciones.objetos.Foto;
 import com.example.votaciones.objetos.Planchas;
 import com.example.votaciones.objetos.Respuesta;
 import com.example.votaciones.objetos.Usuario;
 import com.example.votaciones.objetos.Voto;
+import com.google.gson.Gson;
 
 import java.util.List;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 
 public interface Servicio {
@@ -35,6 +41,7 @@ public interface Servicio {
     @POST("api/votar/verificar")
     Call<Respuesta> verficarVotante(@Body Usuario usuario);
 
-
-
+    @Multipart
+    @POST("api/usuario/foto")
+    Call<Foto> subirFoto(@Part MultipartBody.Part imagen);
 }
