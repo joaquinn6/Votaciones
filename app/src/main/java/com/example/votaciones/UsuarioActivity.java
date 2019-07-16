@@ -40,7 +40,6 @@ public class UsuarioActivity extends AppCompatActivity {
     private String carnet;
     private final String SESION="VariabesDeSesion";
     private String fotoguardada;
-    private static int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE=1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

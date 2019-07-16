@@ -147,7 +147,7 @@ public class InicioActivity extends AppCompatActivity {
                         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                         startActivity(intent);
                     }
-                }else{
+                }else if(id==R.id.ivInstagram){
                     if(planchasList.get(posicion).getInstagram().isEmpty() || planchasList.get(posicion).getInstagram()==null){
 
                     }else {
@@ -155,6 +155,19 @@ public class InicioActivity extends AppCompatActivity {
                         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                         startActivity(intent);
                     }
+                }else{
+                    List<Integrante> integranteList = new ArrayList<>();
+
+                    integranteList.add(new Integrante("Presidente", planchasList.get(posicion).getPresidente()));
+                    integranteList.add(new Integrante("Vicepresidente", planchasList.get(posicion).getVicepresidente()));
+                    integranteList.add(new Integrante("Tesorero", planchasList.get(posicion).getTesorero()));
+                    integranteList.add(new Integrante("Secretario", planchasList.get(posicion).getSecretario()));
+
+                    Intent intent = new Intent(InicioActivity.this,IntegrantesActivity.class);
+                    Bundle x = new Bundle();
+                    x.putSerializable("Integrantes", (Serializable) integranteList);
+                    intent.putExtras(x);
+                    startActivity(intent);
                 }
             }
         };

@@ -89,6 +89,7 @@ public class RvAdaptadorPlancha extends RecyclerView.Adapter<RvAdaptadorPlancha.
             ivInstagram.setOnClickListener(this);
             btnPropuestas.setOnClickListener(this);
             btnIntegranes.setOnClickListener(this);
+            itemView.setOnClickListener(this);
 
         }
 
