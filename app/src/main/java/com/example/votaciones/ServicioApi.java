@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ServicioApi {
     public static Servicio INSTANCIA;
-    public static String HTTP="http://192.168.0.120:8000";
+    public static String HTTP="http://192.168.164.113:8000";
 //    public static String HTTP="http://10.0.2.2:8000";
 
     public static Servicio getInstancia(){

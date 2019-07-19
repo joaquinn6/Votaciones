@@ -106,6 +106,7 @@ public class VotarActivity extends AppCompatActivity {
                                                                 if (response.isSuccessful()){
                                                                     Toast.makeText(VotarActivity.this, "Gracias por votar", Toast.LENGTH_SHORT).show();
                                                                     Intent intent = new Intent(VotarActivity.this, InicioActivity.class);
+                                                                    intent.putExtra("carnet", carnet);
                                                                     startActivity(intent);
                                                                     finish();
                                                                 }else
