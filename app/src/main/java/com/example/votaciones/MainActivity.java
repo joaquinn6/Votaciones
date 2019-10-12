@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,6 +16,10 @@ import android.widget.Toast;
 
 import com.example.votaciones.objetos.Respuesta;
 import com.example.votaciones.objetos.Usuario;
+
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -42,10 +47,13 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(!(etCarnet.getText().toString().isEmpty() || etContrasena.getText().toString().isEmpty())){
                     usuario.setCarnet(etCarnet.getText().toString());
-                    usuario.setContraseña(etContrasena.getText().toString());
+                    usuario.setContraseña(md5(etContrasena.getText().toString()));
                     SharedPreferences.Editor editor = getSharedPreferences(SESION, MODE_PRIVATE).edit();
                     editor.putString("carnet", etCarnet.getText().toString());
-                    editor.putString("contraseña", etContrasena.getText().toString());
+                    editor.putString("contraseña", md5(etContrasena.getText().toString()));
+                    Toast.makeText(MainActivity.this, md5(etContrasena.getText().toString()), Toast.LENGTH_SHORT).show();
+                    String TAG="";
+                    Log.e(TAG, md5(etContrasena.getText().toString()));
                     editor.apply();
                     IniciarSesion();
                 }
@@ -61,7 +69,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
+    public String md5(String md5) {
+        try {
+            java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
+            byte[] array = md.digest(md5.getBytes("UTF-8"));
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < array.length; ++i) {
+                sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1,3));
+            }
+            return sb.toString();
+        } catch (java.security.NoSuchAlgorithmException e) {
+        } catch(UnsupportedEncodingException ex){
+        }
+        return null;
+    }
     public void IniciarSesion(){
         Call<Respuesta> respuesta=ServicioApi.getInstancia().iniciarSesion(usuario);
         respuesta.enqueue(new Callback<Respuesta>() {
