@@ -132,7 +132,7 @@ public class UsuarioActivity extends AppCompatActivity {
                     }
                 }
                 if (contra){
-                    Usuario usuario=new Usuario("",tvNombre.getText().toString(),"","",etContrasena.getText().toString(),carnet,"",fotoguardada,"",etinformacion.getText().toString(),true,"","",etTwitter.getText().toString(),etInstagram.getText().toString(),etFacebook.getText().toString(),false);
+                    Usuario usuario=new Usuario("",tvNombre.getText().toString(),"","",etContrasena.getText().toString(),carnet,"",fotoguardada,"",etinformacion.getText().toString(),true,"","",etTwitter.getText().toString(),etInstagram.getText().toString(),etFacebook.getText().toString(),false,"");
                     Call<String> user = ServicioApi.getInstancia().editarUsuario(usuario);
                     user.enqueue(new Callback<String>() {
                         @Override

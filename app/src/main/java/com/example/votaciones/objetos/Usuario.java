@@ -20,8 +20,9 @@ public class Usuario implements Serializable {
     private String instagram;
     private String facebook;
     private boolean voto;
+    private String pin;
 
-    public Usuario(String id, String nombre, String apellido, String correo, String contraseña, String carnet, String carrera, String foto, String huella, String acercade, boolean verificacion, String codigo, String fechacaduca, String twitter, String instagram, String facebook, boolean voto) {
+    public Usuario(String id, String nombre, String apellido, String correo, String contraseña, String carnet, String carrera, String foto, String huella, String acercade, boolean verificacion, String codigo, String fechacaduca, String twitter, String instagram, String facebook, boolean voto, String pin) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -39,9 +40,18 @@ public class Usuario implements Serializable {
         this.instagram = instagram;
         this.facebook = facebook;
         this.voto = voto;
+        this.pin = pin;
     }
 
     public Usuario() {
+    }
+
+    public String getPin() {
+        return pin;
+    }
+
+    public void setPin(String pin) {
+        this.pin = pin;
     }
 
     public String getId() {

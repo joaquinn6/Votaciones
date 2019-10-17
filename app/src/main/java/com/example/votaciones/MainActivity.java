@@ -18,8 +18,7 @@ import com.example.votaciones.objetos.Respuesta;
 import com.example.votaciones.objetos.Usuario;
 
 import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -51,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
                     SharedPreferences.Editor editor = getSharedPreferences(SESION, MODE_PRIVATE).edit();
                     editor.putString("carnet", etCarnet.getText().toString());
                     editor.putString("contraseña", md5(etContrasena.getText().toString()));
-                    Toast.makeText(MainActivity.this, md5(etContrasena.getText().toString()), Toast.LENGTH_SHORT).show();
                     String TAG="";
                     Log.e(TAG, md5(etContrasena.getText().toString()));
                     editor.apply();
@@ -63,9 +61,10 @@ public class MainActivity extends AppCompatActivity {
         tvCrearCenta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Uri uri = Uri.parse("http://www.google.com/");
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                startActivity(intent);
+
+                intent[0] = new Intent(MainActivity.this, CrearUsuarioActivity.class);
+                startActivity(intent[0]);
+                finish();
             }
         });
     }

@@ -5,12 +5,10 @@ import com.example.votaciones.objetos.Planchas;
 import com.example.votaciones.objetos.Respuesta;
 import com.example.votaciones.objetos.Usuario;
 import com.example.votaciones.objetos.Voto;
-import com.google.gson.Gson;
 
 import java.util.List;
 
 import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -25,6 +23,9 @@ public interface Servicio {
 
     @POST("api/usuario/IniciarSesion")
     Call<Respuesta> iniciarSesion(@Body Usuario usuario);
+
+    @POST("api/usuario/crear")
+    Call<Respuesta> crearUsuario(@Body Usuario usuario);
 
     @GET("api/usuario/Buscar/{carnet}")
     Call<Usuario> obtenerUsuarioCarnet(@Path("carnet") String carnet);
