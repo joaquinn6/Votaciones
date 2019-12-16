@@ -5,7 +5,7 @@
     android:id="@+id/rlChart"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GraficaActivity">
+    tools:context=".Activity.GraficaActivity">
 
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/pc"

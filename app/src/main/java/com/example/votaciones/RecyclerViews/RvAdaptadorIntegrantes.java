@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.votaciones.R;
-import com.example.votaciones.ServicioApi;
+import com.example.votaciones.Api.ServicioApi;
 import com.example.votaciones.objetos.Integrante;
 
 import java.util.List;

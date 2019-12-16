@@ -1,4 +1,4 @@
-package com.example.votaciones;
+package com.example.votaciones.Activity;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import com.example.votaciones.R;
 import com.example.votaciones.RecyclerViews.RvAdaptadorIntegrantes;
 import com.example.votaciones.objetos.Integrante;
 

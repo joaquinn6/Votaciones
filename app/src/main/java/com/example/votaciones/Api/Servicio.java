@@ -1,8 +1,9 @@
-package com.example.votaciones;
+package com.example.votaciones.Api;
 
 import com.example.votaciones.objetos.Foto;
 import com.example.votaciones.objetos.Planchas;
 import com.example.votaciones.objetos.Respuesta;
+import com.example.votaciones.objetos.Token;
 import com.example.votaciones.objetos.Usuario;
 import com.example.votaciones.objetos.Voto;
 
@@ -21,8 +22,8 @@ public interface Servicio {
     @GET("api/plancha/mostrar")
     Call<List<Planchas>> obtenerPlanchas();
 
-    @POST("api/usuario/IniciarSesion")
-    Call<Respuesta> iniciarSesion(@Body Usuario usuario);
+    @POST("api/login_check")
+    Call<Token> iniciarSesion(@Body Token usuario);
 
     @POST("api/usuario/crear")
     Call<Respuesta> crearUsuario(@Body Usuario usuario);

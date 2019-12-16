@@ -1,4 +1,4 @@
-package com.example.votaciones;
+package com.example.votaciones.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -12,6 +12,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.votaciones.Api.ServicioApi;
+import com.example.votaciones.R;
 import com.example.votaciones.RecyclerViews.RvAdaptadorPlancha;
 import com.example.votaciones.objetos.Integrante;
 import com.example.votaciones.objetos.Planchas;
@@ -88,7 +90,7 @@ public class InicioActivity extends AppCompatActivity {
 
         RecyclerView rvPlanchas = findViewById(R.id.rvPlanchas);
 
-        final Call<List<Planchas>> planchas= ServicioApi.getInstancia().obtenerPlanchas();
+        final Call<List<Planchas>> planchas= ServicioApi.getInstancia(this).obtenerPlanchas();
         planchas.enqueue(new Callback<List<Planchas>>() {
             @Override
             public void onResponse(Call<List<Planchas>> call, Response<List<Planchas>> response) {

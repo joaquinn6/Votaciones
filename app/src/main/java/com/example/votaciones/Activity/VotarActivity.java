@@ -1,4 +1,4 @@
-package com.example.votaciones;
+package com.example.votaciones.Activity;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,9 +7,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.example.votaciones.Api.ServicioApi;
+import com.example.votaciones.R;
 import com.example.votaciones.RecyclerViews.RVAdaptadorVotar;
 import com.example.votaciones.objetos.Planchas;
 import com.example.votaciones.objetos.Respuesta;
@@ -18,6 +21,7 @@ import com.example.votaciones.objetos.Voto;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,17 +32,21 @@ public class VotarActivity extends AppCompatActivity {
     private List<Planchas>planchasList= new ArrayList<>();
     private String carnet;
     private Usuario usuario;
+    private final String SESION="VariabesDeSesion";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_votar);
 
-        Bundle extras= getIntent().getExtras();
-        if(extras!=null){
-            carnet=extras.getString("carnet");
-        }
+        SharedPreferences spSesion=getSharedPreferences(SESION, MODE_PRIVATE);
+        Map<String, ?> recuperarTexto = spSesion.getAll();
+        if(!((Map) recuperarTexto).isEmpty()) {
+            carnet=spSesion.getString("carnet", null);
+        }else
+            Toast.makeText(this, "ERROR de sharedPreferences", Toast.LENGTH_SHORT).show();
 
-        Call<Usuario> usuarioCall = ServicioApi.getInstancia().obtenerUsuarioCarnet(carnet);
+            Call<Usuario> usuarioCall = ServicioApi.getInstancia(this).obtenerUsuarioCarnet(carnet);
         usuarioCall.enqueue(new Callback<Usuario>() {
             @Override
             public void onResponse(Call<Usuario> call, Response<Usuario> response) {
@@ -57,7 +65,7 @@ public class VotarActivity extends AppCompatActivity {
 
 
         RecyclerView rvVotar= findViewById(R.id.rvVotar);
-        Call<List<Planchas>> planchas= ServicioApi.getInstancia().obtenerPlanchas();
+        Call<List<Planchas>> planchas= ServicioApi.getInstancia(this).obtenerPlanchas();
         planchas.enqueue(new Callback<List<Planchas>>() {
             @Override
             public void onResponse(Call<List<Planchas>> call, Response<List<Planchas>> response) {
@@ -80,7 +88,7 @@ public class VotarActivity extends AppCompatActivity {
             @Override
             public void OnItemClick(final int posicion) {
 
-                final Call<Respuesta> respuestaCall = ServicioApi.getInstancia().verficarVotante(usuario);
+                final Call<Respuesta> respuestaCall = ServicioApi.getInstancia(VotarActivity.this).verficarVotante(usuario);
                 respuestaCall.enqueue(new Callback<Respuesta>() {
                     @Override
                     public void onResponse(Call<Respuesta> call, Response<Respuesta> response) {
@@ -93,13 +101,13 @@ public class VotarActivity extends AppCompatActivity {
                                 builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                        Call<Respuesta> respuestaCall= ServicioApi.getInstancia().votar(new Voto("",planchasList.get(posicion).getNombrePlancha()));
+                                        Call<Respuesta> respuestaCall= ServicioApi.getInstancia(VotarActivity.this).votar(new Voto("",planchasList.get(posicion).getNombrePlancha()));
                                         respuestaCall.enqueue(new Callback<Respuesta>() {
                                             @Override
                                             public void onResponse(Call<Respuesta> call, Response<Respuesta> response) {
                                                 if(response.isSuccessful()){
                                                     if(response.body().isPermitir()){
-                                                        Call<String> stringCall = ServicioApi.getInstancia().votante(usuario);
+                                                        Call<String> stringCall = ServicioApi.getInstancia(VotarActivity.this).votante(usuario);
                                                         stringCall.enqueue(new Callback<String>() {
                                                             @Override
                                                             public void onResponse(Call<String> call, Response<String> response) {

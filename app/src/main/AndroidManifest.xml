@@ -13,10 +13,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".CrearUsuarioActivity"></activity>
-        <activity android:name=".GraficaActivity"></activity>
+        <activity android:name=".Activity.CrearUsuarioActivity"></activity>
+        <activity android:name=".Activity.GraficaActivity"></activity>
         <activity
-            android:name=".CargaActivity"
+            android:name=".Activity.CargaActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,12 +24,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".PropuestasActivity" />
-        <activity android:name=".IntegrantesActivity" />
-        <activity android:name=".VotarActivity" />
-        <activity android:name=".InicioActivity" />
-        <activity android:name=".UsuarioActivity" />
-        <activity android:name=".MainActivity" />
+        <activity android:name=".Activity.PropuestasActivity" />
+        <activity android:name=".Activity.IntegrantesActivity" />
+        <activity android:name=".Activity.VotarActivity" />
+        <activity android:name=".Activity.InicioActivity" />
+        <activity android:name=".Activity.UsuarioActivity" />
+        <activity android:name=".Activity.MainActivity" />
     </application>
 
 </manifest>

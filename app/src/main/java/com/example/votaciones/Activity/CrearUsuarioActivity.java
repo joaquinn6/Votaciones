@@ -1,4 +1,4 @@
-package com.example.votaciones;
+package com.example.votaciones.Activity;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +14,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.votaciones.Api.ServicioApi;
+import com.example.votaciones.R;
 import com.example.votaciones.objetos.Respuesta;
 import com.example.votaciones.objetos.Usuario;
 
@@ -100,7 +102,7 @@ public class CrearUsuarioActivity extends AppCompatActivity {
     }
 
     public void CrearUsuario(){
-        Call<Respuesta> respuesta=ServicioApi.getInstancia().crearUsuario(usuario);
+        Call<Respuesta> respuesta= ServicioApi.getInstancia(this).crearUsuario(usuario);
         respuesta.enqueue(new Callback<Respuesta>() {
             @Override
             public void onResponse(Call<Respuesta> call, Response<Respuesta> response) {

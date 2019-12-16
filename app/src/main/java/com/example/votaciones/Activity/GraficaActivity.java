@@ -1,9 +1,11 @@
-package com.example.votaciones;
+package com.example.votaciones.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Color;
 import android.os.Bundle;
+
+import com.example.votaciones.R;
 import com.example.votaciones.objetos.Planchas;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;

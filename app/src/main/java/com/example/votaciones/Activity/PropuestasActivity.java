@@ -1,4 +1,4 @@
-package com.example.votaciones;
+package com.example.votaciones.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 
+import com.example.votaciones.R;
 import com.example.votaciones.RecyclerViews.RvAdaptadorPropuestas;
 import com.example.votaciones.objetos.Propuesta;
 

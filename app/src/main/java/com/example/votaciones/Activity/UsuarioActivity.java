@@ -1,4 +1,4 @@
-package com.example.votaciones;
+package com.example.votaciones.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,10 +24,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.votaciones.Api.ServicioApi;
+import com.example.votaciones.R;
 import com.example.votaciones.objetos.Foto;
 import com.example.votaciones.objetos.Usuario;
 
 import java.io.File;
+import java.util.Map;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -37,7 +40,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class UsuarioActivity extends AppCompatActivity {
-    private String carnet;
+    private String carnet="";
     private final String SESION="VariabesDeSesion";
     private String fotoguardada;
 
@@ -45,10 +48,13 @@ public class UsuarioActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_usuario);
-        Bundle extras= getIntent().getExtras();
-        if(extras!=null){
-            carnet=extras.getString("carnet");
-        }
+
+        SharedPreferences spSesion=getSharedPreferences(SESION, MODE_PRIVATE);
+        Map<String, ?> recuperarTexto = spSesion.getAll();
+        if(!((Map) recuperarTexto).isEmpty()) {
+            carnet=spSesion.getString("carnet", null);
+        }else
+            Toast.makeText(this, "ERROR de sharedPreferences", Toast.LENGTH_SHORT).show();
 
         final ImageView ivUsuario= findViewById(R.id.ivUsuario);
         final EditText etinformacion = findViewById(R.id.etInformacion);
@@ -59,7 +65,7 @@ public class UsuarioActivity extends AppCompatActivity {
         final EditText etInstagram = findViewById(R.id.etInstagram);
         final TextView tvNombre = findViewById(R.id.etNombre);
 
-        Call<Usuario> usuarioCall = ServicioApi.getInstancia().obtenerUsuarioCarnet(carnet);
+        Call<Usuario> usuarioCall = ServicioApi.getInstancia(this).obtenerUsuarioCarnet(carnet);
         usuarioCall.enqueue(new Callback<Usuario>() {
             @Override
             public void onResponse(Call<Usuario> call, Response<Usuario> response) {
@@ -133,7 +139,7 @@ public class UsuarioActivity extends AppCompatActivity {
                 }
                 if (contra){
                     Usuario usuario=new Usuario("",tvNombre.getText().toString(),"","",etContrasena.getText().toString(),carnet,"",fotoguardada,"",etinformacion.getText().toString(),true,"","",etTwitter.getText().toString(),etInstagram.getText().toString(),etFacebook.getText().toString(),false,"");
-                    Call<String> user = ServicioApi.getInstancia().editarUsuario(usuario);
+                    Call<String> user = ServicioApi.getInstancia(this).editarUsuario(usuario);
                     user.enqueue(new Callback<String>() {
                         @Override
                         public void onResponse(Call<String> call, Response<String> response) {
@@ -183,7 +189,7 @@ public class UsuarioActivity extends AppCompatActivity {
                 File file = new File(imgDecodableString);
                 RequestBody fileReqBody = RequestBody.create(MediaType.parse("image/*"), file);
                 MultipartBody.Part part = MultipartBody.Part.createFormData("foto", file.getName(), fileReqBody);
-                Call<Foto> subirFoto = ServicioApi.getInstancia().subirFoto(part);
+                Call<Foto> subirFoto = ServicioApi.getInstancia(this).subirFoto(part);
 
                 subirFoto.enqueue(new Callback<Foto>() {
                     @Override
