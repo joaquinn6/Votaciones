@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Token> call, Response<Token> response) {
                 if(response.isSuccessful()){
-                    if(!response.body().getToken().toString().isEmpty()){
+                    if(!response.body().getToken().isEmpty()){
 
                         SharedPreferences.Editor editor = getSharedPreferences(SESION, MODE_PRIVATE).edit();
                         editor.putString("carnet", etCarnet.getText().toString());
@@ -101,8 +101,9 @@ public class MainActivity extends AppCompatActivity {
                         AlertDialog dialog = builder.create();
                         dialog.show();
                     }
-                }else
+                }else {
                     Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override

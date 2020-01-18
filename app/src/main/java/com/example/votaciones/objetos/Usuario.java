@@ -11,7 +11,6 @@ public class Usuario implements Serializable {
     private String carnet;
     private String carrera;
     private String foto;
-    private String huella;
     private String acercade;
     private boolean verificacion;
     private String codigo;
@@ -20,9 +19,11 @@ public class Usuario implements Serializable {
     private String instagram;
     private String facebook;
     private boolean voto;
+    private String facultad;
+    private String roles;
     private String pin;
 
-    public Usuario(String id, String nombre, String apellido, String correo, String contraseña, String carnet, String carrera, String foto, String huella, String acercade, boolean verificacion, String codigo, String fechacaduca, String twitter, String instagram, String facebook, boolean voto, String pin) {
+    public Usuario(String id, String nombre, String apellido, String correo, String contraseña, String carnet, String carrera, String foto, String acercade, boolean verificacion, String codigo, String fechacaduca, String twitter, String instagram, String facebook, boolean voto, String facultad, String roles, String pin) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -31,7 +32,6 @@ public class Usuario implements Serializable {
         this.carnet = carnet;
         this.carrera = carrera;
         this.foto = foto;
-        this.huella = huella;
         this.acercade = acercade;
         this.verificacion = verificacion;
         this.codigo = codigo;
@@ -40,19 +40,30 @@ public class Usuario implements Serializable {
         this.instagram = instagram;
         this.facebook = facebook;
         this.voto = voto;
+        this.facultad = facultad;
+        this.roles = roles;
         this.pin = pin;
     }
 
     public Usuario() {
     }
 
-    public String getPin() {
-        return pin;
+    public void setFacultad(String facultad) {
+        this.facultad = facultad;
     }
 
-    public void setPin(String pin) {
-        this.pin = pin;
+    public void setRoles(String roles) {
+        this.roles = roles;
     }
+
+    public String getFacultad() {
+        return facultad;
+    }
+
+    public String getRoles() {
+        return roles;
+    }
+
 
     public String getId() {
         return id;
@@ -118,14 +129,6 @@ public class Usuario implements Serializable {
         this.foto = foto;
     }
 
-    public String getHuella() {
-        return huella;
-    }
-
-    public void setHuella(String huella) {
-        this.huella = huella;
-    }
-
     public String getAcercade() {
         return acercade;
     }
@@ -188,5 +191,13 @@ public class Usuario implements Serializable {
 
     public void setVoto(boolean voto) {
         this.voto = voto;
+    }
+
+    public String getPin() {
+        return pin;
+    }
+
+    public void setPin(String pin) {
+        this.pin = pin;
     }
 }

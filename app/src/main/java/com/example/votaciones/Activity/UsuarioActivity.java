@@ -27,7 +27,11 @@ import com.bumptech.glide.Glide;
 import com.example.votaciones.Api.ServicioApi;
 import com.example.votaciones.R;
 import com.example.votaciones.objetos.Foto;
+import com.example.votaciones.objetos.Respuesta;
 import com.example.votaciones.objetos.Usuario;
+import com.google.gson.Gson;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.Map;
@@ -118,7 +122,7 @@ public class UsuarioActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NotNull MenuItem item) {
         final EditText etinformacion = findViewById(R.id.etInformacion);
         EditText etContrasena = findViewById(R.id.etContrasena);
         EditText etRepetirContrasena = findViewById(R.id.etRepetirContrasena);
@@ -138,18 +142,22 @@ public class UsuarioActivity extends AppCompatActivity {
                     }
                 }
                 if (contra){
-                    Usuario usuario=new Usuario("",tvNombre.getText().toString(),"","",etContrasena.getText().toString(),carnet,"",fotoguardada,"",etinformacion.getText().toString(),true,"","",etTwitter.getText().toString(),etInstagram.getText().toString(),etFacebook.getText().toString(),false,"");
-                    Call<String> user = ServicioApi.getInstancia(this).editarUsuario(usuario);
-                    user.enqueue(new Callback<String>() {
+                    Usuario usuario=new Usuario("","","","",etContrasena.getText().toString(),carnet,"",fotoguardada,etinformacion.getText().toString(),true,"","",etTwitter.getText().toString(),etInstagram.getText().toString(),etFacebook.getText().toString(),false,"","","");
+                    Gson gson = new Gson();
+                    String JSON = gson.toJson(usuario);
+                    Log.e("API JSON", JSON);
+                    Call<Respuesta> user = ServicioApi.getInstancia(this).editarUsuario(usuario);
+                    user.enqueue(new Callback<Respuesta>() {
                         @Override
-                        public void onResponse(Call<String> call, Response<String> response) {
+                        public void onResponse(Call<Respuesta> call, Response<Respuesta> response) {
                             if(response.isSuccessful()){
                                 Toast.makeText(UsuarioActivity.this, "Cambios Guardados", Toast.LENGTH_SHORT).show();
                             }else
                                 Toast.makeText(UsuarioActivity.this, "Sorry", Toast.LENGTH_SHORT).show();
                         }
                         @Override
-                        public void onFailure(Call<String> call, Throwable t) {
+                        public void onFailure(Call<Respuesta> call, Throwable t) {
+                            Log.e("API", t.getMessage());
                             Toast.makeText(UsuarioActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });

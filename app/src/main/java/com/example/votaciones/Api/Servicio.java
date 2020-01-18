@@ -32,7 +32,7 @@ public interface Servicio {
     Call<Usuario> obtenerUsuarioCarnet(@Path("carnet") String carnet);
 
     @POST("api/usuario/Editar")
-    Call<String>editarUsuario(@Body Usuario usuario);
+    Call<Respuesta>editarUsuario(@Body Usuario usuario);
 
     @POST("api/votar/guardar")
     Call<Respuesta> votar(@Body Voto voto);

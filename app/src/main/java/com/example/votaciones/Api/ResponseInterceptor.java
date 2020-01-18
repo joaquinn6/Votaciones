@@ -22,7 +22,7 @@ public class ResponseInterceptor implements Interceptor {
                 jsonObject.put("code", 200);
                 jsonObject.put("status", "OK");
                 jsonObject.put("message", new JSONObject(response.body().string()));
-            }else if(response.code()==401){
+            }else if(response.code()!=200){
                 Log.e("responseInterceptor",response.body().string());
             }
                 else {
