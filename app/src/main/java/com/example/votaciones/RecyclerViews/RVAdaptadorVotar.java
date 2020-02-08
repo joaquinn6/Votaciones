@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,13 +25,21 @@ public class RVAdaptadorVotar extends RecyclerView.Adapter<RVAdaptadorVotar.Vota
     private List<Planchas> planchasList;
     private Context context;
     private OnItemClickListener onItemClickListener;
+    /*crear elemento de tipo long click*/
+    private OnItemLongClickListener onItemLongClickListener;
 
     public interface OnItemClickListener{
         void OnItemClick(int posicion);
     }
-    public RVAdaptadorVotar(List<Planchas> planchasList, OnItemClickListener onItemClickListener) {
+    /*Interfaz para el evento on longclick*/
+    public interface OnItemLongClickListener{
+        void OnItemLongClick(int posicion,View view);
+    }
+    public RVAdaptadorVotar(List<Planchas> planchasList, OnItemClickListener onItemClickListener ,OnItemLongClickListener onItemLongClickListener) {
         this.planchasList = planchasList;
         this.onItemClickListener = onItemClickListener;
+        /*Inicializar el elemento de long click*/
+        this.onItemLongClickListener=onItemLongClickListener;
     }
 
 
@@ -55,8 +64,8 @@ public class RVAdaptadorVotar extends RecyclerView.Adapter<RVAdaptadorVotar.Vota
     public int getItemCount() {
         return planchasList.size();
     }
-
-    public class VotarHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    /*Agregarimplementacion del longclick*/
+    public class VotarHolder extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener{
         TextView tvNombrePlancha;
         ImageView ivPlancha;
         CardView cvVotar;
@@ -69,11 +78,19 @@ public class RVAdaptadorVotar extends RecyclerView.Adapter<RVAdaptadorVotar.Vota
             cvVotar= itemView.findViewById(R.id.cvVotar);
 
             itemView.setOnClickListener(this);
+            /*Asigtanr el evento*/
+            itemView.setOnLongClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
             onItemClickListener.OnItemClick(getAdapterPosition());
+        }
+        /*evebto del longclick*/
+        @Override
+        public boolean onLongClick(View v) {
+            onItemLongClickListener.OnItemLongClick(getAdapterPosition(),v);
+            return true;
         }
     }
 }

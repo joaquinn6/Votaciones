@@ -1,5 +1,6 @@
 package com.example.votaciones.Api;
 
+import com.example.votaciones.objetos.Configuracion;
 import com.example.votaciones.objetos.Foto;
 import com.example.votaciones.objetos.Planchas;
 import com.example.votaciones.objetos.Respuesta;
@@ -46,4 +47,8 @@ public interface Servicio {
     @Multipart
     @POST("api/usuario/foto")
     Call<Foto> subirFoto(@Part MultipartBody.Part imagen);
+
+    @GET("api/configuracion/extraer")
+    Call<Configuracion> extraerConfiguracion();
+
 }

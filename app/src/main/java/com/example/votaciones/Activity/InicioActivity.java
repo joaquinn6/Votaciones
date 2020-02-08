@@ -100,7 +100,7 @@ public class InicioActivity extends AppCompatActivity {
                     }
                     adapter.notifyDataSetChanged();
                 }else
-                    Toast.makeText(InicioActivity.this, "succesful pero error", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(InicioActivity.this, "succesful pero error"+response.message(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
