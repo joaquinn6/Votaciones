@@ -4,11 +4,19 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.example.votaciones.Api.ServicioApi;
 import com.example.votaciones.R;
 import com.example.votaciones.RecyclerViews.RvAdaptadorIntegrantes;
 import com.example.votaciones.objetos.Integrante;
@@ -58,12 +66,19 @@ public class IntegrantesActivity extends AppCompatActivity {
                             startActivity(intent);
                         }
                     }else{
-                        AlertDialog.Builder builder = new AlertDialog.Builder(IntegrantesActivity.this);
-                        builder.setTitle("Acercar De");
-                        builder.setMessage(integranteList.get(posicion).getUsuario().getAcercade());
-                        builder.setPositiveButton("Aceptar",null);
+                        LayoutInflater inflater= getLayoutInflater();
+                        View view = inflater.inflate(R.layout.foto_integrantes,null);
+                        ImageView ivFotoImagen =view.findViewById(R.id.ivFotoImagen);
+                        Glide.with(IntegrantesActivity.this).load(ServicioApi.HTTP +"/uploads/images/"+ integranteList.get(posicion).getUsuario().getFoto()).into(ivFotoImagen);
 
+                        AlertDialog.Builder builder = new AlertDialog.Builder(IntegrantesActivity.this);
+                        //builder.setTitle("Acercar De");
+                        //builder.setMessage(integranteList.get(posicion).getUsuario().getAcercade());
+                        //builder.setPositiveButton("Aceptar",null);
+
+                        builder.setView(view);
                         AlertDialog dialog = builder.create();
+                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                         dialog.show();
                     }
                 }

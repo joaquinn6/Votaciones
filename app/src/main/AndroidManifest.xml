@@ -13,7 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Activity.GanadorActivity"></activity>
+        <activity
+            android:name=".Activity.GanadorActivity"
+            android:parentActivityName=".Activity.InicioActivity" />
         <activity android:name=".Activity.CrearUsuarioActivity" />
         <activity android:name=".Activity.GraficaActivity" />
         <activity
