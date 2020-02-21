@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".Activity.GanadorActivity">
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/txtCantidadVotos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="86dp"
@@ -31,7 +31,7 @@
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/txtNombre" />
 
     <ImageView
         android:id="@+id/imageView3"
@@ -42,7 +42,7 @@
         app:srcCompat="@drawable/ic_useredit" />
 
     <ImageView
-        android:id="@+id/ivUsuario2"
+        android:id="@+id/ivPlancha"
         android:layout_width="140dp"
         android:layout_height="140dp"
         android:layout_marginStart="8dp"
@@ -55,7 +55,7 @@
         tools:srcCompat="@drawable/ic_vote" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/txtNombre"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="67dp"

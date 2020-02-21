@@ -14,11 +14,16 @@ import android.widget.Toast;
 
 import com.example.votaciones.Api.ServicioApi;
 import com.example.votaciones.R;
+import com.example.votaciones.objetos.Configuracion;
 import com.example.votaciones.objetos.Token;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.io.UnsupportedEncodingException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 
 import retrofit2.Call;
@@ -82,17 +87,64 @@ public class MainActivity extends AppCompatActivity {
         respuesta.enqueue(new Callback<Token>() {
             @Override
             public void onResponse(Call<Token> call, Response<Token> response) {
+                final Token tokenResponse=response.body();
                 if(response.isSuccessful()){
                     if(!response.body().getToken().isEmpty()){
+                        //inicio
+                        final Call<Configuracion> configuracionCall= ServicioApi.getInstancia(MainActivity.this).extraerConfiguracion();
+                        configuracionCall.enqueue(new Callback<Configuracion>() {
+                            @Override
+                            public void onResponse(Call<Configuracion> call, Response<Configuracion> response) {
+                                if(response.isSuccessful()){
+                                    Configuracion confi =response.body();
+                                    String fechaVotar= confi.getFechaVotaciones().split("T")[0];
+                                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                                    Calendar fechaActual= Calendar.getInstance();
+                                    fechaActual.set(Calendar.HOUR_OF_DAY,0);
+                                    fechaActual.set(Calendar.MINUTE,0);
+                                    fechaActual.set(Calendar.SECOND,0);
+                                    try {
+                                        Date strDate = sdf.parse(fechaVotar);
 
-                        SharedPreferences.Editor editor = getSharedPreferences(SESION, MODE_PRIVATE).edit();
-                        editor.putString("carnet", etCarnet.getText().toString());
-                        editor.putString("token", response.body().getToken());
-                        editor.apply();
+                                        if(fechaActual.after(strDate)) {
+                                            SharedPreferences.Editor editor = getSharedPreferences(SESION, MODE_PRIVATE).edit();
+                                            editor.putString("carnet", etCarnet.getText().toString());
+                                            editor.putString("token", tokenResponse.getToken());
+                                            editor.apply();
 
-                        intent[0] = new Intent(MainActivity.this, InicioActivity.class);
-                        startActivity(intent[0]);
-                        finish();
+                                            intent[0] = new Intent(MainActivity.this, InicioActivity.class);
+                                            startActivity(intent[0]);
+                                            finish();
+                                        }
+                                        else {
+                                            SharedPreferences.Editor editor = getSharedPreferences(SESION, MODE_PRIVATE).edit();
+                                            editor.putString("carnet", etCarnet.getText().toString());
+                                            editor.putString("token", tokenResponse.getToken());
+                                            editor.apply();
+                                            Intent i= new Intent(MainActivity.this,
+                                                    GanadorActivity.class);
+                                            //Intent is used to switch from one activity to another.
+                                            //i.putExtra("carnet", usuario.getCarnet());
+                                            startActivity(i);
+                                            //invoke the SecondActivity.
+
+                                            finish();
+                                            //the current activity will get finished.*/
+                                        }
+
+                                    } catch (ParseException e) {
+                                        Toast.makeText(MainActivity.this, "ERORR "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<Configuracion> call, Throwable t) {
+                                Toast.makeText(MainActivity.this,t.getMessage(),Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
+                            }
+                        });
+                        //Fin
+
                     }else{
                         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                         builder.setTitle("Error");
