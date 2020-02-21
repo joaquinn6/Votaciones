@@ -15,6 +15,7 @@ public class ServicioApi {
         if(INSTANCIA==null){
             OkHttpClient okHttpClient = new OkHttpClient.Builder()
                     .addInterceptor(new RequestInterceptor(context))
+                    .addInterceptor(new ResponseInterceptor(context))
                     // This is used to add ApplicationInterceptor
                     //This is used to add NetworkInterceptor.
                     .retryOnConnectionFailure(true)
