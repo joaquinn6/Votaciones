@@ -5,8 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,11 +23,9 @@ import com.example.votaciones.objetos.Usuario;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.EmptyStackException;
 import java.util.List;
 
 import ahmed.easyslider.EasySlider;
-import ahmed.easyslider.SliderItem;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -42,6 +38,7 @@ public class GanadorActivity extends AppCompatActivity {
     private String carnet;
     public EasySlider esIntegrantes;
     public List<Usuario> listUsuario=new ArrayList<>();
+    public Planchas Ganadora= new Planchas();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,22 +71,20 @@ public class GanadorActivity extends AppCompatActivity {
         final View view = inflater.inflate(R.layout.dialog_integrantes,null);
         final ViewPager viewPager =view.findViewById(R.id.vpImagen);
         etNombreUser=view.findViewById(R.id.etNombreUsers);
-        final Call<List<Planchas>> planchas= ServicioApi.getInstancia(this).obtenerPlanchas();
-        planchas.enqueue(new Callback<List<Planchas>>() {
+        final Call<Planchas> planchaGanadora= ServicioApi.getInstancia(this).obtenerPlanchaGanadora();
+        planchaGanadora.enqueue(new Callback<Planchas>() {
             @Override
-            public void onResponse(Call<List<Planchas>> call, Response<List<Planchas>> response) {
+            public void onResponse(Call<Planchas> call, Response<Planchas> response) {
                 if(response.isSuccessful()){
-                    for(Planchas P : response.body()){
-                        planchasList.add(P);
-                    }
-                    int pos= fnGetMayorVotos(planchasList);
-                    txtNombre.setText( planchasList.get(pos).getNombrePlancha());
-                    txtCantidadVotos.setText("Cantidad de Votos: "+planchasList.get(pos).getVotos());
-                    Glide.with(GanadorActivity.this).load(ServicioApi.HTTP +"/uploads/images/"+ planchasList.get(pos).getImagen()).into(ivPlancha);
-                    listUsuario.add(planchasList.get(pos).getPresidente());
-                    listUsuario.add(planchasList.get(pos).getVicepresidente());
-                    listUsuario.add(planchasList.get(pos).getSecretario());
-                    listUsuario.add(planchasList.get(pos).getTesorero());
+                    Ganadora = response.body();
+
+                    txtNombre.setText( Ganadora.getNombrePlancha());
+                    txtCantidadVotos.setText("Cantidad de Votos: "+Ganadora.getVotos());
+                    Glide.with(GanadorActivity.this).load(ServicioApi.HTTP +"/uploads/images/"+ Ganadora.getImagen()).into(ivPlancha);
+                    listUsuario.add(Ganadora.getPresidente());
+                    listUsuario.add(Ganadora.getVicepresidente());
+                    listUsuario.add(Ganadora.getSecretario());
+                    listUsuario.add(Ganadora.getTesorero());
 
                     ImageAdapter adapter= new ImageAdapter(GanadorActivity.this,listUsuario);
                     viewPager.setAdapter(adapter);
@@ -98,7 +93,7 @@ public class GanadorActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Planchas>> call, Throwable t) {
+            public void onFailure(Call<Planchas> call, Throwable t) {
                 Toast.makeText(GanadorActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -152,18 +147,6 @@ public class GanadorActivity extends AppCompatActivity {
         });
 
     }
-
-    private int fnGetMayorVotos(List<Planchas> planchasList) {
-        int pos=-1;
-        float mayor=-9999;
-        for (int i=0;i<planchasList.size();i++) {
-            if (planchasList.get(i).getVotos()>mayor){
-                pos=i;
-            }
-        }
-        return pos;
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

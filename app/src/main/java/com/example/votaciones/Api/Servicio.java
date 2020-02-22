@@ -23,6 +23,9 @@ public interface Servicio {
     @GET("api/plancha/mostrar")
     Call<List<Planchas>> obtenerPlanchas();
 
+    @GET("api/plancha/mostrarGanador")
+    Call<Planchas> obtenerPlanchaGanadora();
+
     @POST("api/login_check")
     Call<Token> iniciarSesion(@Body Token usuario);
 
