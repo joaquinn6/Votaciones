@@ -121,11 +121,10 @@ public class MainActivity extends AppCompatActivity {
                                             editor.putString("carnet", etCarnet.getText().toString());
                                             editor.putString("token", tokenResponse.getToken());
                                             editor.apply();
-                                            Intent i= new Intent(MainActivity.this,
-                                                    GanadorActivity.class);
+                                            intent[0]= new Intent(MainActivity.this, GanadorActivity.class);
                                             //Intent is used to switch from one activity to another.
                                             //i.putExtra("carnet", usuario.getCarnet());
-                                            startActivity(i);
+                                            startActivity(intent[0]);
                                             //invoke the SecondActivity.
 
                                             finish();

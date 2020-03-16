@@ -1,15 +1,23 @@
 package com.example.votaciones.Activity;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.votaciones.Api.ServicioApi;
@@ -30,14 +38,34 @@ public class InicioActivity extends AppCompatActivity {
     private List<Planchas> planchasList = new ArrayList<>();
     private RvAdaptadorPlancha adapter;
     private String carnet;
-
+    private ProgressBar pbCargando;
+    public LayoutInflater inflater;
+    public AlertDialog dialog;
+    ProgressDialog progressDialog = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio);
 
+        //fnCargando();
     }
+    public void fnCargando(){
+        /*inflater= getLayoutInflater();
+        View view = inflater.inflate(R.layout.cargando,null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(InicioActivity.this);
+        builder.setView(view);
+        dialog = builder.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();*/
+        progressDialog = new ProgressDialog(this);
+        progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        progressDialog.show();
+        progressDialog.setContentView(R.layout.cargando);
+        //se podrá cerrar simplemente pulsando back
+        progressDialog.setCancelable(true);
 
+        //no olvidar invocar dismiss para cerrarlo
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_inicial, menu);
@@ -72,6 +100,10 @@ public class InicioActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        fnCargarRecyclerView();
+    }
+
+    private void fnCargarRecyclerView() {fnCargando();
         planchasList.clear();
         Bundle extras= getIntent().getExtras();
         if(extras!=null){
@@ -99,6 +131,7 @@ public class InicioActivity extends AppCompatActivity {
                         planchasList.add(P);
                     }
                     adapter.notifyDataSetChanged();
+                    progressDialog.dismiss();
                 }else
                     Toast.makeText(InicioActivity.this, "succesful pero error"+response.message(), Toast.LENGTH_SHORT).show();
             }
@@ -106,6 +139,27 @@ public class InicioActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<List<Planchas>> call, Throwable t) {
                 Toast.makeText(InicioActivity.this, t.getMessage().toString(), Toast.LENGTH_SHORT).show();
+                if (t.getMessage().equals("timeout")) {
+                    progressDialog.dismiss();
+                    AlertDialog.Builder build=new AlertDialog.Builder(InicioActivity.this);
+                    build.setTitle("Tiempo Fuera");
+                    build.setMessage("Deseas volver a cargar");
+                    build.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            fnCargarRecyclerView();
+                        }
+                    });
+                    build.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            System.exit(0);
+                        }
+                    });
+                    AlertDialog dialog2=build.create();
+                    dialog2.setCancelable(true);
+                    dialog2.show();
+                }
             }
         });
 
@@ -127,7 +181,8 @@ public class InicioActivity extends AppCompatActivity {
                     integranteList.add(new Integrante("Vicepresidente", planchasList.get(posicion).getVicepresidente()));
                     integranteList.add(new Integrante("Tesorero", planchasList.get(posicion).getTesorero()));
                     integranteList.add(new Integrante("Secretario", planchasList.get(posicion).getSecretario()));
-
+                    integranteList.add(new Integrante("Ministro", planchasList.get(posicion).getMinistro()));
+                    integranteList.add(new Integrante("Vocal",planchasList.get(posicion).getVocal()));
                     Intent intent = new Intent(InicioActivity.this,IntegrantesActivity.class);
                     Bundle x = new Bundle();
                     x.putSerializable("Integrantes", (Serializable) integranteList);
@@ -164,7 +219,8 @@ public class InicioActivity extends AppCompatActivity {
                     integranteList.add(new Integrante("Vicepresidente", planchasList.get(posicion).getVicepresidente()));
                     integranteList.add(new Integrante("Tesorero", planchasList.get(posicion).getTesorero()));
                     integranteList.add(new Integrante("Secretario", planchasList.get(posicion).getSecretario()));
-
+                    integranteList.add(new Integrante("Ministro", planchasList.get(posicion).getMinistro()));
+                    integranteList.add(new Integrante("Vocal",planchasList.get(posicion).getVocal()));
                     Intent intent = new Intent(InicioActivity.this,IntegrantesActivity.class);
                     Bundle x = new Bundle();
                     x.putSerializable("Integrantes", (Serializable) integranteList);
@@ -179,8 +235,8 @@ public class InicioActivity extends AppCompatActivity {
         rvPlanchas.setLayoutManager(manager);
         rvPlanchas.setAdapter(adapter);
 
-    }
 
+    }
 
 
 }

@@ -9,6 +9,8 @@ public class Planchas implements Serializable {
     private Usuario vicepresidente;
     private Usuario secretario;
     private Usuario tesorero;
+    private Usuario ministro;
+    private Usuario vocal;
     private String color;
     private String nombrePlancha;
     private String imagen;
@@ -19,12 +21,14 @@ public class Planchas implements Serializable {
     private List<Propuesta> propuestas;
     private float votos;
 
-    public Planchas(String id, Usuario presidente, Usuario vicepresidente, Usuario secretario, Usuario tesorero, String color, String nombrePlancha, String imagen, String twitter, String instagram, String facebook, String acronimo, List<Propuesta> propuestas, float votos) {
+    public Planchas(String id, Usuario presidente, Usuario vicepresidente, Usuario secretario, Usuario tesorero,Usuario ministro,Usuario vocal, String color, String nombrePlancha, String imagen, String twitter, String instagram, String facebook, String acronimo, List<Propuesta> propuestas, float votos) {
         this.id = id;
         this.presidente = presidente;
         this.vicepresidente = vicepresidente;
         this.secretario = secretario;
         this.tesorero = tesorero;
+        this.ministro=ministro;
+        this.vocal=vocal;
         this.color = color;
         this.nombrePlancha = nombrePlancha;
         this.imagen = imagen;
@@ -37,6 +41,22 @@ public class Planchas implements Serializable {
     }
 
     public Planchas() {
+    }
+
+    public Usuario getMinistro() {
+        return ministro;
+    }
+
+    public Usuario getVocal() {
+        return vocal;
+    }
+
+    public void setMinistro(Usuario ministro) {
+        this.ministro = ministro;
+    }
+
+    public void setVocal(Usuario vocal) {
+        this.vocal = vocal;
     }
 
     public float getVotos() {

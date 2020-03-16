@@ -25,10 +25,10 @@ public class ResponseInterceptor implements Interceptor {
             }else if(response.code()!=200){
                 Intent intent=new Intent(context, MainActivity.class);
                 context.startActivity(intent);
-            }else {
+            }/*else {
                 Intent intent=new Intent(context,MainActivity.class);
                 context.startActivity(intent);
-            }
+            }*/
             return response;
    }
 }

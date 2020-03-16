@@ -67,8 +67,10 @@ public class IntegrantesActivity extends AppCompatActivity {
                         }
                     }else{
                         LayoutInflater inflater= getLayoutInflater();
-                        View view = inflater.inflate(R.layout.foto_integrantes,null);
-                        ImageView ivFotoImagen =view.findViewById(R.id.ivFotoImagen);
+                        final View view = inflater.inflate(R.layout.foto_integrantes,null);
+                        final ImageView ivFotoImagen =view.findViewById(R.id.ivFotoImagen);
+                        ImageView salir =view.findViewById(R.id.salir);
+
                         Glide.with(IntegrantesActivity.this).load(ServicioApi.HTTP +"/uploads/images/"+ integranteList.get(posicion).getUsuario().getFoto()).into(ivFotoImagen);
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(IntegrantesActivity.this);
@@ -77,9 +79,16 @@ public class IntegrantesActivity extends AppCompatActivity {
                         //builder.setPositiveButton("Aceptar",null);
 
                         builder.setView(view);
-                        AlertDialog dialog = builder.create();
+                        final AlertDialog dialog = builder.create();
                         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        dialog.setCancelable(true);
                         dialog.show();
+                        salir.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.cancel();
+                            }
+                        });
                     }
                 }
             };
