@@ -25,6 +25,7 @@ import com.example.votaciones.R;
 import com.example.votaciones.RecyclerViews.RvAdaptadorPlancha;
 import com.example.votaciones.objetos.Integrante;
 import com.example.votaciones.objetos.Planchas;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -41,13 +42,21 @@ public class InicioActivity extends AppCompatActivity {
     private ProgressBar pbCargando;
     public LayoutInflater inflater;
     public AlertDialog dialog;
+    public FloatingActionButton botonGanador;
     ProgressDialog progressDialog = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio);
-
+        botonGanador=findViewById(R.id.botonGanador);
         //fnCargando();
+        botonGanador.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(InicioActivity.this, GanadorActivity.class);
+                startActivity(intent);
+            }
+        });
     }
     public void fnCargando(){
         /*inflater= getLayoutInflater();

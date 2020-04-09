@@ -33,7 +33,7 @@ public class CargaActivity extends AppCompatActivity {
     private final String SESION="VariabesDeSesion";
     private  final Token token=new Token();
     private static int TIME=1000;
-
+    public String FECHA="FechaGanador";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +42,7 @@ public class CargaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_carga);
 
         SharedPreferences spSesion=getSharedPreferences(SESION, MODE_PRIVATE);
+        SharedPreferences spFecha=getSharedPreferences(FECHA, MODE_PRIVATE);
         Map<String, ?> recuperarTexto = spSesion.getAll();
         if(!((Map) recuperarTexto).isEmpty()) {
             token.setToken(spSesion.getString("token", null));
@@ -61,6 +62,8 @@ public class CargaActivity extends AppCompatActivity {
                                     fechaActual.set(Calendar.HOUR_OF_DAY,0);
                                     fechaActual.set(Calendar.MINUTE,0);
                                     fechaActual.set(Calendar.SECOND,0);
+                                    SharedPreferences sp=getSharedPreferences(FECHA,MODE_PRIVATE);
+                                    SharedPreferences.Editor edit =sp.edit();
                                     try {
                                         Date strDate = sdf.parse(fechaVotar);
                                         Intent i;
@@ -71,6 +74,7 @@ public class CargaActivity extends AppCompatActivity {
                                         else {
                                             i= new Intent(CargaActivity.this,
                                                     GanadorActivity.class);
+                                            /*edit.putString("fechaActual",fechaActual)*/
                                         }
                                         //Intent is used to switch from one activity to another.
                                         //i.putExtra("carnet", usuario.getCarnet());

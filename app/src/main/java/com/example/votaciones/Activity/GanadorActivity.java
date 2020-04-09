@@ -4,12 +4,14 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +22,7 @@ import com.example.votaciones.R;
 import com.example.votaciones.RecyclerViews.ImageAdapter;
 import com.example.votaciones.objetos.Planchas;
 import com.example.votaciones.objetos.Usuario;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.Serializable;
 import java.sql.Time;
@@ -40,6 +43,8 @@ public class GanadorActivity extends AppCompatActivity {
     public EasySlider esIntegrantes;
     public List<Usuario> listUsuario=new ArrayList<>();
     public Planchas Ganadora= new Planchas();
+    public FloatingActionButton btnFloatingCerrar;
+    final AlertDialog[] dialog = new AlertDialog[1];
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +59,13 @@ public class GanadorActivity extends AppCompatActivity {
         final ViewPager viewPager =view.findViewById(R.id.vpImagen);
         etNombreUser=view.findViewById(R.id.etNombreUsers);
         Titulo=view.findViewById(R.id.Titulo);
-
+        btnFloatingCerrar=view.findViewById(R.id.btnFloatingCerrar);
+        btnFloatingCerrar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog[0].cancel();
+            }
+        });
         /*final Call<List<Planchas>> planchas= ServicioApi.getInstancia(this).obtenerPlanchas();
         planchas.enqueue(new Callback<List<Planchas>>() {
             @Override
@@ -167,9 +178,11 @@ public class GanadorActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //builder.setTitle("Presidente");
                 builder.setView(view);
-                AlertDialog dialog = builder.create();
-                dialog.setCancelable(true);
-                dialog.show();
+                dialog[0] = builder.create();
+                dialog[0].setCancelable(true);
+                if(view.getParent()!=null)
+                    ((ViewGroup)view.getParent()).removeView(view);
+                    dialog[0].show();
             }
         });
 

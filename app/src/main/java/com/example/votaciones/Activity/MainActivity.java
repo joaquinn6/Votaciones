@@ -33,6 +33,7 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity {
 
     private final String SESION="VariabesDeSesion";
+
     private final Token token =new Token();
     private final Intent[] intent = new Intent[1];
 
@@ -103,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
                                     fechaActual.set(Calendar.HOUR_OF_DAY,0);
                                     fechaActual.set(Calendar.MINUTE,0);
                                     fechaActual.set(Calendar.SECOND,0);
+
                                     try {
                                         Date strDate = sdf.parse(fechaVotar);
 
