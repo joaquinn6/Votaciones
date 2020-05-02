@@ -2,8 +2,11 @@ package com.example.votaciones.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
@@ -15,6 +18,7 @@ import com.example.votaciones.Api.ServicioApi;
 import com.example.votaciones.R;
 import com.example.votaciones.objetos.Configuracion;
 import com.example.votaciones.objetos.Token;
+import com.example.votaciones.objetos.VerificarFechaSegundoPlano;
 
 import java.io.Serializable;
 import java.text.ParseException;
@@ -40,9 +44,11 @@ public class CargaActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_carga);
-
+        createNotificaionChannel();
+        VerificarFechaSegundoPlano v=new VerificarFechaSegundoPlano(this);
+        v.execute();
         SharedPreferences spSesion=getSharedPreferences(SESION, MODE_PRIVATE);
-        SharedPreferences spFecha=getSharedPreferences(FECHA, MODE_PRIVATE);
+        //SharedPreferences spFecha=getSharedPreferences(FECHA, MODE_PRIVATE);
         Map<String, ?> recuperarTexto = spSesion.getAll();
         if(!((Map) recuperarTexto).isEmpty()) {
             token.setToken(spSesion.getString("token", null));
@@ -64,17 +70,20 @@ public class CargaActivity extends AppCompatActivity {
                                     fechaActual.set(Calendar.SECOND,0);
                                     SharedPreferences sp=getSharedPreferences(FECHA,MODE_PRIVATE);
                                     SharedPreferences.Editor edit =sp.edit();
+
                                     try {
                                         Date strDate = sdf.parse(fechaVotar);
                                         Intent i;
-                                        if(fechaActual.after(strDate)) {
+                                        edit.putString("fechaVotar",fechaVotar);
+                                        edit.commit();
+                                        if(!fechaActual.after(strDate)) {
                                             i= new Intent(CargaActivity.this,
                                                     InicioActivity.class);
                                         }
                                         else {
                                             i= new Intent(CargaActivity.this,
                                                     GanadorActivity.class);
-                                            /*edit.putString("fechaActual",fechaActual)*/
+
                                         }
                                         //Intent is used to switch from one activity to another.
                                         //i.putExtra("carnet", usuario.getCarnet());
@@ -133,5 +142,16 @@ public class CargaActivity extends AppCompatActivity {
             }, TIME);
         }
 
+    }
+    private void createNotificaionChannel(){
+        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
+            CharSequence name="CHANNEL";
+            String description="Canal de Notificaciones";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel =new NotificationChannel("Winner",name,importance);
+            channel.setDescription(description);
+            NotificationManager notificationManager=getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 }

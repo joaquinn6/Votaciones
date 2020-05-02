@@ -2,6 +2,7 @@ package com.example.votaciones.Api;
 
 import com.example.votaciones.objetos.Configuracion;
 import com.example.votaciones.objetos.Foto;
+import com.example.votaciones.objetos.Plancha;
 import com.example.votaciones.objetos.Planchas;
 import com.example.votaciones.objetos.Respuesta;
 import com.example.votaciones.objetos.Token;
@@ -53,5 +54,8 @@ public interface Servicio {
 
     @GET("api/configuracion/extraer")
     Call<Configuracion> extraerConfiguracion();
+
+    @GET("api/plancha/grafica")
+    Call<List<Plancha>> extraerGrafica();
 
 }

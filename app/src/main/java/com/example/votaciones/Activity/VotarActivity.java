@@ -69,7 +69,7 @@ public class VotarActivity extends AppCompatActivity {
 
 
         RecyclerView rvVotar= findViewById(R.id.rvVotar);
-        Call<List<Planchas>> planchas= ServicioApi.getInstancia(this).obtenerPlanchas();
+        final Call<List<Planchas>> planchas= ServicioApi.getInstancia(this).obtenerPlanchas();
         planchas.enqueue(new Callback<List<Planchas>>() {
             @Override
             public void onResponse(Call<List<Planchas>> call, Response<List<Planchas>> response) {
@@ -77,6 +77,11 @@ public class VotarActivity extends AppCompatActivity {
                     for(Planchas P : response.body()){
                         planchasList.add(P);
                     }
+                    Planchas votoNulo=new Planchas();
+                    votoNulo.setNombrePlancha("NULO");
+                    votoNulo.setColor("#f9f4f3");
+                    votoNulo.setAcronimo("NULO");
+                    planchasList.add(votoNulo);
                     adapter.notifyDataSetChanged();
                 }
                 else
@@ -91,74 +96,6 @@ public class VotarActivity extends AppCompatActivity {
         RVAdaptadorVotar.OnItemClickListener onItemClickListener= new RVAdaptadorVotar.OnItemClickListener() {
             @Override
             public void OnItemClick(final int posicion) {
-
-                /*final Call<Respuesta> respuestaCall = ServicioApi.getInstancia(VotarActivity.this).verficarVotante(usuario);
-                respuestaCall.enqueue(new Callback<Respuesta>() {
-                    @Override
-                    public void onResponse(Call<Respuesta> call, Response<Respuesta> response) {
-                        if(response.isSuccessful()){
-                            if(response.body().isPermitir()){
-                                AlertDialog.Builder builder = new AlertDialog.Builder(VotarActivity.this);
-                                builder.setTitle("Voto");
-                                builder.setMessage("Está seguro de votar por esta plancha?");
-                                builder.setNegativeButton("Cancelar",null);
-                                builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        Call<Respuesta> respuestaCall= ServicioApi.getInstancia(VotarActivity.this).votar(new Voto("",planchasList.get(posicion).getNombrePlancha()));
-                                        respuestaCall.enqueue(new Callback<Respuesta>() {
-                                            @Override
-                                            public void onResponse(Call<Respuesta> call, Response<Respuesta> response) {
-                                                if(response.isSuccessful()){
-                                                    if(response.body().isPermitir()){
-                                                        Call<String> stringCall = ServicioApi.getInstancia(VotarActivity.this).votante(usuario);
-                                                        stringCall.enqueue(new Callback<String>() {
-                                                            @Override
-                                                            public void onResponse(Call<String> call, Response<String> response) {
-                                                                if (response.isSuccessful()){
-                                                                    Toast.makeText(VotarActivity.this, "Gracias por votar", Toast.LENGTH_SHORT).show();
-                                                                    Intent intent = new Intent(VotarActivity.this, InicioActivity.class);
-                                                                    intent.putExtra("carnet", carnet);
-                                                                    startActivity(intent);
-                                                                    finish();
-                                                                }else
-                                                                    Toast.makeText(VotarActivity.this, "No se pudo realizar el voto, intente de nuevo por favor.", Toast.LENGTH_SHORT).show();
-                                                            }
-
-                                                            @Override
-                                                            public void onFailure(Call<String> call, Throwable t) {
-                                                                Toast.makeText(VotarActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
-                                                            }
-                                                        });
-                                                    }else
-                                                        Toast.makeText(VotarActivity.this, "No se pudo realizar el voto, intente de nuevo por favor.", Toast.LENGTH_SHORT).show();
-                                                }else {
-                                                    Toast.makeText(VotarActivity.this, "Hubo algun problema, intente d enuevo mas tarde", Toast.LENGTH_SHORT).show();
-                                                }
-                                            }
-
-                                            @Override
-                                            public void onFailure(Call<Respuesta> call, Throwable t) {
-                                                Toast.makeText(VotarActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
-                                    }
-                                });
-                                AlertDialog dialog = builder.create();
-                                dialog.show();
-                            }else {
-                                Toast.makeText(VotarActivity.this, response.body().getError(), Toast.LENGTH_SHORT).show();
-                            }
-                        }else {
-                            Toast.makeText(VotarActivity.this, "Error al verificar", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<Respuesta> call, Throwable t) {
-                        Toast.makeText(VotarActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });*/
             }
         };
         /*Usar el evento Longclick*/

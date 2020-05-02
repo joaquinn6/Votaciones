@@ -6,6 +6,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,6 +28,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.io.Serializable;
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import ahmed.easyslider.EasySlider;
@@ -45,6 +47,8 @@ public class GanadorActivity extends AppCompatActivity {
     public Planchas Ganadora= new Planchas();
     public FloatingActionButton btnFloatingCerrar;
     final AlertDialog[] dialog = new AlertDialog[1];
+    public String FECHA="FechaGanador";
+    String fechaWin;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +57,8 @@ public class GanadorActivity extends AppCompatActivity {
         txtNombre=findViewById(R.id.txtNombre);
         ivPlancha=findViewById(R.id.ivPlancha);
 
-
+        SharedPreferences spFecha=getSharedPreferences(FECHA, MODE_PRIVATE);
+        fechaWin=spFecha.getString("fechaVotar","");
         LayoutInflater inflater= getLayoutInflater();
         final View view = inflater.inflate(R.layout.dialog_integrantes,null);
         final ViewPager viewPager =view.findViewById(R.id.vpImagen);
@@ -66,6 +71,8 @@ public class GanadorActivity extends AppCompatActivity {
                 dialog[0].cancel();
             }
         });
+
+        //txtNombre.setText(spFecha.getString("fechaVotar",""));
         /*final Call<List<Planchas>> planchas= ServicioApi.getInstancia(this).obtenerPlanchas();
         planchas.enqueue(new Callback<List<Planchas>>() {
             @Override
@@ -103,7 +110,7 @@ public class GanadorActivity extends AppCompatActivity {
                 if(response.isSuccessful()){
                     Ganadora = response.body();
                     txtNombre.setText( Ganadora.getNombrePlancha());
-                    txtCantidadVotos.setText("Cantidad de Votos: "+Ganadora.getVotos());
+                    txtCantidadVotos.setText("Porcentaje de Votos: "+Ganadora.getVotos());
                     Glide.with(GanadorActivity.this).load(ServicioApi.HTTP +"/uploads/images/"+ Ganadora.getImagen()).into(ivPlancha);
                     listUsuario.add(Ganadora.getPresidente());
                     listUsuario.add(Ganadora.getVicepresidente());

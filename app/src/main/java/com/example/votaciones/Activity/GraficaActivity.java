@@ -4,8 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.example.votaciones.R;
+import com.example.votaciones.objetos.Plancha;
 import com.example.votaciones.objetos.Planchas;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
@@ -18,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GraficaActivity extends AppCompatActivity {
-    private List<Planchas>planchasList= new ArrayList<>();
+    private List<Plancha>planchasList= new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,14 +29,14 @@ public class GraficaActivity extends AppCompatActivity {
 
         Bundle extras= getIntent().getExtras();
         if(extras!=null){
-            planchasList = (List<Planchas>) extras.getSerializable("Planchas");
-
+            planchasList = (List<Plancha>) extras.getSerializable("Plancha");
+            Toast.makeText(this, "Entre "+planchasList.size(), Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
         }
             PieChart pcPorcentaje = findViewById(R.id.pc);
 
         List<PieEntry> entries = new ArrayList<>();
         List<Integer> colores = new ArrayList<Integer>();
-        for ( Planchas plancha : planchasList){
+        for ( Plancha plancha : planchasList){
             entries.add(new PieEntry(plancha.getVotos(),plancha.getAcronimo()));
             colores.add(Color.parseColor(plancha.getColor()));
         }

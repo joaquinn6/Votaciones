@@ -6,9 +6,11 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -24,11 +26,16 @@ import com.example.votaciones.Api.ServicioApi;
 import com.example.votaciones.R;
 import com.example.votaciones.RecyclerViews.RvAdaptadorPlancha;
 import com.example.votaciones.objetos.Integrante;
+import com.example.votaciones.objetos.Plancha;
 import com.example.votaciones.objetos.Planchas;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -44,10 +51,22 @@ public class InicioActivity extends AppCompatActivity {
     public AlertDialog dialog;
     public FloatingActionButton botonGanador;
     ProgressDialog progressDialog = null;
+    public String FECHA="FechaGanador";
+    private PendingIntent pendingIntent;
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    Calendar fechaActual= Calendar.getInstance();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio);
+
+        Calendar fechaActual= Calendar.getInstance();
+        fechaActual.set(Calendar.HOUR_OF_DAY,0);
+        fechaActual.set(Calendar.MINUTE,0);
+        fechaActual.set(Calendar.SECOND,0);
+        SharedPreferences spFecha=getSharedPreferences(FECHA, MODE_PRIVATE);
+        String fechaWin=spFecha.getString("fechaVotar","");
         botonGanador=findViewById(R.id.botonGanador);
         //fnCargando();
         botonGanador.setOnClickListener(new View.OnClickListener() {
@@ -57,6 +76,22 @@ public class InicioActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+            try {
+                Date strDate=sdf.parse(fechaWin);
+                if (!fechaActual.before(strDate)){
+                    Toast.makeText(InicioActivity.this, "True", Toast.LENGTH_LONG).show();
+                    botonGanador.hide();
+                }else {
+                    Toast.makeText(InicioActivity.this, "False", Toast.LENGTH_LONG).show();
+                    botonGanador.show();
+                }
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+
     }
     public void fnCargando(){
         /*inflater= getLayoutInflater();
@@ -95,11 +130,28 @@ public class InicioActivity extends AppCompatActivity {
                 startActivity(intent1);
                 break;
             case R.id.mnGrafica:
-                Intent intent2= new Intent(InicioActivity.this,GraficaActivity.class);
-                Bundle x = new Bundle();
-                x.putSerializable("Planchas", (Serializable) planchasList);
-                intent2.putExtras(x);
-                startActivity(intent2);
+                final List<Plancha> planchasList2 = new ArrayList<>();
+                final Call<List<Plancha>> planchaSimple=ServicioApi.getInstancia(this).extraerGrafica();
+                planchaSimple.enqueue(new Callback<List<Plancha>>() {
+                    @Override
+                    public void onResponse(Call<List<Plancha>> call, Response<List<Plancha>> response) {
+                        for (Plancha p:response.body()
+                             ) {
+                            planchasList2.add(p);
+                        }
+                        Intent intent2= new Intent(InicioActivity.this,GraficaActivity.class);
+                        Bundle x = new Bundle();
+                        x.putSerializable("Plancha", (Serializable) planchasList2);
+                        intent2.putExtras(x);
+                        startActivity(intent2);
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Plancha>> call, Throwable t) {
+                        Toast.makeText(InicioActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -110,6 +162,25 @@ public class InicioActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         fnCargarRecyclerView();
+        Calendar fechaActual= Calendar.getInstance();
+        fechaActual.set(Calendar.HOUR_OF_DAY,0);
+        fechaActual.set(Calendar.MINUTE,0);
+        fechaActual.set(Calendar.SECOND,0);
+        SharedPreferences spFecha=getSharedPreferences(FECHA, MODE_PRIVATE);
+        String fechaWin=spFecha.getString("fechaVotar","");
+        try {
+            Date strDate=sdf.parse(fechaWin);
+            if (!fechaActual.before(strDate)){
+                Toast.makeText(InicioActivity.this, "True", Toast.LENGTH_LONG).show();
+                botonGanador.hide();
+            }else {
+                Toast.makeText(InicioActivity.this, "False", Toast.LENGTH_LONG).show();
+                botonGanador.show();
+            }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     private void fnCargarRecyclerView() {fnCargando();
