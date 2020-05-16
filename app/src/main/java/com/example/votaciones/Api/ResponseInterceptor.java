@@ -3,6 +3,7 @@ package com.example.votaciones.Api;
 import android.content.Context;
 import android.content.Intent;
 
+import com.example.votaciones.Activity.GraficaActivity;
 import com.example.votaciones.Activity.MainActivity;
 
 import java.io.IOException;
@@ -22,7 +23,7 @@ public class ResponseInterceptor implements Interceptor {
                 /*jsonObject.put("code", 200);
                 jsonObject.put("status", "OK");
                 jsonObject.put("message", new JSONObject(response.body().string()));*/
-            }else if(response.code()!=200){
+            }else /*if(response.code()!=200)*/{
                 Intent intent=new Intent(context, MainActivity.class);
                 context.startActivity(intent);
             }/*else {

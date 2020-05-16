@@ -72,6 +72,7 @@ public class GanadorActivity extends AppCompatActivity {
             }
         });
 
+
         //txtNombre.setText(spFecha.getString("fechaVotar",""));
         /*final Call<List<Planchas>> planchas= ServicioApi.getInstancia(this).obtenerPlanchas();
         planchas.enqueue(new Callback<List<Planchas>>() {
@@ -208,27 +209,21 @@ public class GanadorActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_inicial, menu);
+        MenuItem mnUsuario= menu.findItem(R.id.mnUsuario);
+        mnUsuario.setVisible(false);
+        MenuItem mnVoto =menu.findItem(R.id.mnVoto);
+        mnVoto.setIcon(R.drawable.ic_inicio);
+        MenuItem mnGrafica =menu.findItem(R.id.mnGrafica);
+        mnGrafica.setVisible(false);
         return super.onCreateOptionsMenu(menu);
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.mnUsuario:
-                Intent intent = new Intent(GanadorActivity.this, UsuarioActivity.class);
-                intent.putExtra("carnet", carnet);
-                startActivity(intent);
-                break;
             case R.id.mnVoto:
                 Intent intent1 =new Intent(GanadorActivity.this,InicioActivity.class);
                 intent1.putExtra("carnet",carnet);
                 startActivity(intent1);
-                break;
-            case R.id.mnGrafica:
-                Intent intent2= new Intent(GanadorActivity.this,GraficaActivity.class);
-                Bundle x = new Bundle();
-                x.putSerializable("Planchas", (Serializable) planchasList);
-                intent2.putExtras(x);
-                startActivity(intent2);
                 break;
         }
         return super.onOptionsItemSelected(item);

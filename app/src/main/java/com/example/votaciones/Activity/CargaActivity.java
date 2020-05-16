@@ -9,18 +9,18 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.example.votaciones.Api.ServicioApi;
+import com.example.votaciones.Class.IntentServiNotificacion;
+import com.example.votaciones.Class.ServicioNotificacion;
 import com.example.votaciones.R;
 import com.example.votaciones.objetos.Configuracion;
 import com.example.votaciones.objetos.Token;
-import com.example.votaciones.objetos.VerificarFechaSegundoPlano;
+import com.example.votaciones.Class.VerificarFechaSegundoPlano;
 
-import java.io.Serializable;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -44,9 +44,9 @@ public class CargaActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_carga);
-        createNotificaionChannel();
+        /*createNotificaionChannel();
         VerificarFechaSegundoPlano v=new VerificarFechaSegundoPlano(this);
-        v.execute();
+        v.execute();*/
         SharedPreferences spSesion=getSharedPreferences(SESION, MODE_PRIVATE);
         //SharedPreferences spFecha=getSharedPreferences(FECHA, MODE_PRIVATE);
         Map<String, ?> recuperarTexto = spSesion.getAll();
@@ -63,41 +63,39 @@ public class CargaActivity extends AppCompatActivity {
                                 if(response.isSuccessful()){
                                     Configuracion confi =response.body();
                                     String fechaVotar= confi.getFechaVotaciones().split("T")[0];
-                                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                                    Calendar fechaActual= Calendar.getInstance();
-                                    fechaActual.set(Calendar.HOUR_OF_DAY,0);
+                                    String horaFinalVota=confi.getHoraFinVotaciones();
+
+                                    /*fechaActual.set(Calendar.HOUR_OF_DAY,0);
                                     fechaActual.set(Calendar.MINUTE,0);
-                                    fechaActual.set(Calendar.SECOND,0);
+                                    fechaActual.set(Calendar.SECOND,0);*/
                                     SharedPreferences sp=getSharedPreferences(FECHA,MODE_PRIVATE);
                                     SharedPreferences.Editor edit =sp.edit();
-
-                                    try {
-                                        Date strDate = sdf.parse(fechaVotar);
-                                        Intent i;
-                                        edit.putString("fechaVotar",fechaVotar);
-                                        edit.commit();
-                                        if(!fechaActual.after(strDate)) {
-                                            i= new Intent(CargaActivity.this,
-                                                    InicioActivity.class);
-                                        }
-                                        else {
-                                            i= new Intent(CargaActivity.this,
-                                                    GanadorActivity.class);
-
-                                        }
-                                        //Intent is used to switch from one activity to another.
-                                        //i.putExtra("carnet", usuario.getCarnet());
-                                        startActivity(i);
-                                        //invoke the SecondActivity.
-
-                                        finish();
-                                        //the current activity will get finished.*/
-                                    } catch (ParseException e) {
-                                        Toast.makeText(CargaActivity.this, "ERORR "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    edit.putString("fechaVotar",fechaVotar);
+                                    edit.putString("horaVotar",horaFinalVota);
+                                    edit.commit();
+                                    /*Inicio Notificacion*/
+                                    createNotificaionChannel();
+                                    Toast.makeText(CargaActivity.this, "Antes de IntentServiNotificacion", Toast.LENGTH_SHORT).show();
+                                    startService(new Intent(CargaActivity.this, IntentServiNotificacion.class));
+                                    //VerificarFechaSegundoPlano v=new VerificarFechaSegundoPlano(CargaActivity.this);
+                                    //v.execute();
+                                    /*Fin Notificacion*/
+                                    Intent i;
+                                    if(fnVerificarFechaHora()) {
+                                        i= new Intent(CargaActivity.this,
+                                                GanadorActivity.class);
+                                    }else{
+                                        i= new Intent(CargaActivity.this,
+                                                InicioActivity.class);
                                     }
+                                    //Intent is used to switch from one activity to another.
+                                    //i.putExtra("carnet", usuario.getCarnet());
+                                    startActivity(i);
+                                    //invoke the SecondActivity.
+                                    finish();
+                                        //the current activity will get finished.*/
                                 }
                             }
-
                             @Override
                             public void onFailure(Call<Configuracion> call, Throwable t) {
                                 Toast.makeText(CargaActivity.this,t.getMessage(),Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
@@ -153,5 +151,46 @@ public class CargaActivity extends AppCompatActivity {
             NotificationManager notificationManager=getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
+    }
+    private Boolean fnVerificarFechaHora(){
+        boolean check = false;
+        Calendar fechaActual =Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date dateHoraVotar,dateHoraActual;
+        fechaActual.set(Calendar.HOUR_OF_DAY,0);
+        fechaActual.set(Calendar.MINUTE,0);
+        fechaActual.set(Calendar.SECOND,0);
+        SharedPreferences spFecha=getSharedPreferences(FECHA, MODE_PRIVATE);
+        String fechaWin=spFecha.getString("fechaVotar","");
+        try {
+            Date strDate=sdf.parse(fechaWin);
+            //Toast.makeText(this, ""+fechaActual.getTime(), Toast.LENGTH_LONG).show();
+            if (fechaActual.getTime().before(strDate)){
+                check= false;
+            }else {
+                //Toast.makeText(this, fechaWin+" true "+fechaActual, Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
+                String horaVotar=spFecha.getString("horaVotar","");
+                Calendar c = Calendar.getInstance();
+                String horaActual=c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE);
+                DateFormat df=new SimpleDateFormat("HH:mm");
+                try {
+                    dateHoraVotar=df.parse(horaVotar);
+                    dateHoraActual=df.parse(horaActual);
+                    if (dateHoraActual.before(dateHoraVotar)){
+                        //Toast.makeText(this, dateHoraActual+" Falso "+dateHoraVotar, Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
+                        check= false;
+                    }else {
+                        //Toast.makeText(this, dateHoraActual+" True "+dateHoraVotar, Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
+                        check= true;
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return check;
     }
 }

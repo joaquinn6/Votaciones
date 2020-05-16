@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.example.votaciones.Api.ServicioApi;
 import com.example.votaciones.R;
 import com.example.votaciones.RecyclerViews.RVAdaptadorVotar;
+import com.example.votaciones.objetos.Plancha;
 import com.example.votaciones.objetos.Planchas;
 import com.example.votaciones.objetos.Respuesta;
 import com.example.votaciones.objetos.Usuario;
@@ -69,7 +70,8 @@ public class VotarActivity extends AppCompatActivity {
 
 
         RecyclerView rvVotar= findViewById(R.id.rvVotar);
-        final Call<List<Planchas>> planchas= ServicioApi.getInstancia(this).obtenerPlanchas();
+
+        /*final Call<List<Planchas>> planchas= ServicioApi.getInstancia(this).obtenerPlanchas();
         planchas.enqueue(new Callback<List<Planchas>>() {
             @Override
             public void onResponse(Call<List<Planchas>> call, Response<List<Planchas>> response) {
@@ -92,7 +94,7 @@ public class VotarActivity extends AppCompatActivity {
             public void onFailure(Call<List<Planchas>> call, Throwable t) {
                 Toast.makeText(VotarActivity.this, t.getMessage().toString(), Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
         RVAdaptadorVotar.OnItemClickListener onItemClickListener= new RVAdaptadorVotar.OnItemClickListener() {
             @Override
             public void OnItemClick(final int posicion) {
@@ -110,11 +112,23 @@ public class VotarActivity extends AppCompatActivity {
             }
         };
         /*Pasar el evento long click por el constructor del adapter*/
-        adapter= new RVAdaptadorVotar(planchasList, onItemClickListener,onItemLongClickListener);
         GridLayoutManager manager = new GridLayoutManager(this, 2);
         rvVotar.setLayoutManager(manager);
+        Bundle extras= getIntent().getExtras();
+        if(extras!=null){
+            planchasList = (List<Planchas>) extras.getSerializable("PlanchasVoto");
+            Planchas votoNulo=new Planchas();
+            votoNulo.setNombrePlancha("NULO");
+            votoNulo.setColor("#f9f4f3");
+            votoNulo.setAcronimo("NULO");
+            planchasList.add(votoNulo);
+            adapter= new RVAdaptadorVotar(planchasList, onItemClickListener,onItemLongClickListener);
+            adapter.notifyDataSetChanged();
+        }
         rvVotar.setAdapter(adapter);
+
         ImageView DragDropVotar=findViewById(R.id.DragDropVotar);
+
         /*Agregar el evento drag a la imagen*/
         DragDropVotar.setOnDragListener(dragListener);
     }

@@ -30,7 +30,7 @@ public class GraficaActivity extends AppCompatActivity {
         Bundle extras= getIntent().getExtras();
         if(extras!=null){
             planchasList = (List<Plancha>) extras.getSerializable("Plancha");
-            Toast.makeText(this, "Entre "+planchasList.size(), Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, "Entre "+planchasList.size(), Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
         }
             PieChart pcPorcentaje = findViewById(R.id.pc);
 

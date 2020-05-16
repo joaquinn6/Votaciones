@@ -27,6 +27,7 @@ import com.example.votaciones.objetos.Token;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.UnsupportedEncodingException;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -43,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
     private final Token token =new Token();
     private final Intent[] intent = new Intent[1];
-
+    public String FECHA="FechaGanador";
     private EditText etCarnet;
     private EditText etContrasena;
     @Override
@@ -61,6 +62,9 @@ public class MainActivity extends AppCompatActivity {
                 if(!(etCarnet.getText().toString().isEmpty() || etContrasena.getText().toString().isEmpty())){
                     token.setUsarname(etCarnet.getText().toString());
                     token.setPassword(md5(etContrasena.getText().toString()));
+                    SharedPreferences.Editor editor = getSharedPreferences(SESION, MODE_PRIVATE).edit();
+                    editor.clear();
+                    editor.apply();
                     IniciarSesion();
                 }
             }
@@ -99,7 +103,30 @@ public class MainActivity extends AppCompatActivity {
                 if(response.isSuccessful()){
                     if(!response.body().getToken().isEmpty()){
                         //inicio
-                        final Call<Configuracion> configuracionCall= ServicioApi.getInstancia(MainActivity.this).extraerConfiguracion();
+                        if(fnVerificarFechaHora()){
+                            SharedPreferences.Editor editor = getSharedPreferences(SESION, MODE_PRIVATE).edit();
+                            editor.putString("carnet", etCarnet.getText().toString());
+                            editor.putString("token", tokenResponse.getToken());
+                            editor.apply();
+                            intent[0]= new Intent(MainActivity.this, GanadorActivity.class);
+                            //Intent is used to switch from one activity to another.
+                            //i.putExtra("carnet", usuario.getCarnet());
+                            startActivity(intent[0]);
+                            //invoke the SecondActivity.
+
+                            finish();
+                            //the current activity will get finished.
+                        }else {
+                            SharedPreferences.Editor editor = getSharedPreferences(SESION, MODE_PRIVATE).edit();
+                            editor.putString("carnet", etCarnet.getText().toString());
+                            editor.putString("token", tokenResponse.getToken());
+                            editor.apply();
+
+                            intent[0] = new Intent(MainActivity.this, InicioActivity.class);
+                            startActivity(intent[0]);
+                            finish();
+                        }
+                        /*final Call<Configuracion> configuracionCall= ServicioApi.getInstancia(MainActivity.this).extraerConfiguracion();
                         configuracionCall.enqueue(new Callback<Configuracion>() {
                             @Override
                             public void onResponse(Call<Configuracion> call, Response<Configuracion> response) {
@@ -137,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
                                             //invoke the SecondActivity.
 
                                             finish();
-                                            //the current activity will get finished.*/
+                                            //the current activity will get finished.
                                         }
 
                                     } catch (ParseException e) {
@@ -150,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
                             public void onFailure(Call<Configuracion> call, Throwable t) {
                                 Toast.makeText(MainActivity.this,t.getMessage(),Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
                             }
-                        });
+                        });*/
                         //Fin
 
                     }else{
@@ -172,5 +199,45 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    private Boolean fnVerificarFechaHora(){
+        boolean check = false;
+        Calendar fechaActual =Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date dateHoraVotar,dateHoraActual;
+        fechaActual.set(Calendar.HOUR_OF_DAY,0);
+        fechaActual.set(Calendar.MINUTE,0);
+        fechaActual.set(Calendar.SECOND,0);
+        SharedPreferences spFecha=getSharedPreferences(FECHA, MODE_PRIVATE);
+        String fechaWin=spFecha.getString("fechaVotar","");
+        try {
+            Date strDate=sdf.parse(fechaWin);
+            //Toast.makeText(this, ""+fechaActual.getTime(), Toast.LENGTH_LONG).show();
+            if (fechaActual.getTime().before(strDate)){
+                check= false;
+            }else {
+                //Toast.makeText(this, fechaWin+" true "+fechaActual, Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
+                String horaVotar=spFecha.getString("horaVotar","");
+                Calendar c = Calendar.getInstance();
+                String horaActual=c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE);
+                DateFormat df=new SimpleDateFormat("HH:mm");
+                try {
+                    dateHoraVotar=df.parse(horaVotar);
+                    dateHoraActual=df.parse(horaActual);
+                    if (dateHoraActual.before(dateHoraVotar)){
+                        //Toast.makeText(this, dateHoraActual+" Falso "+dateHoraVotar, Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
+                        check= false;
+                    }else {
+                        //Toast.makeText(this, dateHoraActual+" True "+dateHoraVotar, Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
+                        check= true;
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
 
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return check;
+    }
 }

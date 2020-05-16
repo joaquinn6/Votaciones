@@ -1,5 +1,6 @@
 package com.example.votaciones.Activity;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -14,6 +15,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -31,12 +33,15 @@ import com.example.votaciones.objetos.Planchas;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.Serializable;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -44,6 +49,7 @@ import retrofit2.Response;
 
 public class InicioActivity extends AppCompatActivity {
     private List<Planchas> planchasList = new ArrayList<>();
+    List<Planchas> listPlanchas= new ArrayList<>();
     private RvAdaptadorPlancha adapter;
     private String carnet;
     private ProgressBar pbCargando;
@@ -53,21 +59,23 @@ public class InicioActivity extends AppCompatActivity {
     ProgressDialog progressDialog = null;
     public String FECHA="FechaGanador";
     private PendingIntent pendingIntent;
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    Calendar fechaActual= Calendar.getInstance();
 
+    SharedPreferences spFecha;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio);
-
-        Calendar fechaActual= Calendar.getInstance();
-        fechaActual.set(Calendar.HOUR_OF_DAY,0);
-        fechaActual.set(Calendar.MINUTE,0);
-        fechaActual.set(Calendar.SECOND,0);
-        SharedPreferences spFecha=getSharedPreferences(FECHA, MODE_PRIVATE);
-        String fechaWin=spFecha.getString("fechaVotar","");
         botonGanador=findViewById(R.id.botonGanador);
+        if (fnVerificarFechaHora()){
+            botonGanador.show();
+            //Toast.makeText(this, "Boton Visible", Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
+        }else {
+            botonGanador.hide();
+            //Toast.makeText(this, "Boton invisible", Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
+        }
+
+
+
         //fnCargando();
         botonGanador.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,30 +85,12 @@ public class InicioActivity extends AppCompatActivity {
             }
         });
 
-            try {
-                Date strDate=sdf.parse(fechaWin);
-                if (!fechaActual.before(strDate)){
-                    Toast.makeText(InicioActivity.this, "True", Toast.LENGTH_LONG).show();
-                    botonGanador.hide();
-                }else {
-                    Toast.makeText(InicioActivity.this, "False", Toast.LENGTH_LONG).show();
-                    botonGanador.show();
-                }
 
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
 
 
     }
     public void fnCargando(){
-        /*inflater= getLayoutInflater();
-        View view = inflater.inflate(R.layout.cargando,null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(InicioActivity.this);
-        builder.setView(view);
-        dialog = builder.create();
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.show();*/
+
         progressDialog = new ProgressDialog(this);
         progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         progressDialog.show();
@@ -113,6 +103,13 @@ public class InicioActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_inicial, menu);
+        MenuItem mnVoto=menu.findItem(R.id.mnVoto);
+        if(fnVerificarFechaHora()){
+            mnVoto.setVisible(false);
+        }else {
+            mnVoto.setVisible(true);
+        }
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -126,7 +123,10 @@ public class InicioActivity extends AppCompatActivity {
                 break;
             case R.id.mnVoto:
                 Intent intent1 =new Intent(InicioActivity.this,VotarActivity.class);
-                intent1.putExtra("carnet",carnet);
+                Bundle x=new Bundle();
+                x.putSerializable("PlanchasVoto",(Serializable) listPlanchas);
+                intent1.putExtras(x);
+                //intent1.putExtra("carnet",carnet);
                 startActivity(intent1);
                 break;
             case R.id.mnGrafica:
@@ -162,24 +162,19 @@ public class InicioActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         fnCargarRecyclerView();
-        Calendar fechaActual= Calendar.getInstance();
+        /*Calendar fechaActual= Calendar.getInstance();
         fechaActual.set(Calendar.HOUR_OF_DAY,0);
         fechaActual.set(Calendar.MINUTE,0);
         fechaActual.set(Calendar.SECOND,0);
-        SharedPreferences spFecha=getSharedPreferences(FECHA, MODE_PRIVATE);
-        String fechaWin=spFecha.getString("fechaVotar","");
-        try {
-            Date strDate=sdf.parse(fechaWin);
-            if (!fechaActual.before(strDate)){
-                Toast.makeText(InicioActivity.this, "True", Toast.LENGTH_LONG).show();
-                botonGanador.hide();
-            }else {
-                Toast.makeText(InicioActivity.this, "False", Toast.LENGTH_LONG).show();
-                botonGanador.show();
-            }
+        spFecha=getSharedPreferences(FECHA, MODE_PRIVATE);
+        /*Comparar Hora*/
+        /*String fechaWin=spFecha.getString("fechaVotar","");
 
-        } catch (ParseException e) {
-            e.printStackTrace();
+        /*Probando*/
+        if (fnVerificarFechaHora()){
+            botonGanador.show();
+        }else {
+            botonGanador.hide();
         }
     }
 
@@ -193,6 +188,7 @@ public class InicioActivity extends AppCompatActivity {
         final SwipeRefreshLayout srlRecargar= findViewById(R.id.srlRecargar);
 
         srlRecargar.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onRefresh() {
                 onResume();
@@ -210,6 +206,7 @@ public class InicioActivity extends AppCompatActivity {
                     for(Planchas P : response.body()){
                         planchasList.add(P);
                     }
+                    listPlanchas=planchasList;
                     adapter.notifyDataSetChanged();
                     progressDialog.dismiss();
                 }else
@@ -318,5 +315,45 @@ public class InicioActivity extends AppCompatActivity {
 
     }
 
+    private Boolean fnVerificarFechaHora(){
+        boolean check = false;
+        Calendar fechaActual =Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date dateHoraVotar,dateHoraActual;
+        fechaActual.set(Calendar.HOUR_OF_DAY,0);
+        fechaActual.set(Calendar.MINUTE,0);
+        fechaActual.set(Calendar.SECOND,0);
+        SharedPreferences spFecha=getSharedPreferences(FECHA, MODE_PRIVATE);
+        String fechaWin=spFecha.getString("fechaVotar","");
+        try {
+            Date strDate=sdf.parse(fechaWin);
+            if (fechaActual.getTime().before(strDate)){
+                check= false;
+            }else {
+                //Toast.makeText(this, fechaWin+" true "+fechaActual, Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
+                String horaVotar=spFecha.getString("horaVotar","");
+                Calendar c = Calendar.getInstance();
+                String horaActual=c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE);
+                DateFormat df=new SimpleDateFormat("HH:mm");
+                try {
+                    dateHoraVotar=df.parse(horaVotar);
+                    dateHoraActual=df.parse(horaActual);
+                    if (dateHoraActual.before(dateHoraVotar)){
+                        //Toast.makeText(this, dateHoraActual+" Falso "+dateHoraVotar, Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
+                        check= false;
+                    }else {
+                        //Toast.makeText(this, dateHoraActual+" True "+dateHoraVotar, Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
+                        check= true;
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
 
+        } catch (ParseException e) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+        return check;
+    }
 }
