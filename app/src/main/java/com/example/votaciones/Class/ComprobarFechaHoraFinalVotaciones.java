@@ -35,32 +35,31 @@ public class ComprobarFechaHoraFinalVotaciones {
         fechaActual.set(Calendar.MINUTE,0);
         fechaActual.set(Calendar.SECOND,0);
         SharedPreferences spFecha=context.getSharedPreferences(FECHA, MODE_PRIVATE);
-        String fechaWin=spFecha.getString("fechaVotar","");
+        String fechaWin=fechaVota;/*spFecha.getString("fechaVotar","");*/
         try {
             Date strDate=sdf.parse(fechaWin);
-            //Toast.makeText(this, ""+fechaActual.getTime(), Toast.LENGTH_LONG).show();
             if (fechaActual.getTime().before(strDate)){
-                check= false;
+                check=false;
             }else {
                 //Toast.makeText(this, fechaWin+" true "+fechaActual, Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
                 String horaVotar=spFecha.getString("horaVotar","");
                 Calendar c = Calendar.getInstance();
                 String horaActual=c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE);
                 DateFormat df=new SimpleDateFormat("HH:mm");
-                try {
-                    dateHoraVotar=df.parse(horaVotar);
-                    dateHoraActual=df.parse(horaActual);
-                    //Toast.makeText(this, horaActual+" Falso "+horaVotar, Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
-                    if (dateHoraActual.before(dateHoraVotar)){
-                        //Toast.makeText(this, dateHoraActual+" Falso "+dateHoraVotar, Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
-                        check= false;
-                    }else {
-                        //Toast.makeText(this, dateHoraActual+" True "+dateHoraVotar, Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
-                        check= true;
+                if(fechaActual.getTime().equals(strDate)) {
+                    try {
+                        dateHoraVotar = df.parse(horaVotar);
+                        dateHoraActual = df.parse(horaActual);
+
+                        if (dateHoraActual.before(dateHoraVotar)) {
+                            check = false;
+                        } else {
+                            check = true;
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
                     }
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                }else check=true;
             }
 
         } catch (ParseException e) {

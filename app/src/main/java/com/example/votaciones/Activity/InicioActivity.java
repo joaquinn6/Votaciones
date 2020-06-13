@@ -25,6 +25,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.votaciones.Api.ServicioApi;
+import com.example.votaciones.Class.ComprobarFechaHoraFinalVotaciones;
 import com.example.votaciones.R;
 import com.example.votaciones.RecyclerViews.RvAdaptadorPlancha;
 import com.example.votaciones.objetos.Integrante;
@@ -59,14 +60,18 @@ public class InicioActivity extends AppCompatActivity {
     ProgressDialog progressDialog = null;
     public String FECHA="FechaGanador";
     private PendingIntent pendingIntent;
-
+    private ComprobarFechaHoraFinalVotaciones cffv;
     SharedPreferences spFecha;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio);
+        SharedPreferences spFecha=getSharedPreferences(FECHA, MODE_PRIVATE);
+        String fechaWin=spFecha.getString("fechaVotar","");
+        String horaVotar=spFecha.getString("horaVotar","");
+        cffv=new ComprobarFechaHoraFinalVotaciones(fechaWin,horaVotar,this);
         botonGanador=findViewById(R.id.botonGanador);
-        if (fnVerificarFechaHora()){
+        if (cffv.fnVerificarFechaHora()){
             botonGanador.show();
             //Toast.makeText(this, "Boton Visible", Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
         }else {
@@ -104,7 +109,7 @@ public class InicioActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_inicial, menu);
         MenuItem mnVoto=menu.findItem(R.id.mnVoto);
-        if(fnVerificarFechaHora()){
+        if(cffv.fnVerificarFechaHora()){
             mnVoto.setVisible(false);
         }else {
             mnVoto.setVisible(true);
@@ -171,7 +176,7 @@ public class InicioActivity extends AppCompatActivity {
         /*String fechaWin=spFecha.getString("fechaVotar","");
 
         /*Probando*/
-        if (fnVerificarFechaHora()){
+        if (cffv.fnVerificarFechaHora()){
             botonGanador.show();
         }else {
             botonGanador.hide();
@@ -315,7 +320,7 @@ public class InicioActivity extends AppCompatActivity {
 
     }
 
-    private Boolean fnVerificarFechaHora(){
+    /*private Boolean fnVerificarFechaHora(){
         boolean check = false;
         Calendar fechaActual =Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -328,26 +333,31 @@ public class InicioActivity extends AppCompatActivity {
         try {
             Date strDate=sdf.parse(fechaWin);
             if (fechaActual.getTime().before(strDate)){
-                check= false;
+                Toast.makeText(this, ""+false, Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
+                check=false;
             }else {
                 //Toast.makeText(this, fechaWin+" true "+fechaActual, Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
                 String horaVotar=spFecha.getString("horaVotar","");
                 Calendar c = Calendar.getInstance();
                 String horaActual=c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE);
                 DateFormat df=new SimpleDateFormat("HH:mm");
-                try {
-                    dateHoraVotar=df.parse(horaVotar);
-                    dateHoraActual=df.parse(horaActual);
-                    if (dateHoraActual.before(dateHoraVotar)){
-                        //Toast.makeText(this, dateHoraActual+" Falso "+dateHoraVotar, Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
-                        check= false;
-                    }else {
-                        //Toast.makeText(this, dateHoraActual+" True "+dateHoraVotar, Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
-                        check= true;
+                if(fechaActual.getTime().equals(strDate)) {
+                    try {
+                        dateHoraVotar = df.parse(horaVotar);
+                        dateHoraActual = df.parse(horaActual);
+                        Toast.makeText(this, "" + true, Toast.LENGTH_LONG + Toast.LENGTH_LONG + Toast.LENGTH_LONG + Toast.LENGTH_LONG).show();
+
+                        if (dateHoraActual.before(dateHoraVotar)) {
+                            Toast.makeText(this, dateHoraActual + " Falso " + dateHoraVotar, Toast.LENGTH_LONG + Toast.LENGTH_LONG + Toast.LENGTH_LONG + Toast.LENGTH_LONG).show();
+                            check = false;
+                        } else {
+                            Toast.makeText(this, dateHoraActual + " True " + dateHoraVotar, Toast.LENGTH_LONG + Toast.LENGTH_LONG + Toast.LENGTH_LONG + Toast.LENGTH_LONG).show();
+                            check = true;
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
                     }
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                }else check=true;
             }
 
         } catch (ParseException e) {
@@ -355,5 +365,5 @@ public class InicioActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return check;
-    }
+    }*/
 }

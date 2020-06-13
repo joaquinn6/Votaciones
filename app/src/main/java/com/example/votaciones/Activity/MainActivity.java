@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.votaciones.Api.ServicioApi;
+import com.example.votaciones.Class.ComprobarFechaHoraFinalVotaciones;
 import com.example.votaciones.R;
 import com.example.votaciones.objetos.Configuracion;
 import com.example.votaciones.objetos.Token;
@@ -47,11 +48,15 @@ public class MainActivity extends AppCompatActivity {
     public String FECHA="FechaGanador";
     private EditText etCarnet;
     private EditText etContrasena;
+    private ComprobarFechaHoraFinalVotaciones cffv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        SharedPreferences spFecha=getSharedPreferences(FECHA, MODE_PRIVATE);
+        String fechaWin=spFecha.getString("fechaVotar","");
+        String horaVotar=spFecha.getString("horaVotar","");
+        cffv=new ComprobarFechaHoraFinalVotaciones(fechaWin,horaVotar,this);
         etCarnet = findViewById(R.id.etCarnet);
         etContrasena = findViewById(R.id.etContrasena);
         Button btnSesion = findViewById(R.id.btnSesion);
@@ -103,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
                 if(response.isSuccessful()){
                     if(!response.body().getToken().isEmpty()){
                         //inicio
-                        if(fnVerificarFechaHora()){
+                        if(cffv.fnVerificarFechaHora()){
                             SharedPreferences.Editor editor = getSharedPreferences(SESION, MODE_PRIVATE).edit();
                             editor.putString("carnet", etCarnet.getText().toString());
                             editor.putString("token", tokenResponse.getToken());
@@ -199,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    private Boolean fnVerificarFechaHora(){
+    /*private Boolean fnVerificarFechaHora(){
         boolean check = false;
         Calendar fechaActual =Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -239,5 +244,5 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return check;
-    }
+    }*/
 }

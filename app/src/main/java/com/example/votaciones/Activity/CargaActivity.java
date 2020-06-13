@@ -13,6 +13,7 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.example.votaciones.Api.ServicioApi;
+import com.example.votaciones.Class.ComprobarFechaHoraFinalVotaciones;
 import com.example.votaciones.Class.IntentServiNotificacion;
 import com.example.votaciones.Class.ServicioNotificacion;
 import com.example.votaciones.R;
@@ -38,12 +39,17 @@ public class CargaActivity extends AppCompatActivity {
     private  final Token token=new Token();
     private static int TIME=1000;
     public String FECHA="FechaGanador";
+    private ComprobarFechaHoraFinalVotaciones cffv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_carga);
+        SharedPreferences spFecha=getSharedPreferences(FECHA, MODE_PRIVATE);
+        String fechaWin=spFecha.getString("fechaVotar","");
+        String horaVotar=spFecha.getString("horaVotar","");
+        cffv=new ComprobarFechaHoraFinalVotaciones(fechaWin,horaVotar,this);
         /*createNotificaionChannel();
         VerificarFechaSegundoPlano v=new VerificarFechaSegundoPlano(this);
         v.execute();*/
@@ -81,7 +87,7 @@ public class CargaActivity extends AppCompatActivity {
                                     //v.execute();
                                     /*Fin Notificacion*/
                                     Intent i;
-                                    if(fnVerificarFechaHora()) {
+                                    if(cffv.fnVerificarFechaHora()) {
                                         i= new Intent(CargaActivity.this,
                                                 GanadorActivity.class);
                                     }else{
@@ -152,7 +158,7 @@ public class CargaActivity extends AppCompatActivity {
             notificationManager.createNotificationChannel(channel);
         }
     }
-    private Boolean fnVerificarFechaHora(){
+    /*private Boolean fnVerificarFechaHora(){
         boolean check = false;
         Calendar fechaActual =Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -173,24 +179,26 @@ public class CargaActivity extends AppCompatActivity {
                 Calendar c = Calendar.getInstance();
                 String horaActual=c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE);
                 DateFormat df=new SimpleDateFormat("HH:mm");
-                try {
-                    dateHoraVotar=df.parse(horaVotar);
-                    dateHoraActual=df.parse(horaActual);
-                    if (dateHoraActual.before(dateHoraVotar)){
-                        //Toast.makeText(this, dateHoraActual+" Falso "+dateHoraVotar, Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
-                        check= false;
-                    }else {
-                        //Toast.makeText(this, dateHoraActual+" True "+dateHoraVotar, Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
-                        check= true;
+                if(fechaActual.getTime().equals(strDate)) {
+                    try {
+                        dateHoraVotar = df.parse(horaVotar);
+                        dateHoraActual = df.parse(horaActual);
+                        if (dateHoraActual.before(dateHoraVotar)) {
+                            //Toast.makeText(this, dateHoraActual+" Falso "+dateHoraVotar, Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
+                            check = false;
+                        } else {
+                            //Toast.makeText(this, dateHoraActual+" True "+dateHoraVotar, Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
+                            check = true;
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
                     }
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                }else check=true;
             }
 
         } catch (ParseException e) {
             e.printStackTrace();
         }
         return check;
-    }
+    }*/
 }
