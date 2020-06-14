@@ -40,9 +40,9 @@ public class VerificarFechaSegundoPlano extends AsyncTask<Void,Integer,Boolean> 
         SharedPreferences spFecha = context.getSharedPreferences(FECHA, context.MODE_PRIVATE);
         String fechaWin = spFecha.getString("fechaVotar", "");
         String horaWin = spFecha.getString("horaVotar", "");
-        ComprobarFechaHoraFinalVotaciones comprobarFechaHoraFinalVotaciones = new ComprobarFechaHoraFinalVotaciones(fechaWin, horaWin, context);
+        ComprobarFechaHoraFinalVotaciones comprobarFechaHoraFinalVotaciones = new ComprobarFechaHoraFinalVotaciones(context);
         //while (bucle) {
-        if (comprobarFechaHoraFinalVotaciones.fnDiaHoraLlego() /*&&  bucle*/) {
+        if (comprobarFechaHoraFinalVotaciones.fnDiaHoraLlego(fechaWin,horaWin) /*&&  bucle*/) {
             Intent intent = new Intent(context, GanadorActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             pi = PendingIntent.getActivity(context, 0, intent, 0);

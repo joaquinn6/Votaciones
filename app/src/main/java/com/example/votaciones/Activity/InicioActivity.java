@@ -62,21 +62,26 @@ public class InicioActivity extends AppCompatActivity {
     private PendingIntent pendingIntent;
     private ComprobarFechaHoraFinalVotaciones cffv;
     SharedPreferences spFecha;
+    String fechaWin,horaVotar,horaInicio;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio);
         SharedPreferences spFecha=getSharedPreferences(FECHA, MODE_PRIVATE);
-        String fechaWin=spFecha.getString("fechaVotar","");
-        String horaVotar=spFecha.getString("horaVotar","");
-        cffv=new ComprobarFechaHoraFinalVotaciones(fechaWin,horaVotar,this);
+        fechaWin=spFecha.getString("fechaVotar","");
+        horaVotar=spFecha.getString("horaVotar","");
+        horaInicio=spFecha.getString("horaInicioVota","");
+        cffv=new ComprobarFechaHoraFinalVotaciones(this);
         botonGanador=findViewById(R.id.botonGanador);
-        if (cffv.fnVerificarFechaHora()){
+        if (cffv.fnMostrarGanador(fechaWin,horaVotar)){
             botonGanador.show();
+            //Toast.makeText(this, "Probar show", Toast.LENGTH_SHORT).show();
             //Toast.makeText(this, "Boton Visible", Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
         }else {
+
             botonGanador.hide();
-            //Toast.makeText(this, "Boton invisible", Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, "Probar", Toast.LENGTH_SHORT).show();
+//Toast.makeText(this, "Boton invisible", Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
         }
 
 
@@ -109,12 +114,21 @@ public class InicioActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_inicial, menu);
         MenuItem mnVoto=menu.findItem(R.id.mnVoto);
-        if(cffv.fnVerificarFechaHora()){
-            mnVoto.setVisible(false);
+        MenuItem mnGrafica=menu.findItem(R.id.mnGrafica);
+        if (cffv.fnVerificarFechaHora(fechaWin,horaVotar,horaInicio)){
+            Toast.makeText(this, "Entre true", Toast.LENGTH_LONG).show();
+            if(cffv.fnMostrarGanador(fechaWin,horaVotar)){
+                mnGrafica.setVisible(true);
+                mnVoto.setVisible(false);
+            }else {
+                mnVoto.setVisible(true);
+                mnGrafica.setVisible(true);
+            }
         }else {
-            mnVoto.setVisible(true);
+            Toast.makeText(this, "Entre false", Toast.LENGTH_LONG).show();
+            mnVoto.setVisible(false);
+            mnGrafica.setVisible(false);
         }
-
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -176,7 +190,7 @@ public class InicioActivity extends AppCompatActivity {
         /*String fechaWin=spFecha.getString("fechaVotar","");
 
         /*Probando*/
-        if (cffv.fnVerificarFechaHora()){
+        if (cffv.fnMostrarGanador(fechaWin,horaVotar)){
             botonGanador.show();
         }else {
             botonGanador.hide();

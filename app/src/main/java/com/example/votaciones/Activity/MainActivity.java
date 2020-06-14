@@ -13,6 +13,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -49,14 +50,18 @@ public class MainActivity extends AppCompatActivity {
     private EditText etCarnet;
     private EditText etContrasena;
     private ComprobarFechaHoraFinalVotaciones cffv;
+    String fechaFinInscrip;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SharedPreferences spFecha=getSharedPreferences(FECHA, MODE_PRIVATE);
+        /*SharedPreferences spFecha=getSharedPreferences(FECHA, MODE_PRIVATE);
         String fechaWin=spFecha.getString("fechaVotar","");
         String horaVotar=spFecha.getString("horaVotar","");
-        cffv=new ComprobarFechaHoraFinalVotaciones(fechaWin,horaVotar,this);
+        fechaFinInscrip=spFecha.getString("fechaFinInscrip","");*/
+        //dialogInscripcion();
+        cffv=new ComprobarFechaHoraFinalVotaciones(this);
+        //cffvInscripcion=new ComprobarFechaHoraFinalVotaciones(fechaFinInscrip);
         etCarnet = findViewById(R.id.etCarnet);
         etContrasena = findViewById(R.id.etContrasena);
         Button btnSesion = findViewById(R.id.btnSesion);
@@ -70,7 +75,9 @@ public class MainActivity extends AppCompatActivity {
                     SharedPreferences.Editor editor = getSharedPreferences(SESION, MODE_PRIVATE).edit();
                     editor.clear();
                     editor.apply();
+
                     IniciarSesion();
+
                 }
             }
         });
@@ -107,30 +114,67 @@ public class MainActivity extends AppCompatActivity {
                 final Token tokenResponse=response.body();
                 if(response.isSuccessful()){
                     if(!response.body().getToken().isEmpty()){
-                        //inicio
-                        if(cffv.fnVerificarFechaHora()){
-                            SharedPreferences.Editor editor = getSharedPreferences(SESION, MODE_PRIVATE).edit();
-                            editor.putString("carnet", etCarnet.getText().toString());
-                            editor.putString("token", tokenResponse.getToken());
-                            editor.apply();
-                            intent[0]= new Intent(MainActivity.this, GanadorActivity.class);
-                            //Intent is used to switch from one activity to another.
-                            //i.putExtra("carnet", usuario.getCarnet());
-                            startActivity(intent[0]);
-                            //invoke the SecondActivity.
+                        final Call<Configuracion> configuracionCall= ServicioApi.getInstancia(MainActivity.this).extraerConfiguracion();
+                        configuracionCall.enqueue(new Callback<Configuracion>() {
+                            @Override
+                            public void onResponse(Call<Configuracion> call, Response<Configuracion> response) {
+                                if(response.isSuccessful()){
+                                    Configuracion confi =response.body();
+                                    String fechaVotar= confi.getFechaVotaciones().split("T")[0];
+                                    String horaFinalVota=confi.getHoraFinVotaciones();
+                                    String fechaFinInscrip= confi.getFechaInscripcionFin().split("T")[0];
+                                    String horaInicioVota= confi.getHoraInicioVotaciones();
+                                    //Toast.makeText(MainActivity.this, fechaFinInscrip, Toast.LENGTH_SHORT).show();
+                                    /*fechaActual.set(Calendar.HOUR_OF_DAY,0);
+                                    fechaActual.set(Calendar.MINUTE,0);
+                                    fechaActual.set(Calendar.SECOND,0);*/
+                                    SharedPreferences sp=getSharedPreferences(FECHA,MODE_PRIVATE);
+                                    SharedPreferences.Editor edit =sp.edit();
+                                    edit.putString("fechaVotar",fechaVotar);
+                                    edit.putString("horaVotar",horaFinalVota);
+                                    edit.putString("fechaFinInscrip",fechaFinInscrip);
+                                    edit.putString("horaInicioVota",horaInicioVota);
+                                    edit.commit();
+                                    MainActivity.this.fechaFinInscrip=fechaFinInscrip;
+                                    //cffv=new ComprobarFechaHoraFinalVotaciones(fechaVotar,horaFinalVota,MainActivity.this);
+                                    //cffvInscripcion=new ComprobarFechaHoraFinalVotaciones(fechaFinInscrip);
+                                    Toast.makeText(MainActivity.this, "Antes de enviar "+horaInicioVota+"|||"+horaFinalVota, Toast.LENGTH_LONG).show();
+                                    //Toast.makeText(MainActivity.this, cffvInscripcion.fnFechaInscripcion()+"  "+cffv.fnVerificarFechaHora(), Toast.LENGTH_LONG).show();
+                                    //inicio
+                                    if (cffv.fnFechaInscripcion(fechaFinInscrip)) {
+                                        if (cffv.fnMostrarGanador(fechaVotar,horaFinalVota)) {
+                                            SharedPreferences.Editor editor = getSharedPreferences(SESION, MODE_PRIVATE).edit();
+                                            editor.putString("carnet", etCarnet.getText().toString());
+                                            editor.putString("token", tokenResponse.getToken());
+                                            editor.apply();
+                                            intent[0] = new Intent(MainActivity.this, GanadorActivity.class);
+                                            //Intent is used to switch from one activity to another.
+                                            //i.putExtra("carnet", usuario.getCarnet());
+                                            startActivity(intent[0]);
+                                            //invoke the SecondActivity.
 
-                            finish();
-                            //the current activity will get finished.
-                        }else {
-                            SharedPreferences.Editor editor = getSharedPreferences(SESION, MODE_PRIVATE).edit();
-                            editor.putString("carnet", etCarnet.getText().toString());
-                            editor.putString("token", tokenResponse.getToken());
-                            editor.apply();
+                                            finish();
+                                            //the current activity will get finished.
+                                        } else {
+                                            SharedPreferences.Editor editor = getSharedPreferences(SESION, MODE_PRIVATE).edit();
+                                            editor.putString("carnet", etCarnet.getText().toString());
+                                            editor.putString("token", tokenResponse.getToken());
+                                            editor.apply();
 
-                            intent[0] = new Intent(MainActivity.this, InicioActivity.class);
-                            startActivity(intent[0]);
-                            finish();
-                        }
+                                            intent[0] = new Intent(MainActivity.this, InicioActivity.class);
+                                            startActivity(intent[0]);
+                                            finish();
+                                        }
+                                    }else dialogInscripcion();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<Configuracion> call, Throwable t) {
+
+                            }
+                        });
+
                         /*final Call<Configuracion> configuracionCall= ServicioApi.getInstancia(MainActivity.this).extraerConfiguracion();
                         configuracionCall.enqueue(new Callback<Configuracion>() {
                             @Override
@@ -204,45 +248,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    /*private Boolean fnVerificarFechaHora(){
-        boolean check = false;
-        Calendar fechaActual =Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date dateHoraVotar,dateHoraActual;
-        fechaActual.set(Calendar.HOUR_OF_DAY,0);
-        fechaActual.set(Calendar.MINUTE,0);
-        fechaActual.set(Calendar.SECOND,0);
-        SharedPreferences spFecha=getSharedPreferences(FECHA, MODE_PRIVATE);
-        String fechaWin=spFecha.getString("fechaVotar","");
-        try {
-            Date strDate=sdf.parse(fechaWin);
-            //Toast.makeText(this, ""+fechaActual.getTime(), Toast.LENGTH_LONG).show();
-            if (fechaActual.getTime().before(strDate)){
-                check= false;
-            }else {
-                //Toast.makeText(this, fechaWin+" true "+fechaActual, Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
-                String horaVotar=spFecha.getString("horaVotar","");
-                Calendar c = Calendar.getInstance();
-                String horaActual=c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE);
-                DateFormat df=new SimpleDateFormat("HH:mm");
-                try {
-                    dateHoraVotar=df.parse(horaVotar);
-                    dateHoraActual=df.parse(horaActual);
-                    if (dateHoraActual.before(dateHoraVotar)){
-                        //Toast.makeText(this, dateHoraActual+" Falso "+dateHoraVotar, Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
-                        check= false;
-                    }else {
-                        //Toast.makeText(this, dateHoraActual+" True "+dateHoraVotar, Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
-                        check= true;
-                    }
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+    private void dialogInscripcion(){
+        TextView txtMensaje;
+        AlertDialog.Builder builder=new AlertDialog.Builder(MainActivity.this);
+        LayoutInflater inflater=getLayoutInflater();
+        View view =inflater.inflate(R.layout.layout_inscripciones,null);
+        txtMensaje=view.findViewById(R.id.txtMensaje);
+        txtMensaje.setText("Bienvenido, en este momento no hay acceso debido a que estamos en etapa de inscripción de Planchas, vuelva cuando estén todas las Planchas inscritas despues del "+fechaFinInscrip);
+        builder.setView(view);
+        final AlertDialog dialog=builder.create();
+        dialog.show();
+        Button btnOk=view.findViewById(R.id.btnOk);
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
             }
+        });
+    }
 
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return check;
-    }*/
 }

@@ -95,22 +95,16 @@ public class VotarActivity extends AppCompatActivity {
                 Toast.makeText(VotarActivity.this, t.getMessage().toString(), Toast.LENGTH_SHORT).show();
             }
         });*/
-        RVAdaptadorVotar.OnItemClickListener onItemClickListener= new RVAdaptadorVotar.OnItemClickListener() {
+        RVAdaptadorVotar.OnTouchListener onTouchListener=new RVAdaptadorVotar.OnTouchListener() {
             @Override
-            public void OnItemClick(final int posicion) {
-            }
-        };
-        /*Usar el evento Longclick*/
-        RVAdaptadorVotar.OnItemLongClickListener onItemLongClickListener=new RVAdaptadorVotar.OnItemLongClickListener(){
-
-            @Override
-            public void OnItemLongClick(int posicion, View view) {
+            public void OnTouch(int posicion, View view) {
                 Position=posicion;
                 ClipData data  =ClipData.newPlainText("","");
                 View.DragShadowBuilder mydrag=new View.DragShadowBuilder(view);
                 view.startDrag(data, mydrag, view, 0);
             }
         };
+
         /*Pasar el evento long click por el constructor del adapter*/
         GridLayoutManager manager = new GridLayoutManager(this, 2);
         rvVotar.setLayoutManager(manager);
@@ -122,7 +116,7 @@ public class VotarActivity extends AppCompatActivity {
             votoNulo.setColor("#f9f4f3");
             votoNulo.setAcronimo("NULO");
             planchasList.add(votoNulo);
-            adapter= new RVAdaptadorVotar(planchasList, onItemClickListener,onItemLongClickListener);
+            adapter= new RVAdaptadorVotar(planchasList,onTouchListener);
             adapter.notifyDataSetChanged();
         }
         rvVotar.setAdapter(adapter);
