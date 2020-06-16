@@ -75,18 +75,10 @@ public class InicioActivity extends AppCompatActivity {
         botonGanador=findViewById(R.id.botonGanador);
         if (cffv.fnMostrarGanador(fechaWin,horaVotar)){
             botonGanador.show();
-            //Toast.makeText(this, "Probar show", Toast.LENGTH_SHORT).show();
-            //Toast.makeText(this, "Boton Visible", Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
         }else {
 
             botonGanador.hide();
-            //Toast.makeText(this, "Probar", Toast.LENGTH_SHORT).show();
-//Toast.makeText(this, "Boton invisible", Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
         }
-
-
-
-        //fnCargando();
         botonGanador.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,10 +86,6 @@ public class InicioActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-
-
-
     }
     public void fnCargando(){
 
@@ -116,7 +104,6 @@ public class InicioActivity extends AppCompatActivity {
         MenuItem mnVoto=menu.findItem(R.id.mnVoto);
         MenuItem mnGrafica=menu.findItem(R.id.mnGrafica);
         if (cffv.fnVerificarFechaHora(fechaWin,horaVotar,horaInicio)){
-            Toast.makeText(this, "Entre true", Toast.LENGTH_LONG).show();
             if(cffv.fnMostrarGanador(fechaWin,horaVotar)){
                 mnGrafica.setVisible(true);
                 mnVoto.setVisible(false);
@@ -125,9 +112,11 @@ public class InicioActivity extends AppCompatActivity {
                 mnGrafica.setVisible(true);
             }
         }else {
-            Toast.makeText(this, "Entre false", Toast.LENGTH_LONG).show();
             mnVoto.setVisible(false);
-            mnGrafica.setVisible(false);
+            if (cffv.fnMostrarGanador(fechaWin,horaVotar))
+                mnGrafica.setVisible(true);
+            else
+                mnGrafica.setVisible(false);
         }
         return super.onCreateOptionsMenu(menu);
     }
@@ -181,14 +170,6 @@ public class InicioActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         fnCargarRecyclerView();
-        /*Calendar fechaActual= Calendar.getInstance();
-        fechaActual.set(Calendar.HOUR_OF_DAY,0);
-        fechaActual.set(Calendar.MINUTE,0);
-        fechaActual.set(Calendar.SECOND,0);
-        spFecha=getSharedPreferences(FECHA, MODE_PRIVATE);
-        /*Comparar Hora*/
-        /*String fechaWin=spFecha.getString("fechaVotar","");
-
         /*Probando*/
         if (cffv.fnMostrarGanador(fechaWin,horaVotar)){
             botonGanador.show();
@@ -234,7 +215,7 @@ public class InicioActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Planchas>> call, Throwable t) {
-                Toast.makeText(InicioActivity.this, t.getMessage().toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(InicioActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
                 if (t.getMessage().equals("timeout")) {
                     progressDialog.dismiss();
                     AlertDialog.Builder build=new AlertDialog.Builder(InicioActivity.this);
@@ -333,51 +314,4 @@ public class InicioActivity extends AppCompatActivity {
 
 
     }
-
-    /*private Boolean fnVerificarFechaHora(){
-        boolean check = false;
-        Calendar fechaActual =Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date dateHoraVotar,dateHoraActual;
-        fechaActual.set(Calendar.HOUR_OF_DAY,0);
-        fechaActual.set(Calendar.MINUTE,0);
-        fechaActual.set(Calendar.SECOND,0);
-        SharedPreferences spFecha=getSharedPreferences(FECHA, MODE_PRIVATE);
-        String fechaWin=spFecha.getString("fechaVotar","");
-        try {
-            Date strDate=sdf.parse(fechaWin);
-            if (fechaActual.getTime().before(strDate)){
-                Toast.makeText(this, ""+false, Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
-                check=false;
-            }else {
-                //Toast.makeText(this, fechaWin+" true "+fechaActual, Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
-                String horaVotar=spFecha.getString("horaVotar","");
-                Calendar c = Calendar.getInstance();
-                String horaActual=c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE);
-                DateFormat df=new SimpleDateFormat("HH:mm");
-                if(fechaActual.getTime().equals(strDate)) {
-                    try {
-                        dateHoraVotar = df.parse(horaVotar);
-                        dateHoraActual = df.parse(horaActual);
-                        Toast.makeText(this, "" + true, Toast.LENGTH_LONG + Toast.LENGTH_LONG + Toast.LENGTH_LONG + Toast.LENGTH_LONG).show();
-
-                        if (dateHoraActual.before(dateHoraVotar)) {
-                            Toast.makeText(this, dateHoraActual + " Falso " + dateHoraVotar, Toast.LENGTH_LONG + Toast.LENGTH_LONG + Toast.LENGTH_LONG + Toast.LENGTH_LONG).show();
-                            check = false;
-                        } else {
-                            Toast.makeText(this, dateHoraActual + " True " + dateHoraVotar, Toast.LENGTH_LONG + Toast.LENGTH_LONG + Toast.LENGTH_LONG + Toast.LENGTH_LONG).show();
-                            check = true;
-                        }
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                }else check=true;
-            }
-
-        } catch (ParseException e) {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        }
-        return check;
-    }*/
 }

@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.example.votaciones.Api.ServicioApi;
 import com.example.votaciones.Class.ComprobarFechaHoraFinalVotaciones;
+import com.example.votaciones.Class.IntentServiNotificacion;
 import com.example.votaciones.R;
 import com.example.votaciones.objetos.Configuracion;
 import com.example.votaciones.objetos.Token;
@@ -55,13 +56,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        /*SharedPreferences spFecha=getSharedPreferences(FECHA, MODE_PRIVATE);
-        String fechaWin=spFecha.getString("fechaVotar","");
-        String horaVotar=spFecha.getString("horaVotar","");
-        fechaFinInscrip=spFecha.getString("fechaFinInscrip","");*/
-        //dialogInscripcion();
         cffv=new ComprobarFechaHoraFinalVotaciones(this);
-        //cffvInscripcion=new ComprobarFechaHoraFinalVotaciones(fechaFinInscrip);
         etCarnet = findViewById(R.id.etCarnet);
         etContrasena = findViewById(R.id.etContrasena);
         Button btnSesion = findViewById(R.id.btnSesion);
@@ -124,10 +119,6 @@ public class MainActivity extends AppCompatActivity {
                                     String horaFinalVota=confi.getHoraFinVotaciones();
                                     String fechaFinInscrip= confi.getFechaInscripcionFin().split("T")[0];
                                     String horaInicioVota= confi.getHoraInicioVotaciones();
-                                    //Toast.makeText(MainActivity.this, fechaFinInscrip, Toast.LENGTH_SHORT).show();
-                                    /*fechaActual.set(Calendar.HOUR_OF_DAY,0);
-                                    fechaActual.set(Calendar.MINUTE,0);
-                                    fechaActual.set(Calendar.SECOND,0);*/
                                     SharedPreferences sp=getSharedPreferences(FECHA,MODE_PRIVATE);
                                     SharedPreferences.Editor edit =sp.edit();
                                     edit.putString("fechaVotar",fechaVotar);
@@ -136,10 +127,8 @@ public class MainActivity extends AppCompatActivity {
                                     edit.putString("horaInicioVota",horaInicioVota);
                                     edit.commit();
                                     MainActivity.this.fechaFinInscrip=fechaFinInscrip;
-                                    //cffv=new ComprobarFechaHoraFinalVotaciones(fechaVotar,horaFinalVota,MainActivity.this);
-                                    //cffvInscripcion=new ComprobarFechaHoraFinalVotaciones(fechaFinInscrip);
-                                    Toast.makeText(MainActivity.this, "Antes de enviar "+horaInicioVota+"|||"+horaFinalVota, Toast.LENGTH_LONG).show();
-                                    //Toast.makeText(MainActivity.this, cffvInscripcion.fnFechaInscripcion()+"  "+cffv.fnVerificarFechaHora(), Toast.LENGTH_LONG).show();
+                                    Toast.makeText(MainActivity.this, "Antes de IntentServiNotificacion", Toast.LENGTH_LONG).show();
+                                    startService(new Intent(MainActivity.this, IntentServiNotificacion.class));
                                     //inicio
                                     if (cffv.fnFechaInscripcion(fechaFinInscrip)) {
                                         if (cffv.fnMostrarGanador(fechaVotar,horaFinalVota)) {
@@ -174,59 +163,6 @@ public class MainActivity extends AppCompatActivity {
 
                             }
                         });
-
-                        /*final Call<Configuracion> configuracionCall= ServicioApi.getInstancia(MainActivity.this).extraerConfiguracion();
-                        configuracionCall.enqueue(new Callback<Configuracion>() {
-                            @Override
-                            public void onResponse(Call<Configuracion> call, Response<Configuracion> response) {
-                                if(response.isSuccessful()){
-                                    Configuracion confi =response.body();
-                                    String fechaVotar= confi.getFechaVotaciones().split("T")[0];
-                                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                                    Calendar fechaActual= Calendar.getInstance();
-                                    fechaActual.set(Calendar.HOUR_OF_DAY,0);
-                                    fechaActual.set(Calendar.MINUTE,0);
-                                    fechaActual.set(Calendar.SECOND,0);
-
-                                    try {
-                                        Date strDate = sdf.parse(fechaVotar);
-
-                                        if(fechaActual.after(strDate)) {
-                                            SharedPreferences.Editor editor = getSharedPreferences(SESION, MODE_PRIVATE).edit();
-                                            editor.putString("carnet", etCarnet.getText().toString());
-                                            editor.putString("token", tokenResponse.getToken());
-                                            editor.apply();
-
-                                            intent[0] = new Intent(MainActivity.this, InicioActivity.class);
-                                            startActivity(intent[0]);
-                                            finish();
-                                        }
-                                        else {
-                                            SharedPreferences.Editor editor = getSharedPreferences(SESION, MODE_PRIVATE).edit();
-                                            editor.putString("carnet", etCarnet.getText().toString());
-                                            editor.putString("token", tokenResponse.getToken());
-                                            editor.apply();
-                                            intent[0]= new Intent(MainActivity.this, GanadorActivity.class);
-                                            //Intent is used to switch from one activity to another.
-                                            //i.putExtra("carnet", usuario.getCarnet());
-                                            startActivity(intent[0]);
-                                            //invoke the SecondActivity.
-
-                                            finish();
-                                            //the current activity will get finished.
-                                        }
-
-                                    } catch (ParseException e) {
-                                        Toast.makeText(MainActivity.this, "ERORR "+e.getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<Configuracion> call, Throwable t) {
-                                Toast.makeText(MainActivity.this,t.getMessage(),Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
-                            }
-                        });*/
                         //Fin
 
                     }else{

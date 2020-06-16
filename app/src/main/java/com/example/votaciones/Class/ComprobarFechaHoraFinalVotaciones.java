@@ -108,10 +108,12 @@ public class ComprobarFechaHoraFinalVotaciones {
                     try {
                         dateHoraVotar = df.parse(horaVotar);
                         dateHoraActual = df.parse(horaActual);
+                        //Toast.makeText(context, dateHoraActual+">"+dateHoraVotar+"="+dateHoraActual.after(dateHoraVotar)+"|||"+dateHoraActual+"=="+dateHoraVotar+"="+dateHoraActual.equals(dateHoraVotar), Toast.LENGTH_SHORT).show();
                         if (dateHoraActual.after(dateHoraVotar) || dateHoraActual.equals(dateHoraVotar)) {
+                            //Toast.makeText(context, "True", Toast.LENGTH_SHORT).show();
                             check = true;
                         } else {
-                            //Toast.makeText(context, dateHoraActual+" Falso "+dateHoraVotar, Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
+                            //Toast.makeText(context, " Falso ", Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
                             check = false;
                         }
                     } catch (ParseException e) {

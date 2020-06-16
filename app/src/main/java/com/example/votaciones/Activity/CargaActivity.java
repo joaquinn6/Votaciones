@@ -49,7 +49,6 @@ public class CargaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_carga);
         cffv=new ComprobarFechaHoraFinalVotaciones(context);
         SharedPreferences spSesion=getSharedPreferences(SESION, MODE_PRIVATE);
-        //SharedPreferences spFecha=getSharedPreferences(FECHA, MODE_PRIVATE);
         Map<String, ?> recuperarTexto = spSesion.getAll();
         if(!((Map) recuperarTexto).isEmpty()) {
             token.setToken(spSesion.getString("token", null));
@@ -67,9 +66,7 @@ public class CargaActivity extends AppCompatActivity {
                                     String horaFinalVota=confi.getHoraFinVotaciones();
                                     String fechaFinInscrip= confi.getFechaInscripcionFin().split("T")[0];
                                     String horaInicioVota= confi.getHoraInicioVotaciones();
-                                    /*fechaActual.set(Calendar.HOUR_OF_DAY,0);
-                                    fechaActual.set(Calendar.MINUTE,0);
-                                    fechaActual.set(Calendar.SECOND,0);*/
+
                                     SharedPreferences sp=getSharedPreferences(FECHA,MODE_PRIVATE);
                                     SharedPreferences.Editor edit =sp.edit();
                                     edit.putString("fechaVotar",fechaVotar);
@@ -77,14 +74,9 @@ public class CargaActivity extends AppCompatActivity {
                                     edit.putString("fechaFinInscrip",fechaFinInscrip);
                                     edit.putString("horaInicioVota",horaInicioVota);
                                     edit.commit();
-                                    //cffv=new ComprobarFechaHoraFinalVotaciones(fechaVotar,horaFinalVota,context);
                                     /*Inicio Notificacion*/
                                     createNotificaionChannel();
-                                    startService(new Intent(CargaActivity.this, IntentServiNotificacion.class));
-                                    //VerificarFechaSegundoPlano v=new VerificarFechaSegundoPlano(CargaActivity.this);
-                                    //v.execute();
                                     /*Fin Notificacion*/
-                                    //Toast.makeText(CargaActivity.this, ""+cffv.fnMostrarGanador(fechaVotar,horaFinalVota), Toast.LENGTH_SHORT).show();
                                     Intent i;
                                     if(cffv.fnMostrarGanador(fechaVotar,horaFinalVota)) {
                                         i= new Intent(CargaActivity.this,
@@ -93,8 +85,6 @@ public class CargaActivity extends AppCompatActivity {
                                         i= new Intent(CargaActivity.this,
                                                 InicioActivity.class);
                                     }
-                                    //Intent is used to switch from one activity to another.
-                                    //i.putExtra("carnet", usuario.getCarnet());
                                     startActivity(i);
                                     //invoke the SecondActivity.
                                     finish();
@@ -113,7 +103,7 @@ public class CargaActivity extends AppCompatActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-
+                        createNotificaionChannel();
                         Intent i = new Intent(CargaActivity.this,
                                 MainActivity.class);
                         //Intent is used to switch from one activity to another.
@@ -132,6 +122,7 @@ public class CargaActivity extends AppCompatActivity {
 
                 @Override
                 public void run() {
+                    createNotificaionChannel();
                     Intent i = new Intent(CargaActivity.this,
                             MainActivity.class);
                     //Intent is used to switch from one activity to another.

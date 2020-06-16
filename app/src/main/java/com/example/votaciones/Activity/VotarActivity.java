@@ -128,7 +128,7 @@ public class VotarActivity extends AppCompatActivity {
     }
     /*Variable de posicion del recycler view*/
     private int Position;
-    /*eventi drag*/
+    /*evento drag*/
     View.OnDragListener dragListener=new View.OnDragListener() {
         @Override
         public boolean onDrag(View v, DragEvent event) {

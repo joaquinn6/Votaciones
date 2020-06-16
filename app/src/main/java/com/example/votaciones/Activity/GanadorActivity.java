@@ -72,38 +72,6 @@ public class GanadorActivity extends AppCompatActivity {
             }
         });
 
-
-        //txtNombre.setText(spFecha.getString("fechaVotar",""));
-        /*final Call<List<Planchas>> planchas= ServicioApi.getInstancia(this).obtenerPlanchas();
-        planchas.enqueue(new Callback<List<Planchas>>() {
-            @Override
-            public void onResponse(Call<List<Planchas>> call, Response<List<Planchas>> response) {
-                if(response.isSuccessful()){
-                    for(Planchas P : response.body()){
-                        planchasList.add(P);
-                    }
-                    Planchas Ganador = fnGetGanador(planchasList);
-                    txtNombre.setText(Ganador.getNombrePlancha());
-                    txtCantidadVotos.setText("Cantidad de Votos: "+Ganador.getVotos());
-                    Glide.with(GanadorActivity.this).load(ServicioApi.HTTP +"/uploads/images/"+ Ganador.getPresidente().getFoto()).into(ivPlancha);
-                    listUsuario.add(Ganador.getPresidente());
-                    listUsuario.add(Ganador.getVicepresidente());
-                    listUsuario.add(Ganador.getSecretario());
-                    listUsuario.add(Ganador.getTesorero());
-                    listUsuario.add(Ganador.getMinistro());
-                    listUsuario.add(Ganador.getVocal());
-                    ImageAdapter adapter= new ImageAdapter(GanadorActivity.this,listUsuario);
-                    viewPager.setAdapter(adapter);
-                }else
-                    Toast.makeText(GanadorActivity.this, "succesful pero error"+response.message(), Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onFailure(Call<List<Planchas>> call, Throwable t) {
-                Toast.makeText(GanadorActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });*/
-
         final Call<Planchas> planchaGanadora= ServicioApi.getInstancia(this).obtenerPlanchaGanadora();
         planchaGanadora.enqueue(new Callback<Planchas>() {
             @Override

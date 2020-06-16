@@ -46,6 +46,7 @@ public class IntentServiNotificacion extends IntentService {
         }
     }
     private void enviarNotificacion() {
+        Toast.makeText(context, "Empezando", Toast.LENGTH_LONG).show();
         SharedPreferences spFecha = context.getSharedPreferences(FECHA, context.MODE_PRIVATE);
         String fechaWin = spFecha.getString("fechaVotar", "");
         String horaWin = spFecha.getString("horaVotar", "");
@@ -53,7 +54,7 @@ public class IntentServiNotificacion extends IntentService {
         ComprobarFechaHoraFinalVotaciones c = new ComprobarFechaHoraFinalVotaciones(context);
         boolean bucle=true;
         while (bucle) {
-            Toast.makeText(context, "Entre seguro", Toast.LENGTH_LONG).show();
+            //Toast.makeText(context, "Entre seguro", Toast.LENGTH_LONG).show();
             if (c.fnDiaHoraLlego(fechaWin,horaWin)) {
                 Toast.makeText(context, "Entre al if", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(context, GanadorActivity.class);
