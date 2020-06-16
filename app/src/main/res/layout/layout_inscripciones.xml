@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,30 +7,68 @@
     android:gravity="center"
     android:orientation="vertical">
 
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/ivSalir"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/prueba2"
+            android:tooltipText="Periodo de Inscripcion"
+            app:srcCompat="@drawable/ic_warning_black_24dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+
+        <TextView
+            android:id="@+id/txtMensaje"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="42dp"
+            android:gravity="center"
+            android:text="Bienvenido, en este momento no hay acceso para ver las planchas, Vuelva al finalizar las inscripciones el dia xx/xx/xx"
+            android:textColor="@android:color/background_dark"
+            android:textSize="23sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+
+        <Button
+            android:id="@+id/btnOk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:background="@color/green"
+            android:text="Ok" />
+    </LinearLayout>
 
     <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="match_parent"
+        android:id="@+id/imageView5"
+        android:layout_width="50dp"
         android:layout_height="50dp"
-        app:srcCompat="@drawable/ic_warning_black_24dp"
-        android:background="@color/prueba2"
-        android:tooltipText="Periodo de Inscripcion"/>
-    <TextView
-        android:id="@+id/txtMensaje"
-        android:layout_margin="42dp"
-        android:gravity="center"
-        android:textSize="23sp"
-        android:textColor="@android:color/background_dark"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Bienvenido, en este momento no hay acceso para ver las planchas, Vuelva al finalizar las inscripciones el dia xx/xx/xx"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/linearLayout"
+        app:srcCompat="@drawable/ic_cancelar" />
 
-    <Button
-        android:id="@+id/btnOk"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:background="@color/green"
-        android:text="Ok" />
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

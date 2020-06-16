@@ -22,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.votaciones.Api.ServicioApi;
@@ -63,6 +64,8 @@ public class InicioActivity extends AppCompatActivity {
     private ComprobarFechaHoraFinalVotaciones cffv;
     SharedPreferences spFecha;
     String fechaWin,horaVotar,horaInicio;
+    TextView txtFechaVotacion;
+    Menu menuRecargar=null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,14 +74,26 @@ public class InicioActivity extends AppCompatActivity {
         fechaWin=spFecha.getString("fechaVotar","");
         horaVotar=spFecha.getString("horaVotar","");
         horaInicio=spFecha.getString("horaInicioVota","");
+        txtFechaVotacion=findViewById(R.id.txtFechaVotacion);
+        txtFechaVotacion.setText("Fecha de Votacion el dia "+fechaWin+" a la "+horaInicio);
         cffv=new ComprobarFechaHoraFinalVotaciones(this);
         botonGanador=findViewById(R.id.botonGanador);
+        MenuItem mnGrafica=null,mnVoto=null;
+        /*if (menuRecargar!=null) {
+            mnGrafica = menuRecargar.findItem(R.id.mnGrafica);
+            mnVoto = menuRecargar.findItem(R.id.mnVoto);
+        }
+        if (mnGrafica!=null && mnVoto!=null)
         if (cffv.fnMostrarGanador(fechaWin,horaVotar)){
+            mnGrafica.setVisible(true);
+            mnVoto.setVisible(false);
             botonGanador.show();
         }else {
-
             botonGanador.hide();
-        }
+            mnVoto.setVisible(true);
+            mnGrafica.setVisible(true);
+        }*/
+        fnBotonGanador_Menu();
         botonGanador.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,6 +133,7 @@ public class InicioActivity extends AppCompatActivity {
             else
                 mnGrafica.setVisible(false);
         }
+        menuRecargar=menu;
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -164,18 +180,45 @@ public class InicioActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
+    private void fnBotonGanador_Menu(){
+        MenuItem mnGrafica=null,mnVoto=null;
+        if (menuRecargar!=null) {
+            mnGrafica = menuRecargar.findItem(R.id.mnGrafica);
+            mnVoto = menuRecargar.findItem(R.id.mnVoto);
+        }
+        if (mnGrafica!=null && mnVoto!=null)
+            if (cffv.fnMostrarGanador(fechaWin,horaVotar)){
+                mnGrafica.setVisible(true);
+                mnVoto.setVisible(false);
+                txtFechaVotacion.setVisibility(View.INVISIBLE);
+                botonGanador.show();
+            }else {
+                botonGanador.hide();
+                mnVoto.setVisible(true);
+                txtFechaVotacion.setVisibility(View.VISIBLE);
+                mnGrafica.setVisible(true);
+            }
+        else
+            if (cffv.fnMostrarGanador(fechaWin,horaVotar)){
+                txtFechaVotacion.setVisibility(View.INVISIBLE);
+                botonGanador.show();
+            }else {
+                botonGanador.hide();
+                txtFechaVotacion.setVisibility(View.VISIBLE);
+            }
+    }
 
     @Override
     protected void onResume() {
         super.onResume();
         fnCargarRecyclerView();
         /*Probando*/
-        if (cffv.fnMostrarGanador(fechaWin,horaVotar)){
+        /*if (cffv.fnMostrarGanador(fechaWin,horaVotar)){
             botonGanador.show();
         }else {
             botonGanador.hide();
-        }
+        }*/
+        fnBotonGanador_Menu();
     }
 
     private void fnCargarRecyclerView() {fnCargando();

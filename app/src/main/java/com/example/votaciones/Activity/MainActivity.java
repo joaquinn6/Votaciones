@@ -17,6 +17,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -128,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
                                     edit.commit();
                                     MainActivity.this.fechaFinInscrip=fechaFinInscrip;
                                     Toast.makeText(MainActivity.this, "Antes de IntentServiNotificacion", Toast.LENGTH_LONG).show();
+                                    createNotificaionChannel();
                                     startService(new Intent(MainActivity.this, IntentServiNotificacion.class));
                                     //inicio
                                     if (cffv.fnFechaInscripcion(fechaFinInscrip)) {
@@ -160,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
 
                             @Override
                             public void onFailure(Call<Configuracion> call, Throwable t) {
-
+                                Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
                             }
                         });
                         //Fin
@@ -186,11 +189,13 @@ public class MainActivity extends AppCompatActivity {
     }
     private void dialogInscripcion(){
         TextView txtMensaje;
+        ImageView ivSalir;
         AlertDialog.Builder builder=new AlertDialog.Builder(MainActivity.this);
         LayoutInflater inflater=getLayoutInflater();
         View view =inflater.inflate(R.layout.layout_inscripciones,null);
         txtMensaje=view.findViewById(R.id.txtMensaje);
         txtMensaje.setText("Bienvenido, en este momento no hay acceso debido a que estamos en etapa de inscripción de Planchas, vuelva cuando estén todas las Planchas inscritas despues del "+fechaFinInscrip);
+        ivSalir=findViewById(R.id.ivSalir);
         builder.setView(view);
         final AlertDialog dialog=builder.create();
         dialog.show();
@@ -201,6 +206,23 @@ public class MainActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
+        ivSalir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+    }
+    private void createNotificaionChannel(){
+        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
+            CharSequence name="CHANNEL";
+            String description="Canal de Notificaciones";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel =new NotificationChannel("Winner",name,importance);
+            channel.setDescription(description);
+            NotificationManager notificationManager=getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 
 }

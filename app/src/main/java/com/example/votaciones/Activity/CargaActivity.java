@@ -75,7 +75,7 @@ public class CargaActivity extends AppCompatActivity {
                                     edit.putString("horaInicioVota",horaInicioVota);
                                     edit.commit();
                                     /*Inicio Notificacion*/
-                                    createNotificaionChannel();
+                                    //createNotificaionChannel();
                                     /*Fin Notificacion*/
                                     Intent i;
                                     if(cffv.fnMostrarGanador(fechaVotar,horaFinalVota)) {
@@ -103,7 +103,7 @@ public class CargaActivity extends AppCompatActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        createNotificaionChannel();
+                        //createNotificaionChannel();
                         Intent i = new Intent(CargaActivity.this,
                                 MainActivity.class);
                         //Intent is used to switch from one activity to another.
@@ -122,7 +122,7 @@ public class CargaActivity extends AppCompatActivity {
 
                 @Override
                 public void run() {
-                    createNotificaionChannel();
+                    //createNotificaionChannel();
                     Intent i = new Intent(CargaActivity.this,
                             MainActivity.class);
                     //Intent is used to switch from one activity to another.
