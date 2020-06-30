@@ -58,4 +58,8 @@ public interface Servicio {
     @GET("api/plancha/grafica")
     Call<List<Plancha>> extraerGrafica();
 
+    @POST("api/usuario/IniciarSesion")
+    Call<Respuesta> VerificarPreInicio(@Body Usuario usuario);
+
+
 }

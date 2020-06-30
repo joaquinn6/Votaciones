@@ -34,6 +34,7 @@ import com.example.votaciones.Class.ServicioNotificacion;
 import com.example.votaciones.Class.WorMaNotificacion;
 import com.example.votaciones.R;
 import com.example.votaciones.objetos.Configuracion;
+import com.example.votaciones.objetos.Respuesta;
 import com.example.votaciones.objetos.Token;
 import com.example.votaciones.objetos.Usuario;
 import com.google.gson.JsonObject;
@@ -67,16 +68,13 @@ public class MainActivity extends AppCompatActivity {
     private EditText etContrasena;
     private ComprobarFechaHoraFinalVotaciones cffv;
     String fechaFinInscrip;
+    private Usuario usuarioPreLogin;
+
     public String userRole="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-        //createNotificaionChannel();
-        //noti();
-
 
         cffv=new ComprobarFechaHoraFinalVotaciones(this);
         etCarnet = findViewById(R.id.etCarnet);
@@ -87,12 +85,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(!(etCarnet.getText().toString().isEmpty() || etContrasena.getText().toString().isEmpty())){
-                    token.setUsarname(etCarnet.getText().toString());
-                    token.setPassword(md5(etContrasena.getText().toString()));
-                    SharedPreferences.Editor editor = getSharedPreferences(SESION, MODE_PRIVATE).edit();
-                    editor.clear();
-                    editor.apply();
-                    IniciarSesion();
+                    PreLogin(etCarnet.getText().toString(),md5(etContrasena.getText().toString()));
                 }
             }
         });
@@ -121,6 +114,35 @@ public class MainActivity extends AppCompatActivity {
         }
         return null;
     }
+
+    private void PreLogin(final String carnet, final String password){
+        usuarioPreLogin = new Usuario("","","","",password,carnet,"","","",true,"","","","","",false,"","","");
+        Call<Respuesta> respuesta = ServicioApi.getInstancia(this).VerificarPreInicio(usuarioPreLogin);
+        respuesta.enqueue(new Callback<Respuesta>() {
+            @Override
+            public void onResponse(Call<Respuesta> call, Response<Respuesta> response) {
+                if(response.isSuccessful()){
+                    final Respuesta res = response.body();
+                    if(res.isPermitir()) {
+                        token.setUsarname(carnet);
+                        token.setPassword(password);
+                        SharedPreferences.Editor editor = getSharedPreferences(SESION, MODE_PRIVATE).edit();
+                        editor.clear();
+                        editor.apply();
+                        IniciarSesion();
+                    }else{
+                        Toast.makeText(MainActivity.this, res.getError(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Respuesta> call, Throwable t) {
+                Toast.makeText(MainActivity.this,"Error al iniciar sesion", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     public void IniciarSesion(){
         Call<Token> respuesta= ServicioApi.getInstancia(this).iniciarSesion(token);
         respuesta.enqueue(new Callback<Token>() {
