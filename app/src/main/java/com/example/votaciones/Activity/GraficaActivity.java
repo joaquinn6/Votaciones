@@ -3,6 +3,7 @@ package com.example.votaciones.Activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -56,7 +57,6 @@ public class GraficaActivity extends AppCompatActivity {
         Description description = pcPorcentaje.getDescription();
         description.setText("Porcentajes de votaciones a tiempo real");
         description.setTextSize(15);
-
         PieData data = new PieData(set);
         pcPorcentaje.setData(data);
         pcPorcentaje.setHoleRadius(44);

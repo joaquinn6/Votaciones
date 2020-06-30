@@ -8,8 +8,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ServicioApi {
     public static Servicio INSTANCIA;
-    public static String HTTP="http://192.168.43.194:8000/";
-    //public static String HTTP="http://10.0.3.2:8000/";
+    //public static String HTTP="http://192.168.43.194:8000/";
+    public static String HTTP="http://10.0.3.2:8000/";
 
     public static Servicio getInstancia(Context context){
         if(INSTANCIA==null){

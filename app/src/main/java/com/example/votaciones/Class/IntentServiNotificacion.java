@@ -15,6 +15,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.example.votaciones.Activity.GanadorActivity;
+import com.example.votaciones.Activity.InicioActivity;
 import com.example.votaciones.R;
 
 import java.text.DateFormat;
@@ -40,7 +41,7 @@ public class IntentServiNotificacion extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        //Toast.makeText(context, "Entramos IntentServiNotificacion", Toast.LENGTH_LONG).show();
+        Toast.makeText(context, "Entramos IntentServiNotificacion", Toast.LENGTH_LONG).show();
         if (intent!=null) {
             enviarNotificacion();
         }
@@ -62,7 +63,7 @@ public class IntentServiNotificacion extends IntentService {
                 pi = PendingIntent.getActivity(context, 0, intent, 0);
 
                 NotificationCompat.Builder builderNtf = new NotificationCompat.Builder(context.getApplicationContext(), CHANNEL_ID);
-                builderNtf.setSmallIcon(R.drawable.ic_stat_ntf);
+                builderNtf.setSmallIcon(R.drawable.ic_logo1);
                 builderNtf.setContentTitle("Ganador");
                 builderNtf.setContentText("El momento llego, Puedes ver al Ganador ya");
                 builderNtf.setColor(Color.parseColor("#1B5B94"));

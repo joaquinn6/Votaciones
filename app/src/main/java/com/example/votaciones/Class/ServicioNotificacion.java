@@ -26,6 +26,7 @@ public class ServicioNotificacion extends Service {
     VerificarFechaSegundoPlano v;
     @Override
     public void onCreate(){
+        //Toast.makeText(context,"OnCreate", Toast.LENGTH_SHORT).show();
         v=new VerificarFechaSegundoPlano(context);
     }
     @Override

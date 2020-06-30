@@ -61,6 +61,7 @@ public class CargaActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(Call<Configuracion> call, Response<Configuracion> response) {
                                 if(response.isSuccessful()){
+                                    createNotificaionChannel();
                                     Configuracion confi =response.body();
                                     String fechaVotar= confi.getFechaVotaciones().split("T")[0];
                                     String horaFinalVota=confi.getHoraFinVotaciones();
@@ -74,6 +75,7 @@ public class CargaActivity extends AppCompatActivity {
                                     edit.putString("fechaFinInscrip",fechaFinInscrip);
                                     edit.putString("horaInicioVota",horaInicioVota);
                                     edit.commit();
+                                    startService(new Intent(CargaActivity.this, ServicioNotificacion.class));
                                     /*Inicio Notificacion*/
                                     //createNotificaionChannel();
                                     /*Fin Notificacion*/
@@ -141,7 +143,7 @@ public class CargaActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
             CharSequence name="CHANNEL";
             String description="Canal de Notificaciones";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            int importance = NotificationManager.IMPORTANCE_HIGH;
             NotificationChannel channel =new NotificationChannel("Winner",name,importance);
             channel.setDescription(description);
             NotificationManager notificationManager=getSystemService(NotificationManager.class);

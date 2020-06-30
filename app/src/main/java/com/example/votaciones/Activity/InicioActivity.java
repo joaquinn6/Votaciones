@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -32,6 +33,9 @@ import com.example.votaciones.RecyclerViews.RvAdaptadorPlancha;
 import com.example.votaciones.objetos.Integrante;
 import com.example.votaciones.objetos.Plancha;
 import com.example.votaciones.objetos.Planchas;
+import com.github.pwittchen.swipe.library.rx2.SimpleSwipeListener;
+import com.github.pwittchen.swipe.library.rx2.Swipe;
+import com.github.pwittchen.swipe.library.rx2.SwipeListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.Serializable;
@@ -45,11 +49,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class InicioActivity extends AppCompatActivity {
+    private Swipe swipe;
     private List<Planchas> planchasList = new ArrayList<>();
     List<Planchas> listPlanchas= new ArrayList<>();
     private RvAdaptadorPlancha adapter;
@@ -67,6 +74,11 @@ public class InicioActivity extends AppCompatActivity {
     TextView txtFechaVotacion;
     Menu menuRecargar=null;
     @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        swipe.dispatchTouchEvent(event);
+        return super.dispatchTouchEvent(event);
+    }
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio);
@@ -78,6 +90,10 @@ public class InicioActivity extends AppCompatActivity {
         txtFechaVotacion.setText("Fecha de Votacion el dia "+fechaWin+" a la "+horaInicio);
         cffv=new ComprobarFechaHoraFinalVotaciones(this);
         botonGanador=findViewById(R.id.botonGanador);
+        /*Deslizar inicio*/
+        swipe = new Swipe();
+        fnDeslizar();
+        /*Fin*/
         MenuItem mnGrafica=null,mnVoto=null;
         /*if (menuRecargar!=null) {
             mnGrafica = menuRecargar.findItem(R.id.mnGrafica);
@@ -102,6 +118,40 @@ public class InicioActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void fnDeslizar() {
+        final TextView txtFecha;
+        AlertDialog.Builder builder=new AlertDialog.Builder(InicioActivity.this);
+        LayoutInflater inflater=getLayoutInflater();
+        View view =inflater.inflate(R.layout.layout_fecha,null);
+        txtFecha=view.findViewById(R.id.txtFecha);
+        //txtFecha.setText("Fecha de Votacion el dia "+fechaWin+" a la "+horaInicio);
+        builder.setView(view);
+        final AlertDialog alertDialog=builder.create();
+
+        swipe.setListener(new SimpleSwipeListener() {
+            @Override
+            public boolean onSwipedLeft(MotionEvent event) {
+                txtFecha.setText("Fecha Fin de Votacion el dia "+fechaWin+" a la "+horaVotar);
+                if (cffv.fnMostrarGanador(fechaWin,horaVotar)){
+                    txtFecha.setText("Ya acabo");
+                }
+                alertDialog.show();
+                return super.onSwipedLeft(event);
+            }
+            @Override
+            public boolean onSwipedRight(MotionEvent event) {
+                txtFecha.setText("Fecha Inicio de Votacion el dia "+fechaWin+" a la "+horaInicio);
+                if (cffv.fnVerificarFechaHora(fechaWin,horaVotar,horaInicio)){
+                    txtFecha.setText("Ya Inicio");
+                }
+                alertDialog.show();
+                return super.onSwipedRight(event);
+            }
+
+        });
+    }
+
     public void fnCargando(){
 
         progressDialog = new ProgressDialog(this);
@@ -354,7 +404,5 @@ public class InicioActivity extends AppCompatActivity {
         GridLayoutManager manager = new GridLayoutManager(this, 1);
         rvPlanchas.setLayoutManager(manager);
         rvPlanchas.setAdapter(adapter);
-
-
     }
 }
