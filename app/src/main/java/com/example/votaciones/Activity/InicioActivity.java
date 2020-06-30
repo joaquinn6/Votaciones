@@ -73,6 +73,7 @@ public class InicioActivity extends AppCompatActivity {
     String fechaWin,horaVotar,horaInicio;
     TextView txtFechaVotacion;
     Menu menuRecargar=null;
+
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         swipe.dispatchTouchEvent(event);
@@ -87,7 +88,7 @@ public class InicioActivity extends AppCompatActivity {
         horaVotar=spFecha.getString("horaVotar","");
         horaInicio=spFecha.getString("horaInicioVota","");
         txtFechaVotacion=findViewById(R.id.txtFechaVotacion);
-        txtFechaVotacion.setText("Fecha de Votacion el dia "+fechaWin+" a la "+horaInicio);
+        txtFechaVotacion.setText("Votaciones: el "+ fechaWin  +" desde las "+horaInicio +" hasta las ");//Completame aqui ney jaja
         cffv=new ComprobarFechaHoraFinalVotaciones(this);
         botonGanador=findViewById(R.id.botonGanador);
         /*Deslizar inicio*/
