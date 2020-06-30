@@ -229,6 +229,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    /*Crear Dialogo para admin y inscripcion*/
     private void dialogInscripcion(String mensaje){
         TextView txtMensaje;
         ImageView ivSalir;
@@ -256,6 +257,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    /*Fin Dialog*/
+    /*Creando Notificacion y canal INICIO*/
     private void createNotificaionChannel(){
         if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
             CharSequence name="CHANNEL";
@@ -298,6 +301,8 @@ public class MainActivity extends AppCompatActivity {
                 .putString("detalle",detalle)
                 .putInt("idNoti",idNoti).build();
     }
+    /*FIN Noti*/
+    /*Inicio para Extraer el role INICIO*/
     public String decoded(String JWTEncoded) throws Exception {
         String res="";
         String[] split = JWTEncoded.split("\\.");
@@ -314,4 +319,5 @@ public class MainActivity extends AppCompatActivity {
         byte[] decodedBytes = Base64.decode(strEncoded, Base64.URL_SAFE);
         return new String(decodedBytes, "UTF-8");
     }
+    /*Fin Role*/
 }
