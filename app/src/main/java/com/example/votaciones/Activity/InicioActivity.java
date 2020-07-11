@@ -61,24 +61,19 @@ public class InicioActivity extends AppCompatActivity {
     List<Planchas> listPlanchas= new ArrayList<>();
     private RvAdaptadorPlancha adapter;
     private String carnet;
-    private ProgressBar pbCargando;
-    public LayoutInflater inflater;
-    public AlertDialog dialog;
+//    private ProgressBar pbCargando;
+//    public LayoutInflater inflater;
+//    public AlertDialog dialog;
     public FloatingActionButton botonGanador;
     ProgressDialog progressDialog = null;
     public String FECHA="FechaGanador";
     private PendingIntent pendingIntent;
     private ComprobarFechaHoraFinalVotaciones cffv;
-    SharedPreferences spFecha;
     String fechaWin,horaVotar,horaInicio;
     TextView txtFechaVotacion;
     Menu menuRecargar=null;
 
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent event) {
-        swipe.dispatchTouchEvent(event);
-        return super.dispatchTouchEvent(event);
-    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,28 +83,15 @@ public class InicioActivity extends AppCompatActivity {
         horaVotar=spFecha.getString("horaVotar","");
         horaInicio=spFecha.getString("horaInicioVota","");
         txtFechaVotacion=findViewById(R.id.txtFechaVotacion);
-        txtFechaVotacion.setText("Votaciones: el "+ fechaWin  +" desde las "+horaInicio +" hasta las ");//Completame aqui ney jaja
+        String[] fe=fechaWin.split("-");
+        int hi=Integer.parseInt(horaInicio.split(":")[0]);
+        String m=horaInicio.split(":")[1];
+        int hf=Integer.parseInt(horaVotar.split(":")[0]);
+        String mm=horaVotar.split(":")[1];
+        txtFechaVotacion.setText("Votaciones: el "+ fe[2]+"-"+fe[1]+"-"+fe[0]+" desde las "+hi%12+":"+m+" "+((hi>=12)? "PM":"AM") +" hasta las "+hf%12+":"+mm+" "+((hf>=12)? "PM":"AM"));//Completame aqui ney jaja
         cffv=new ComprobarFechaHoraFinalVotaciones(this);
         botonGanador=findViewById(R.id.botonGanador);
-        /*Deslizar inicio*/
-        swipe = new Swipe();
-        fnDeslizar();
-        /*Fin*/
-        MenuItem mnGrafica=null,mnVoto=null;
-        /*if (menuRecargar!=null) {
-            mnGrafica = menuRecargar.findItem(R.id.mnGrafica);
-            mnVoto = menuRecargar.findItem(R.id.mnVoto);
-        }
-        if (mnGrafica!=null && mnVoto!=null)
-        if (cffv.fnMostrarGanador(fechaWin,horaVotar)){
-            mnGrafica.setVisible(true);
-            mnVoto.setVisible(false);
-            botonGanador.show();
-        }else {
-            botonGanador.hide();
-            mnVoto.setVisible(true);
-            mnGrafica.setVisible(true);
-        }*/
+
         fnBotonGanador_Menu();
         botonGanador.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,38 +102,6 @@ public class InicioActivity extends AppCompatActivity {
         });
     }
 
-    private void fnDeslizar() {
-        final TextView txtFecha;
-        AlertDialog.Builder builder=new AlertDialog.Builder(InicioActivity.this);
-        LayoutInflater inflater=getLayoutInflater();
-        View view =inflater.inflate(R.layout.layout_fecha,null);
-        txtFecha=view.findViewById(R.id.txtFecha);
-        //txtFecha.setText("Fecha de Votacion el dia "+fechaWin+" a la "+horaInicio);
-        builder.setView(view);
-        final AlertDialog alertDialog=builder.create();
-
-        swipe.setListener(new SimpleSwipeListener() {
-            @Override
-            public boolean onSwipedLeft(MotionEvent event) {
-                txtFecha.setText("Fecha Fin de Votacion el dia "+fechaWin+" a la "+horaVotar);
-                if (cffv.fnMostrarGanador(fechaWin,horaVotar)){
-                    txtFecha.setText("Ya acabo");
-                }
-                alertDialog.show();
-                return super.onSwipedLeft(event);
-            }
-            @Override
-            public boolean onSwipedRight(MotionEvent event) {
-                txtFecha.setText("Fecha Inicio de Votacion el dia "+fechaWin+" a la "+horaInicio);
-                if (cffv.fnVerificarFechaHora(fechaWin,horaVotar,horaInicio)){
-                    txtFecha.setText("Ya Inicio");
-                }
-                alertDialog.show();
-                return super.onSwipedRight(event);
-            }
-
-        });
-    }
 
     public void fnCargando(){
 
@@ -237,38 +187,34 @@ public class InicioActivity extends AppCompatActivity {
             mnGrafica = menuRecargar.findItem(R.id.mnGrafica);
             mnVoto = menuRecargar.findItem(R.id.mnVoto);
         }
-        if (mnGrafica!=null && mnVoto!=null)
-            if (cffv.fnMostrarGanador(fechaWin,horaVotar)){
+        if (mnGrafica!=null && mnVoto!=null) {
+            if (cffv.fnMostrarGanador(fechaWin, horaVotar)) {
+                Toast.makeText(this, "fnBotonGanador True", Toast.LENGTH_LONG).show();
                 mnGrafica.setVisible(true);
                 mnVoto.setVisible(false);
                 txtFechaVotacion.setVisibility(View.INVISIBLE);
                 botonGanador.show();
-            }else {
+            } else if(cffv.fnVerificarFechaHora(fechaWin,horaVotar,horaInicio)) {
+                Toast.makeText(this, "fnBotonGanador Falso", Toast.LENGTH_LONG).show();
                 botonGanador.hide();
                 mnVoto.setVisible(true);
                 txtFechaVotacion.setVisibility(View.VISIBLE);
                 mnGrafica.setVisible(true);
             }
-        else
-            if (cffv.fnMostrarGanador(fechaWin,horaVotar)){
+        } else {
+            if (cffv.fnMostrarGanador(fechaWin, horaVotar)) {
                 txtFechaVotacion.setVisibility(View.INVISIBLE);
                 botonGanador.show();
-            }else {
+            } else {
                 botonGanador.hide();
                 txtFechaVotacion.setVisibility(View.VISIBLE);
             }
-    }
+        }    }
 
     @Override
     protected void onResume() {
         super.onResume();
         fnCargarRecyclerView();
-        /*Probando*/
-        /*if (cffv.fnMostrarGanador(fechaWin,horaVotar)){
-            botonGanador.show();
-        }else {
-            botonGanador.hide();
-        }*/
         fnBotonGanador_Menu();
     }
 

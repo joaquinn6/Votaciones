@@ -129,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
                         SharedPreferences.Editor editor = getSharedPreferences(SESION, MODE_PRIVATE).edit();
                         editor.clear();
                         editor.apply();
+                        editor.commit();
                         IniciarSesion();
                     }else{
                         Toast.makeText(MainActivity.this, res.getError(), Toast.LENGTH_SHORT).show();
@@ -182,8 +183,8 @@ public class MainActivity extends AppCompatActivity {
                                         edit.commit();
                                         MainActivity.this.fechaFinInscrip = fechaFinInscrip;
                                         //Toast.makeText(MainActivity.this, "Antes de IntentServiNotificacion", Toast.LENGTH_LONG).show();
-                                        createNotificaionChannel();
-                                        noti(fechaVotar, horaFinalVota);
+                                        //createNotificaionChannel();
+                                        //noti(fechaVotar, horaFinalVota);
                                         //startService(new Intent(MainActivity.this, ServicioNotificacion.class));
                                         //inicio
                                         if (cffv.fnFechaInscripcion(fechaFinInscrip)) {

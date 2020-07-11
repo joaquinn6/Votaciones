@@ -52,8 +52,12 @@ public class WorMaNotificacion extends Worker {
     }
     private void fnCreateNotification(){
         SharedPreferences sp = context.getSharedPreferences("noti", context.MODE_PRIVATE);
+        ComprobarFechaHoraFinalVotaciones cffv=new ComprobarFechaHoraFinalVotaciones(context);
+        SharedPreferences spFecha=context.getSharedPreferences("FechaGanador", context.MODE_PRIVATE);
+        String fechaWin=spFecha.getString("fechaVotar","");
+        String horaVotar=spFecha.getString("horaVotar","");
         //Toast.makeText(context, ""+sp.getBoolean("notificado", false), (Toast.LENGTH_LONG+Toast.LENGTH_LONG)).show();
-        //if (!sp.getBoolean("notificado", false)) {
+        if (cffv.fnDiaHoraLlego(fechaWin,horaVotar)) {
             PendingIntent pi;
             Intent intent = new Intent(context, GanadorActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -76,7 +80,7 @@ public class WorMaNotificacion extends Worker {
             //WorkManager.getInstance(context).cancelAllWork();
             edit.putBoolean("notificado", true);
             edit.commit();
-        //}
+        }
     }
 
 }

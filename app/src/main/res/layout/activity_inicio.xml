@@ -49,10 +49,10 @@
             android:id="@+id/txtFechaVotacion"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/green"
+            android:background="@color/colorPrimary"
             android:gravity="center"
             android:text="Fecha de Votacion el dia xx/xx/xx a la xx:xx"
-            android:textColor="#050505"
+            android:textColor="#ffff"
             android:textSize="18sp"
             android:textStyle="bold" />
 

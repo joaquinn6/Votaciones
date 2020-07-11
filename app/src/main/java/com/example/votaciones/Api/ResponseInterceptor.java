@@ -21,11 +21,11 @@ public class ResponseInterceptor implements Interceptor {
     public Response intercept(Chain chain) throws IOException {
         Response response = chain.proceed(chain.request());
             if (response.code() == 401) {
-                Toast.makeText(context, "Sesion expirada", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "Sesion expirada", Toast.LENGTH_SHORT).show();
                 Intent intent=new Intent(context, MainActivity.class);
                 context.startActivity(intent);
             }else if(response.code() != 200) /*if(response.code()!=200)*/{
-                Toast.makeText(context, "Error en el servidor", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "Error en el servidor", Toast.LENGTH_SHORT).show();
             }
             return response;
    }

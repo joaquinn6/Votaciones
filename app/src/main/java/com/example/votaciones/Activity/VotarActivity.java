@@ -4,11 +4,15 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.work.Data;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.DragEvent;
 import android.view.View;
@@ -16,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.votaciones.Api.ServicioApi;
+import com.example.votaciones.Class.WorMaNotificacion;
 import com.example.votaciones.R;
 import com.example.votaciones.RecyclerViews.RVAdaptadorVotar;
 import com.example.votaciones.objetos.Plancha;
@@ -24,9 +29,13 @@ import com.example.votaciones.objetos.Respuesta;
 import com.example.votaciones.objetos.Usuario;
 import com.example.votaciones.objetos.Voto;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,12 +47,15 @@ public class VotarActivity extends AppCompatActivity {
     private String carnet;
     private Usuario usuario;
     private final String SESION="VariabesDeSesion";
+    public String fechaVotar, horaVotar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_votar);
-
+        SharedPreferences spFecha=getSharedPreferences("FechaGanador",MODE_PRIVATE);
+        fechaVotar=spFecha.getString("fechaVotar","");
+        horaVotar=spFecha.getString("horaVotar","");
         SharedPreferences spSesion=getSharedPreferences(SESION, MODE_PRIVATE);
         Map<String, ?> recuperarTexto = spSesion.getAll();
         if(!((Map) recuperarTexto).isEmpty()) {
@@ -162,6 +174,10 @@ public class VotarActivity extends AppCompatActivity {
                                                                 @Override
                                                                 public void onResponse(Call<String> call, Response<String> response) {
                                                                     if (response.isSuccessful()){
+                                                                        /*Llamar noti*/
+                                                                        createNotificaionChannel();
+                                                                        noti(fechaVotar,horaVotar);
+                                                                        /*fin llamar noti*/
                                                                         Toast.makeText(VotarActivity.this, "Gracias por votar", Toast.LENGTH_SHORT).show();
                                                                         Intent intent = new Intent(VotarActivity.this, InicioActivity.class);
                                                                         intent.putExtra("carnet", carnet);
@@ -210,4 +226,48 @@ public class VotarActivity extends AppCompatActivity {
             return true;
         }
     };
+    /*Creando Notificacion y canal INICIO*/
+    private void createNotificaionChannel(){
+        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
+            CharSequence name="CHANNEL";
+            String description="Canal de Notificaciones";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel channel =new NotificationChannel("Winner",name,importance);
+            channel.setDescription(description);
+            //channel.setImportance(NotificationManager.IMPORTANCE_HIGH);
+            NotificationManager notificationManager=getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+    private void noti(String fechaVotar, String llegaHora) {
+
+        int hh = Integer.parseInt(llegaHora.split(":")[0]);
+        int mm = Integer.parseInt(llegaHora.split(":")[1]);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar fecha = Calendar.getInstance();
+        try {
+            fecha.setTime(sdf.parse(fechaVotar));
+            fecha.set(Calendar.HOUR, hh);
+            fecha.set(Calendar.MINUTE, mm);
+            //Toast.makeText(this, "Entre " + fecha.getTime(), Toast.LENGTH_SHORT).show();
+            String tag = generateKey();
+            Long alertaTime = fecha.getTimeInMillis() - System.currentTimeMillis();
+            int rand = (int) (Math.random() * 50 + 1);
+            Data data = fnGuardarData("Work Manager", "Soy un detalle", rand);
+            WorMaNotificacion.fnGuardarNoti(alertaTime, data, tag,VotarActivity.this);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+    }
+    private String generateKey(){
+        return UUID.randomUUID().toString();
+    }
+    private Data fnGuardarData(String titulo, String detalle, int idNoti){
+        return new Data.Builder()
+                .putString("titulo",titulo)
+                .putString("detalle",detalle)
+                .putInt("idNoti",idNoti).build();
+    }
+    /*FIN Noti*/
 }

@@ -75,7 +75,7 @@ public class CargaActivity extends AppCompatActivity {
                                     edit.putString("fechaFinInscrip",fechaFinInscrip);
                                     edit.putString("horaInicioVota",horaInicioVota);
                                     edit.commit();
-                                    startService(new Intent(CargaActivity.this, ServicioNotificacion.class));
+                                    //startService(new Intent(CargaActivity.this, ServicioNotificacion.class));
                                     /*Inicio Notificacion*/
                                     //createNotificaionChannel();
                                     /*Fin Notificacion*/

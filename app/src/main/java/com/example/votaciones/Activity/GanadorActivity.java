@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,6 +50,7 @@ public class GanadorActivity extends AppCompatActivity {
     final AlertDialog[] dialog = new AlertDialog[1];
     public String FECHA="FechaGanador";
     String fechaWin;
+    Button btnPropuesta,btnIntegrantes;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +58,8 @@ public class GanadorActivity extends AppCompatActivity {
         txtCantidadVotos=findViewById(R.id.txtCantidadVotos);
         txtNombre=findViewById(R.id.txtNombre);
         ivPlancha=findViewById(R.id.ivPlancha);
-
+        btnIntegrantes=findViewById(R.id.btnIntegrantes);
+        btnPropuesta=findViewById(R.id.btnPropuesta);
         SharedPreferences spFecha=getSharedPreferences(FECHA, MODE_PRIVATE);
         fechaWin=spFecha.getString("fechaVotar","");
         LayoutInflater inflater= getLayoutInflater();
@@ -108,27 +111,27 @@ public class GanadorActivity extends AppCompatActivity {
                 switch (position){
                     case 0:
                         Titulo.setText("Presidente");
-                        name="Presidente "+listUsuario.get(position).getNombre();
+                        name=listUsuario.get(position).getNombre();
                         break;
                     case 1:
                         Titulo.setText("Vicepresidente");
-                        name="Vicepresidente "+listUsuario.get(position).getNombre();
+                        name=listUsuario.get(position).getNombre();
                         break;
                     case 2:
                         Titulo.setText("Secretario");
-                        name="Secretario "+listUsuario.get(position).getNombre();
+                        name=listUsuario.get(position).getNombre();
                         break;
                     case 3:
                         Titulo.setText("Tesorero");
-                        name="Tesorero "+listUsuario.get(position).getNombre();
+                        name=listUsuario.get(position).getNombre();
                         break;
                     case 4:
                         Titulo.setText("Ministro");
-                        name="Ministro "+listUsuario.get(position).getNombre();
+                        name=listUsuario.get(position).getNombre();
                         break;
                     case 5:
                         Titulo.setText("Vocal");
-                        name="Vocal "+listUsuario.get(position).getNombre();
+                        name=listUsuario.get(position).getNombre();
                         break;
                     default:
                         return;
@@ -161,7 +164,28 @@ public class GanadorActivity extends AppCompatActivity {
                     dialog[0].show();
             }
         });
-
+        btnIntegrantes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                builder.setView(view);
+                dialog[0] = builder.create();
+                dialog[0].setCancelable(true);
+                if(view.getParent()!=null)
+                    ((ViewGroup)view.getParent()).removeView(view);
+                dialog[0].show();
+            }
+        });
+        btnPropuesta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent =new Intent(GanadorActivity.this,PropuestasActivity.class);
+                Bundle x=new Bundle();
+                x.putSerializable("Propuestas",(Serializable)Ganadora.getPropuestas());
+                intent.putExtras(x);
+                intent.putExtra("color",Ganadora.getColor());
+                startActivity(intent);
+            }
+        });
     }
 
     private Planchas fnGetGanador(List<Planchas> planchasList) {
