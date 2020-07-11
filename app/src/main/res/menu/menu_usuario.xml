@@ -4,6 +4,10 @@
 
     <item android:title="Aceptar" android:id="@+id/mnAceptar" android:icon="@drawable/ic_check" app:showAsAction="always"></item>
     <item android:title="Cancelar" android:id="@+id/mnCancelar" android:icon="@drawable/ic_cancelar" app:showAsAction="always"></item>
-    <item android:title="Logout" android:id="@+id/mnLogout" android:icon="@drawable/ic_logout" app:showAsAction="always"></item>
+    <item
+        android:id="@+id/mnLogout"
+        android:icon="@drawable/ic_logout"
+        android:title="Cerrar sesión"
+        app:showAsAction="always"></item>
 
 </menu>

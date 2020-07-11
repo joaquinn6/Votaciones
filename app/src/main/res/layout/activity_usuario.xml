@@ -65,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:ems="10"
-                android:hint="Informacion"
+                android:hint="Información"
                 android:inputType="textMultiLine"
                 android:singleLine="false"
                 app:layout_constraintEnd_toEndOf="parent"

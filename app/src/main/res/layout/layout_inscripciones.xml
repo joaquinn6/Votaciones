@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="42dp"
             android:gravity="center"
-            android:text="Bienvenido, en este momento no hay acceso para ver las planchas, Vuelva al finalizar las inscripciones el dia xx/xx/xx"
+            android:text="Bienvenido, en este momento no hay acceso para ver las planchas, vuelva al finalizar las inscripciones el dia xx/xx/xx"
             android:textColor="@android:color/background_dark"
             android:textSize="23sp" />
 

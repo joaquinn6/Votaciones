@@ -103,11 +103,11 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="8dp"
-        android:text="Verifcar si su correo estudiantil esta activo aqui."
+        android:text="Verifica si tú correo estudiantil está activo aquí."
         android:textColor="#AFA706"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
-        tools:text="Verificar si su correo estudiantil esta activo aqui." />
+        tools:text="Verifica si tú correo estudiantil está activo aquí." />
 </androidx.constraintlayout.widget.ConstraintLayout>

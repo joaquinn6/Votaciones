@@ -158,7 +158,7 @@ public class VotarActivity extends AppCompatActivity {
                                 if(response.body().isPermitir()){
                                     AlertDialog.Builder builder = new AlertDialog.Builder(VotarActivity.this);
                                     builder.setTitle("Voto");
-                                    builder.setMessage("Está seguro de votar por esta plancha?");
+                                    builder.setMessage("¿Está seguro que desea votar por esta plancha?");
                                     builder.setNegativeButton("Cancelar",null);
                                     builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
                                         @Override

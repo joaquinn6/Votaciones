@@ -65,7 +65,7 @@ public class IntentServiNotificacion extends IntentService {
                 NotificationCompat.Builder builderNtf = new NotificationCompat.Builder(context.getApplicationContext(), CHANNEL_ID);
                 builderNtf.setSmallIcon(R.drawable.ic_logo1);
                 builderNtf.setContentTitle("Ganador");
-                builderNtf.setContentText("El momento llego, Puedes ver al Ganador ya");
+                builderNtf.setContentText("El momento llegó, puedes ver al ganador ahora.");
                 builderNtf.setColor(Color.parseColor("#1B5B94"));
                 builderNtf.setPriority(NotificationCompat.PRIORITY_DEFAULT);
                 builderNtf.setLights(Color.parseColor("#1B5B94"), 1000, 1000);

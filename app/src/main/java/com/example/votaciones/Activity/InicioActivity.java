@@ -88,7 +88,7 @@ public class InicioActivity extends AppCompatActivity {
         String m=horaInicio.split(":")[1];
         int hf=Integer.parseInt(horaVotar.split(":")[0]);
         String mm=horaVotar.split(":")[1];
-        txtFechaVotacion.setText("Votaciones: el "+ fe[2]+"-"+fe[1]+"-"+fe[0]+" desde las "+hi%12+":"+m+" "+((hi>=12)? "PM":"AM") +" hasta las "+hf%12+":"+mm+" "+((hf>=12)? "PM":"AM"));//Completame aqui ney jaja
+        txtFechaVotacion.setText("Votaciones: el "+ fe[2]+"-"+fe[1]+"-"+fe[0]+" desde las "+hi%12+":"+m+" "+((hi>=12)? "PM":"AM") +" hasta las "+hf%12+":"+mm+" "+((hf>=12)? "PM":"AM"));
         cffv=new ComprobarFechaHoraFinalVotaciones(this);
         botonGanador=findViewById(R.id.botonGanador);
 
@@ -189,13 +189,13 @@ public class InicioActivity extends AppCompatActivity {
         }
         if (mnGrafica!=null && mnVoto!=null) {
             if (cffv.fnMostrarGanador(fechaWin, horaVotar)) {
-                Toast.makeText(this, "fnBotonGanador True", Toast.LENGTH_LONG).show();
+                //Toast.makeText(this, "fnBotonGanador True", Toast.LENGTH_LONG).show();
                 mnGrafica.setVisible(true);
                 mnVoto.setVisible(false);
                 txtFechaVotacion.setVisibility(View.INVISIBLE);
                 botonGanador.show();
             } else if(cffv.fnVerificarFechaHora(fechaWin,horaVotar,horaInicio)) {
-                Toast.makeText(this, "fnBotonGanador Falso", Toast.LENGTH_LONG).show();
+                //Toast.makeText(this, "fnBotonGanador Falso", Toast.LENGTH_LONG).show();
                 botonGanador.hide();
                 mnVoto.setVisible(true);
                 txtFechaVotacion.setVisibility(View.VISIBLE);

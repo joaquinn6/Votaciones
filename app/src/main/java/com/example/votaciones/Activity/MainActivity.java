@@ -96,7 +96,6 @@ public class MainActivity extends AppCompatActivity {
 
                 intent[0] = new Intent(MainActivity.this, CrearUsuarioActivity.class);
                 startActivity(intent[0]);
-                finish();
             }
         });
     }
@@ -211,9 +210,10 @@ public class MainActivity extends AppCompatActivity {
                                                 startActivity(intent[0]);
                                                 finish();
                                             }
-                                        } else
-                                            dialogInscripcion("Bienvenido, en este momento no hay acceso debido a que estamos en etapa de inscripción de Planchas, vuelva cuando estén todas las Planchas inscritas despues del " + fechaFinInscrip);
-
+                                        } else {
+                                            String[] fe=fechaFinInscrip.split("-");
+                                            dialogInscripcion("Bienvenido, en este momento no hay acceso debido a que estamos en etapa de inscripción de planchas, vuelva el día  " + fe[2]+"-"+fe[1]+"-"+fe[0] + ".");
+                                        }
 
 
                                     }
