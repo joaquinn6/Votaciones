@@ -17,12 +17,9 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,37 +30,22 @@ import com.example.votaciones.RecyclerViews.RvAdaptadorPlancha;
 import com.example.votaciones.objetos.Integrante;
 import com.example.votaciones.objetos.Plancha;
 import com.example.votaciones.objetos.Planchas;
-import com.github.pwittchen.swipe.library.rx2.SimpleSwipeListener;
 import com.github.pwittchen.swipe.library.rx2.Swipe;
-import com.github.pwittchen.swipe.library.rx2.SwipeListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class InicioActivity extends AppCompatActivity {
-    private Swipe swipe;
     private List<Planchas> planchasList = new ArrayList<>();
     List<Planchas> listPlanchas= new ArrayList<>();
     private RvAdaptadorPlancha adapter;
     private String carnet;
-//    private ProgressBar pbCargando;
-//    public LayoutInflater inflater;
-//    public AlertDialog dialog;
     public FloatingActionButton botonGanador;
     ProgressDialog progressDialog = null;
     public String FECHA="FechaGanador";
@@ -88,7 +70,7 @@ public class InicioActivity extends AppCompatActivity {
         String m=horaInicio.split(":")[1];
         int hf=Integer.parseInt(horaVotar.split(":")[0]);
         String mm=horaVotar.split(":")[1];
-        txtFechaVotacion.setText("Votaciones: el "+ fe[2]+"-"+fe[1]+"-"+fe[0]+" desde las "+hi%12+":"+m+" "+((hi>=12)? "PM":"AM") +" hasta las "+hf%12+":"+mm+" "+((hf>=12)? "PM":"AM"));
+        txtFechaVotacion.setText("Votaciones: el "+ fe[2]+"-"+fe[1]+"-"+fe[0]+" desde las "+((hi==12 || hi==0)? "12":hi%12) +":"+m+" "+((hi>=12)? "PM":"AM") +" hasta las "+((hi==12 || hi==0)? "12":hi%12)+":"+mm+" "+((hf>=12)? "PM":"AM"));//Completame aqui ney jaja
         cffv=new ComprobarFechaHoraFinalVotaciones(this);
         botonGanador=findViewById(R.id.botonGanador);
 
@@ -189,13 +171,11 @@ public class InicioActivity extends AppCompatActivity {
         }
         if (mnGrafica!=null && mnVoto!=null) {
             if (cffv.fnMostrarGanador(fechaWin, horaVotar)) {
-                //Toast.makeText(this, "fnBotonGanador True", Toast.LENGTH_LONG).show();
                 mnGrafica.setVisible(true);
                 mnVoto.setVisible(false);
                 txtFechaVotacion.setVisibility(View.INVISIBLE);
                 botonGanador.show();
             } else if(cffv.fnVerificarFechaHora(fechaWin,horaVotar,horaInicio)) {
-                //Toast.makeText(this, "fnBotonGanador Falso", Toast.LENGTH_LONG).show();
                 botonGanador.hide();
                 mnVoto.setVisible(true);
                 txtFechaVotacion.setVisibility(View.VISIBLE);

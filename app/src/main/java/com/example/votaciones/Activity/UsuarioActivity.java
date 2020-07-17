@@ -2,6 +2,7 @@ package com.example.votaciones.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -15,9 +16,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -34,6 +37,7 @@ import com.google.gson.Gson;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 import okhttp3.MediaType;
@@ -44,7 +48,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class UsuarioActivity extends AppCompatActivity {
-    private String carnet="";
+    private String carnet="",pass="";
     private final String SESION="VariabesDeSesion";
     private String fotoguardada;
 
@@ -57,6 +61,7 @@ public class UsuarioActivity extends AppCompatActivity {
         Map<String, ?> recuperarTexto = spSesion.getAll();
         if(!((Map) recuperarTexto).isEmpty()) {
             carnet=spSesion.getString("carnet", null);
+            pass=spSesion.getString("pass",null);
         }else
             Toast.makeText(this, "ERROR de sharedPreferences", Toast.LENGTH_SHORT).show();
 
@@ -124,7 +129,7 @@ public class UsuarioActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NotNull MenuItem item) {
         final EditText etinformacion = findViewById(R.id.etInformacion);
-        EditText etContrasena = findViewById(R.id.etContrasena);
+        final EditText etContrasena = findViewById(R.id.etContrasena);
         EditText etRepetirContrasena = findViewById(R.id.etRepetirContrasena);
         final EditText etFacebook = findViewById(R.id.etFacebook);
         final EditText etTwitter = findViewById(R.id.etTwitter);
@@ -142,25 +147,54 @@ public class UsuarioActivity extends AppCompatActivity {
                     }
                 }
                 if (contra){
-                    Usuario usuario=new Usuario("","","","",etContrasena.getText().toString(),carnet,"",fotoguardada,etinformacion.getText().toString(),true,"","",etTwitter.getText().toString(),etInstagram.getText().toString(),etFacebook.getText().toString(),false,"","","");
-                    Gson gson = new Gson();
-                    String JSON = gson.toJson(usuario);
-                    Log.e("API JSON", JSON);
-                    Call<Respuesta> user = ServicioApi.getInstancia(this).editarUsuario(usuario);
-                    user.enqueue(new Callback<Respuesta>() {
+                    Button btnCancelar,btnAceptar;
+                    final TextView txtPassword;
+                    AlertDialog.Builder builder=new AlertDialog.Builder(UsuarioActivity.this);
+                    LayoutInflater inflater=getLayoutInflater();
+                    View view =inflater.inflate(R.layout.confirmar_clave,null);
+                    btnCancelar=view.findViewById(R.id.btnCancelar);
+                    btnAceptar=view.findViewById(R.id.btnAceptar);
+                    txtPassword=view.findViewById(R.id.txtPassword);
+                    builder.setView(view);
+                    final AlertDialog dialog=builder.create();
+                    dialog.show();
+                    btnCancelar.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onResponse(Call<Respuesta> call, Response<Respuesta> response) {
-                            if(response.isSuccessful()){
-                                Toast.makeText(UsuarioActivity.this, "Cambios Guardados", Toast.LENGTH_SHORT).show();
-                            }else
-                                Toast.makeText(UsuarioActivity.this, "Sorry", Toast.LENGTH_SHORT).show();
-                        }
-                        @Override
-                        public void onFailure(Call<Respuesta> call, Throwable t) {
-                            Log.e("API", t.getMessage());
-                            Toast.makeText(UsuarioActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                        public void onClick(View v) {
+                            dialog.dismiss();
                         }
                     });
+                    btnAceptar.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if(txtPassword.getText().toString().isEmpty()){
+                                Toast.makeText(UsuarioActivity.this, "Ingrese la contraseña", Toast.LENGTH_SHORT).show();
+                            }else if(txtPassword.getText().toString().equals(pass)){
+                                Usuario usuario=new Usuario("","","","",md5(etContrasena.getText().toString())/*etContrasena.getText().toString()*/,carnet,"",fotoguardada,etinformacion.getText().toString(),true,"","",etTwitter.getText().toString(),etInstagram.getText().toString(),etFacebook.getText().toString(),false,"","","");
+                                Gson gson = new Gson();
+                                String JSON = gson.toJson(usuario);
+                                Log.e("API JSON", JSON);
+                                Call<Respuesta> user = ServicioApi.getInstancia(UsuarioActivity.this).editarUsuario(usuario);
+                                user.enqueue(new Callback<Respuesta>() {
+                                    @Override
+                                    public void onResponse(Call<Respuesta> call, Response<Respuesta> response) {
+                                        if(response.isSuccessful()){
+                                            Toast.makeText(UsuarioActivity.this, "Cambios Guardados", Toast.LENGTH_SHORT).show();
+                                            dialog.dismiss();
+                                        }else
+                                            Toast.makeText(UsuarioActivity.this, "Sorry", Toast.LENGTH_SHORT).show();
+                                    }
+                                    @Override
+                                    public void onFailure(Call<Respuesta> call, Throwable t) {
+                                        Log.e("API", t.getMessage());
+                                        Toast.makeText(UsuarioActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }else
+                                Toast.makeText(UsuarioActivity.this, "Contraseña equivocada", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
                 }
                 break;
             case R.id.mnCancelar:
@@ -220,7 +254,22 @@ public class UsuarioActivity extends AppCompatActivity {
         }
     }
 
-
+    public String md5(@NotNull String md5) {
+        try {
+            java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
+            byte[] array = md.digest(md5.getBytes("UTF-8"));
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < array.length; ++i) {
+                sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1,3));
+            }
+            return sb.toString();
+        } catch (java.security.NoSuchAlgorithmException e) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        } catch(UnsupportedEncodingException ex){
+            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+        return null;
+    }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);

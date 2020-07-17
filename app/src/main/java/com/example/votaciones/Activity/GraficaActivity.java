@@ -3,13 +3,10 @@ package com.example.votaciones.Activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.example.votaciones.R;
 import com.example.votaciones.objetos.Plancha;
-import com.example.votaciones.objetos.Planchas;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;

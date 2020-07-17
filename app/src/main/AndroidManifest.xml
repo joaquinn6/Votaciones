@@ -33,8 +33,7 @@
         <activity android:name=".Activity.InicioActivity" />
         <activity android:name=".Activity.UsuarioActivity" />
         <activity android:name=".Activity.MainActivity" />
-        <service android:name=".Class.IntentServiNotificacion"/>
-        <service android:name=".Class.ServicioNotificacion"/>
+
     </application>
 
 </manifest>

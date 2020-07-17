@@ -23,7 +23,6 @@ import com.example.votaciones.Api.ServicioApi;
 import com.example.votaciones.Class.WorMaNotificacion;
 import com.example.votaciones.R;
 import com.example.votaciones.RecyclerViews.RVAdaptadorVotar;
-import com.example.votaciones.objetos.Plancha;
 import com.example.votaciones.objetos.Planchas;
 import com.example.votaciones.objetos.Respuesta;
 import com.example.votaciones.objetos.Usuario;
@@ -83,30 +82,6 @@ public class VotarActivity extends AppCompatActivity {
 
         RecyclerView rvVotar= findViewById(R.id.rvVotar);
 
-        /*final Call<List<Planchas>> planchas= ServicioApi.getInstancia(this).obtenerPlanchas();
-        planchas.enqueue(new Callback<List<Planchas>>() {
-            @Override
-            public void onResponse(Call<List<Planchas>> call, Response<List<Planchas>> response) {
-                if (response.isSuccessful()){
-                    for(Planchas P : response.body()){
-                        planchasList.add(P);
-                    }
-                    Planchas votoNulo=new Planchas();
-                    votoNulo.setNombrePlancha("NULO");
-                    votoNulo.setColor("#f9f4f3");
-                    votoNulo.setAcronimo("NULO");
-                    planchasList.add(votoNulo);
-                    adapter.notifyDataSetChanged();
-                }
-                else
-                    Toast.makeText(VotarActivity.this, "Sorry", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onFailure(Call<List<Planchas>> call, Throwable t) {
-                Toast.makeText(VotarActivity.this, t.getMessage().toString(), Toast.LENGTH_SHORT).show();
-            }
-        });*/
         RVAdaptadorVotar.OnTouchListener onTouchListener=new RVAdaptadorVotar.OnTouchListener() {
             @Override
             public void OnTouch(int posicion, View view) {

@@ -26,11 +26,10 @@ public class ComprobarFechaHoraFinalVotaciones {
     public Boolean fnFechaInscripcion(String fechaFinInscrip){
         boolean check = false;
         Calendar fechaActual =Calendar.getInstance();
-        //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         fechaActual.set(Calendar.HOUR_OF_DAY,0);
         fechaActual.set(Calendar.MINUTE,0);
         fechaActual.set(Calendar.SECOND,0);
-        String fechaFinInscripcion=fechaFinInscrip;/*spFecha.getString("fechaVotar","");*/
+        String fechaFinInscripcion=fechaFinInscrip;
         try {
             Date strDate=sdf.parse(fechaFinInscripcion);
             if (fechaActual.getTime().after(strDate)){
@@ -45,24 +44,22 @@ public class ComprobarFechaHoraFinalVotaciones {
     public Boolean fnVerificarFechaHora(String fechaVota,String horaVota,String horaIni){
         boolean check = false;
         Calendar fechaActual =Calendar.getInstance();
-        //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date dateHoraVotar,dateHoraActual,dateHoraInicio;
         fechaActual.set(Calendar.HOUR_OF_DAY,0);
         fechaActual.set(Calendar.MINUTE,0);
         fechaActual.set(Calendar.SECOND,0);
-        SharedPreferences spFecha=context.getSharedPreferences(FECHA, MODE_PRIVATE);
-        String fechaWin=fechaVota;/*spFecha.getString("fechaVotar","");*/
+        //SharedPreferences spFecha=context.getSharedPreferences(FECHA, MODE_PRIVATE);
+        String fechaWin=fechaVota;
         try {
             Date strDate=sdf.parse(fechaWin);
             if (fechaActual.getTime().before(strDate)){
                 check=false;
             }else {
-                String horaVotar= horaVota/*spFecha.getString("horaVotar","")*/;
+                String horaVotar= horaVota;
                 String horaInicio=horaIni;
                 Calendar c = Calendar.getInstance();
                 String horaActual=c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE);
                 DateFormat df=new SimpleDateFormat("HH:mm");
-                //Toast.makeText(context, "Probando "+fechaActual.getTime().toString().equals(strDate.toString()), Toast.LENGTH_LONG).show();
                 if(fechaActual.getTime().toString().equals(strDate.toString())) {
                     try {
                         dateHoraVotar = df.parse(horaVotar);
@@ -92,35 +89,30 @@ public class ComprobarFechaHoraFinalVotaciones {
         fechaActual.set(Calendar.HOUR_OF_DAY,0);
         fechaActual.set(Calendar.MINUTE,0);
         fechaActual.set(Calendar.SECOND,0);
-        SharedPreferences spFecha=context.getSharedPreferences(FECHA, MODE_PRIVATE);
-        String fechaWin=fechaVota;//spFecha.getString("fechaVotar","");
+        //SharedPreferences spFecha=context.getSharedPreferences(FECHA, MODE_PRIVATE);
+        String fechaWin=fechaVota;
         try {
             Date strDate=sdf.parse(fechaWin);
             String stringFechaActual=fechaActual.getTime().toString();
             String stringStrDate=strDate.toString();
             if (fechaActual.getTime().after(strDate)){
                 if (stringFechaActual.equals(stringStrDate)) {
-                    //Toast.makeText(context, "Probando = es igual", Toast.LENGTH_SHORT).show();
-                    String horaVotar = horaVota;//spFecha.getString("horaVotar","");
+                    String horaVotar = horaVota;
                     Calendar c = Calendar.getInstance();
                     String horaActual = c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE);
                     DateFormat df = new SimpleDateFormat("HH:mm");
                     try {
                         dateHoraVotar = df.parse(horaVotar);
                         dateHoraActual = df.parse(horaActual);
-                        //Toast.makeText(context, dateHoraActual+">"+dateHoraVotar+"="+dateHoraActual.after(dateHoraVotar)+"|||"+dateHoraActual+"=="+dateHoraVotar+"="+dateHoraActual.equals(dateHoraVotar), Toast.LENGTH_SHORT).show();
                         if (dateHoraActual.after(dateHoraVotar) || dateHoraActual.equals(dateHoraVotar)) {
-                            //Toast.makeText(context, "True", Toast.LENGTH_SHORT).show();
                             check = true;
                         } else {
-                            //Toast.makeText(context, " Falso ", Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
                             check = false;
                         }
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
                 } else {
-                    //Toast.makeText(context, "Probando = no es igual", Toast.LENGTH_SHORT).show();
                     check = true;
                 }
 
@@ -143,8 +135,8 @@ public class ComprobarFechaHoraFinalVotaciones {
         fechaActual.set(Calendar.HOUR_OF_DAY,0);
         fechaActual.set(Calendar.MINUTE,0);
         fechaActual.set(Calendar.SECOND,0);
-        SharedPreferences spFecha=context.getSharedPreferences(FECHA, MODE_PRIVATE);
-        String fechaWin=fechaVota;//spFecha.getString("fechaVotar","");
+        //SharedPreferences spFecha=context.getSharedPreferences(FECHA, MODE_PRIVATE);
+        String fechaWin=fechaVota;
         try {
             Date strDate=sdf.parse(fechaWin);
             String stringFechaActual=fechaActual.getTime().toString();
@@ -155,29 +147,24 @@ public class ComprobarFechaHoraFinalVotaciones {
                 Calendar c = Calendar.getInstance();
                 String horaActual=c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE);
                 DateFormat df=new SimpleDateFormat("HH:mm");
-                //Toast.makeText(context, "Entre al dia", Toast.LENGTH_SHORT).show();
                 try {
                     dateHoraVotar=df.parse(horaVotar);
                     dateHoraActual=df.parse(horaActual);
                     if (dateHoraActual.equals(dateHoraVotar)){
-                        //Toast.makeText(context, dateHoraActual+" True "+dateHoraVotar, Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
                         check= true;
                     }else {
-                        //Toast.makeText(context, dateHoraActual+" Falso "+dateHoraVotar, Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG+Toast.LENGTH_LONG).show();
                         check= false;
                     }
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
             }else {
-                //Toast.makeText(context, strDate+" |Sali| "+fechaActual.getTime(), Toast.LENGTH_LONG).show();
                 check= false;
             }
 
         } catch (ParseException e) {
             Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();;
         }
-        //Toast.makeText(context, "Aqui en fnDiaHoraLlego "+check, Toast.LENGTH_LONG).show();
 
         return check;
     }

@@ -15,18 +15,10 @@ import android.widget.Toast;
 
 import com.example.votaciones.Api.ServicioApi;
 import com.example.votaciones.Class.ComprobarFechaHoraFinalVotaciones;
-import com.example.votaciones.Class.IntentServiNotificacion;
-import com.example.votaciones.Class.ServicioNotificacion;
 import com.example.votaciones.R;
 import com.example.votaciones.objetos.Configuracion;
 import com.example.votaciones.objetos.Token;
-import com.example.votaciones.Class.VerificarFechaSegundoPlano;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Map;
 
 import retrofit2.Call;
