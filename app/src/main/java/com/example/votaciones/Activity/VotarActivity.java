@@ -47,7 +47,7 @@ public class VotarActivity extends AppCompatActivity {
     private Usuario usuario;
     private final String SESION="VariabesDeSesion";
     public String fechaVotar, horaVotar;
-
+    private boolean voto =false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,78 +124,81 @@ public class VotarActivity extends AppCompatActivity {
                 case DragEvent.ACTION_DRAG_ENTERED:
                     break;
                 case DragEvent.ACTION_DROP:
-                    final View view = (View) event.getLocalState();
-                    final Call<Respuesta> respuestaCall = ServicioApi.getInstancia(VotarActivity.this).verficarVotante(usuario);
-                    respuestaCall.enqueue(new Callback<Respuesta>() {
-                        @Override
-                        public void onResponse(Call<Respuesta> call, Response<Respuesta> response) {
-                            if(response.isSuccessful()){
-                                if(response.body().isPermitir()){
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(VotarActivity.this);
-                                    builder.setTitle("Voto");
-                                    builder.setMessage("¿Está seguro que desea votar por esta plancha?");
-                                    builder.setNegativeButton("Cancelar",null);
-                                    builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                            Call<Respuesta> respuestaCall= ServicioApi.getInstancia(VotarActivity.this).votar(new Voto("",planchasList.get(Position).getNombrePlancha()));
-                                            respuestaCall.enqueue(new Callback<Respuesta>() {
-                                                @Override
-                                                public void onResponse(Call<Respuesta> call, Response<Respuesta> response) {
-                                                    if(response.isSuccessful()){
-                                                        if(response.body().isPermitir()){
-                                                            Call<String> stringCall = ServicioApi.getInstancia(VotarActivity.this).votante(usuario);
-                                                            stringCall.enqueue(new Callback<String>() {
-                                                                @Override
-                                                                public void onResponse(Call<String> call, Response<String> response) {
-                                                                    if (response.isSuccessful()){
-                                                                        /*Llamar noti*/
-                                                                        createNotificaionChannel();
-                                                                        noti(fechaVotar,horaVotar);
-                                                                        /*fin llamar noti*/
-                                                                        Toast.makeText(VotarActivity.this, "Gracias por votar", Toast.LENGTH_SHORT).show();
-                                                                        Intent intent = new Intent(VotarActivity.this, InicioActivity.class);
-                                                                        intent.putExtra("carnet", carnet);
-                                                                        startActivity(intent);
-                                                                        finish();
-                                                                    }else
-                                                                        Toast.makeText(VotarActivity.this, "No se pudo realizar el voto, intente de nuevo por favor.", Toast.LENGTH_SHORT).show();
-                                                                }
+                    if (!voto){
+                        final View view = (View) event.getLocalState();
+                        final Call<Respuesta> respuestaCall = ServicioApi.getInstancia(VotarActivity.this).verficarVotante(usuario);
+                        respuestaCall.enqueue(new Callback<Respuesta>() {
+                            @Override
+                            public void onResponse(Call<Respuesta> call, Response<Respuesta> response) {
+                                if(response.isSuccessful()){
+                                    if(response.body().isPermitir()){
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(VotarActivity.this);
+                                        builder.setTitle("Voto");
+                                        builder.setMessage("¿Está seguro que desea votar por esta plancha?");
+                                        builder.setNegativeButton("Cancelar",null);
+                                        builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                voto=true;
+                                                Call<Respuesta> respuestaCall= ServicioApi.getInstancia(VotarActivity.this).votar(new Voto("",planchasList.get(Position).getNombrePlancha()));
+                                                respuestaCall.enqueue(new Callback<Respuesta>() {
+                                                    @Override
+                                                    public void onResponse(Call<Respuesta> call, Response<Respuesta> response) {
+                                                        if(response.isSuccessful()){
+                                                            if(response.body().isPermitir()){
+                                                                Call<String> stringCall = ServicioApi.getInstancia(VotarActivity.this).votante(usuario);
+                                                                stringCall.enqueue(new Callback<String>() {
+                                                                    @Override
+                                                                    public void onResponse(Call<String> call, Response<String> response) {
+                                                                        if (response.isSuccessful()){
+                                                                            /*Llamar noti*/
+                                                                            createNotificaionChannel();
+                                                                            noti(fechaVotar,horaVotar);
+                                                                            /*fin llamar noti*/
+                                                                            Toast.makeText(VotarActivity.this, "Gracias por votar", Toast.LENGTH_SHORT).show();
+                                                                            Intent intent = new Intent(VotarActivity.this, InicioActivity.class);
+                                                                            intent.putExtra("carnet", carnet);
+                                                                            startActivity(intent);
+                                                                            finish();
+                                                                        }else
+                                                                            Toast.makeText(VotarActivity.this, "No se pudo realizar el voto, intente de nuevo por favor.", Toast.LENGTH_SHORT).show();
+                                                                    }
 
-                                                                @Override
-                                                                public void onFailure(Call<String> call, Throwable t) {
-                                                                    Toast.makeText(VotarActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
-                                                                }
-                                                            });
-                                                        }else
-                                                            Toast.makeText(VotarActivity.this, "No se pudo realizar el voto, intente de nuevo por favor.", Toast.LENGTH_SHORT).show();
-                                                    }else {
-                                                        Toast.makeText(VotarActivity.this, "Hubo algun problema, intente d enuevo mas tarde", Toast.LENGTH_SHORT).show();
+                                                                    @Override
+                                                                    public void onFailure(Call<String> call, Throwable t) {
+                                                                        Toast.makeText(VotarActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                    }
+                                                                });
+                                                            }else
+                                                                Toast.makeText(VotarActivity.this, "No se pudo realizar el voto, intente de nuevo por favor.", Toast.LENGTH_SHORT).show();
+                                                        }else {
+                                                            Toast.makeText(VotarActivity.this, "Hubo algun problema, intente d enuevo mas tarde", Toast.LENGTH_SHORT).show();
+                                                        }
                                                     }
-                                                }
 
-                                                @Override
-                                                public void onFailure(Call<Respuesta> call, Throwable t) {
-                                                    Toast.makeText(VotarActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
-                                        }
-                                    });
-                                    AlertDialog dialog = builder.create();
-                                    dialog.show();
+                                                    @Override
+                                                    public void onFailure(Call<Respuesta> call, Throwable t) {
+                                                        Toast.makeText(VotarActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                            }
+                                        });
+                                        AlertDialog dialog = builder.create();
+                                        dialog.show();
+                                    }else {
+                                        Toast.makeText(VotarActivity.this, response.body().getError(), Toast.LENGTH_SHORT).show();
+                                    }
                                 }else {
-                                    Toast.makeText(VotarActivity.this, response.body().getError(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(VotarActivity.this, "Error al verificar", Toast.LENGTH_SHORT).show();
                                 }
-                            }else {
-                                Toast.makeText(VotarActivity.this, "Error al verificar", Toast.LENGTH_SHORT).show();
                             }
-                        }
 
-                        @Override
-                        public void onFailure(Call<Respuesta> call, Throwable t) {
-                            Toast.makeText(VotarActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                            @Override
+                            public void onFailure(Call<Respuesta> call, Throwable t) {
+                                Toast.makeText(VotarActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
                     break;
             }
             return true;

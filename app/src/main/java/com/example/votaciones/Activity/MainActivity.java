@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
     String fechaFinInscrip;
     private Usuario usuarioPreLogin;
 
-    public String userRole="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +68,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(!(etCarnet.getText().toString().isEmpty() || etContrasena.getText().toString().isEmpty())){
+                    SharedPreferences.Editor editor = getSharedPreferences(SESION, MODE_PRIVATE).edit();
+                    editor.clear();
+                    editor.apply();
+                    editor.commit();
                     PreLogin(etCarnet.getText().toString(),md5(etContrasena.getText().toString()));
                 }
             }
@@ -111,10 +114,6 @@ public class MainActivity extends AppCompatActivity {
                     if(res.isPermitir()) {
                         token.setUsarname(carnet);
                         token.setPassword(password);
-                        SharedPreferences.Editor editor = getSharedPreferences(SESION, MODE_PRIVATE).edit();
-                        editor.clear();
-                        editor.apply();
-                        editor.commit();
                         IniciarSesion();
                     }else{
                         Toast.makeText(MainActivity.this, res.getError(), Toast.LENGTH_SHORT).show();
@@ -269,50 +268,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     /*Fin Dialog*/
-    /*Creando Notificacion y canal INICIO*/
-    private void createNotificaionChannel(){
-        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
-            CharSequence name="CHANNEL";
-            String description="Canal de Notificaciones";
-            int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel channel =new NotificationChannel("Winner",name,importance);
-            channel.setDescription(description);
-            //channel.setImportance(NotificationManager.IMPORTANCE_HIGH);
-            NotificationManager notificationManager=getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
-    }
-    private void noti(String fechaVotar, String llegaHora) {
-
-            int hh = Integer.parseInt(llegaHora.split(":")[0]);
-            int mm = Integer.parseInt(llegaHora.split(":")[1]);
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            Calendar fecha = Calendar.getInstance();
-            try {
-                fecha.setTime(sdf.parse(fechaVotar));
-                fecha.set(Calendar.HOUR, hh);
-                fecha.set(Calendar.MINUTE, mm);
-                //Toast.makeText(this, "Entre " + fecha.getTime(), Toast.LENGTH_SHORT).show();
-                String tag = generateKey();
-                Long alertaTime = fecha.getTimeInMillis() - System.currentTimeMillis();
-                int rand = (int) (Math.random() * 50 + 1);
-                Data data = fnGuardarData("Work Manager", "Soy un detalle", rand);
-                WorMaNotificacion.fnGuardarNoti(alertaTime, data, tag,MainActivity.this);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
-    }
-    private String generateKey(){
-        return UUID.randomUUID().toString();
-    }
-    private Data fnGuardarData(String titulo, String detalle, int idNoti){
-        return new Data.Builder()
-                .putString("titulo",titulo)
-                .putString("detalle",detalle)
-                .putInt("idNoti",idNoti).build();
-    }
-    /*FIN Noti*/
     /*Inicio para Extraer el role INICIO*/
     public String decoded(String JWTEncoded) throws Exception {
         String res="";

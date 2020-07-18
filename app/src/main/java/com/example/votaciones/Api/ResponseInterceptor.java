@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
-import com.example.votaciones.Activity.GraficaActivity;
 import com.example.votaciones.Activity.MainActivity;
 
 import java.io.IOException;

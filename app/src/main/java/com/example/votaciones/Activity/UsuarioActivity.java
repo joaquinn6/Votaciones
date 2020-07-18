@@ -182,7 +182,7 @@ public class UsuarioActivity extends AppCompatActivity {
                                             Toast.makeText(UsuarioActivity.this, "Cambios Guardados", Toast.LENGTH_SHORT).show();
                                             dialog.dismiss();
                                         }else
-                                            Toast.makeText(UsuarioActivity.this, "Sorry", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(UsuarioActivity.this, "Hubo un error, por favor intentar nuevamente", Toast.LENGTH_SHORT).show();
                                     }
                                     @Override
                                     public void onFailure(Call<Respuesta> call, Throwable t) {
@@ -191,7 +191,7 @@ public class UsuarioActivity extends AppCompatActivity {
                                     }
                                 });
                             }else
-                                Toast.makeText(UsuarioActivity.this, "Contraseña equivocada", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(UsuarioActivity.this, "Contraseña Incorrecta", Toast.LENGTH_SHORT).show();
                         }
                     });
 
