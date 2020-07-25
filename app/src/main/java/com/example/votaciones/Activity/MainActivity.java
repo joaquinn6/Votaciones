@@ -2,13 +2,9 @@ package com.example.votaciones.Activity;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.work.Data;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
 import android.view.LayoutInflater;
@@ -21,7 +17,6 @@ import android.widget.Toast;
 
 import com.example.votaciones.Api.ServicioApi;
 import com.example.votaciones.Class.ComprobarFechaHoraFinalVotaciones;
-import com.example.votaciones.Class.WorMaNotificacion;
 import com.example.votaciones.R;
 import com.example.votaciones.objetos.Configuracion;
 import com.example.votaciones.objetos.Respuesta;
@@ -31,10 +26,6 @@ import com.example.votaciones.objetos.Usuario;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.UnsupportedEncodingException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.UUID;
 
 
 import retrofit2.Call;
@@ -50,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     public String FECHA="FechaGanador";
     private EditText etCarnet;
     private EditText etContrasena;
+    private TextView tvOlvide;
     private ComprobarFechaHoraFinalVotaciones cffv;
     String fechaFinInscrip;
     private Usuario usuarioPreLogin;
@@ -58,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        tvOlvide=findViewById(R.id.tvOlvide);
         cffv=new ComprobarFechaHoraFinalVotaciones(this);
         etCarnet = findViewById(R.id.etCarnet);
         etContrasena = findViewById(R.id.etContrasena);
@@ -83,6 +75,46 @@ public class MainActivity extends AppCompatActivity {
 
                 intent[0] = new Intent(MainActivity.this, CrearUsuarioActivity.class);
                 startActivity(intent[0]);
+            }
+        });
+        tvOlvide.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Button btnCancelar,btnAceptar;
+                final EditText edCarnet;
+                final TextView txtCorreo;
+                AlertDialog.Builder builder=new AlertDialog.Builder(MainActivity.this);
+                LayoutInflater inflater=getLayoutInflater();
+                View view =inflater.inflate(R.layout.layout_recuperar,null);
+                btnCancelar=view.findViewById(R.id.btnCancelar);
+                btnAceptar=view.findViewById(R.id.btnAceptar);
+                txtCorreo=view.findViewById(R.id.txtCorreo);
+                edCarnet=view.findViewById(R.id.edCarnet);
+                builder.setView(view);
+                final AlertDialog dialog=builder.create();
+                dialog.show();
+                btnCancelar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                btnAceptar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(edCarnet.getText().toString().isEmpty()){
+                            Toast.makeText(MainActivity.this, "Ingrese su carnet", Toast.LENGTH_SHORT).show();
+                        }else {
+                        try {
+                            Thread.sleep(3000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        txtCorreo.setText("El correo fue enviado");
+                        edCarnet.setText("");
+                        }
+                    }
+                });
             }
         });
     }

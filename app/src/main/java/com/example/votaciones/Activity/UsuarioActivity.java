@@ -154,7 +154,7 @@ public class UsuarioActivity extends AppCompatActivity {
                     View view =inflater.inflate(R.layout.confirmar_clave,null);
                     btnCancelar=view.findViewById(R.id.btnCancelar);
                     btnAceptar=view.findViewById(R.id.btnAceptar);
-                    txtPassword=view.findViewById(R.id.txtPassword);
+                    txtPassword=view.findViewById(R.id.edCarnet);
                     builder.setView(view);
                     final AlertDialog dialog=builder.create();
                     dialog.show();

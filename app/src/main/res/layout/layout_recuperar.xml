@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
-        android:text="Confirmar Contraseña"
+        android:text="¿Olvidaste tu contraseña?"
         android:textColor="#ffff"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -26,8 +26,18 @@
         android:layout_marginTop="30dp"
         android:layout_weight="1"
         android:ems="10"
-        android:hint="Password"
-        android:inputType="textPersonName|textPassword" />
+        android:hint="Carnet"
+        android:inputType="textPersonName" />
+
+
+    <TextView
+        android:id="@+id/txtCorreo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:text="Se le enviara un correo para restablecer su contraseña"
+        android:textColor="@color/colorPrimary" />
 
     <LinearLayout
         android:layout_width="match_parent"
