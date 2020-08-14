@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.votaciones.Api.Servicio;
 import com.example.votaciones.Api.ServicioApi;
 import com.example.votaciones.Class.ComprobarFechaHoraFinalVotaciones;
 import com.example.votaciones.R;
@@ -22,10 +23,20 @@ import com.example.votaciones.objetos.Configuracion;
 import com.example.votaciones.objetos.Respuesta;
 import com.example.votaciones.objetos.Token;
 import com.example.votaciones.objetos.Usuario;
+import com.google.android.material.textfield.TextInputEditText;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
 
 
 import retrofit2.Call;
@@ -40,7 +51,8 @@ public class MainActivity extends AppCompatActivity {
     private final Intent[] intent = new Intent[1];
     public String FECHA="FechaGanador";
     private EditText etCarnet;
-    private EditText etContrasena;
+    //private EditText etContrasena;
+    private TextInputEditText etContrasena;
     private TextView tvOlvide;
     private ComprobarFechaHoraFinalVotaciones cffv;
     String fechaFinInscrip;
@@ -99,22 +111,45 @@ public class MainActivity extends AppCompatActivity {
                         dialog.dismiss();
                     }
                 });
+                /*Restablecer contrasenia*/
                 btnAceptar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if(edCarnet.getText().toString().isEmpty()){
                             Toast.makeText(MainActivity.this, "Ingrese su carnet", Toast.LENGTH_SHORT).show();
                         }else {
-                        try {
+                            Usuario userOlvidoPass=new Usuario("","","","","",edCarnet.getText().toString(),"","","",true,"","","","","",false,"","","");
+                            final Call<Respuesta> resp= ServicioApi.getInstancia(MainActivity.this).Restablecer_Contrasenia(userOlvidoPass);
+                            resp.enqueue(new Callback<Respuesta>() {
+                                @Override
+                                public void onResponse(Call<Respuesta> call, Response<Respuesta> response) {
+                                    if (response.isSuccessful()){
+                                        if (response.body().isPermitir()){
+                                            Toast.makeText(MainActivity.this, "Se ha enviado un mensaje a su correo estudiantil", Toast.LENGTH_SHORT).show();
+                                            dialog.dismiss();
+                                        }
+                                        else {
+                                            txtCorreo.setText(response.body().getError());
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<Respuesta> call, Throwable t) {
+                                    Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            /*try {
                             Thread.sleep(3000);
-                        } catch (InterruptedException e) {
+                            } catch (InterruptedException e) {
                             e.printStackTrace();
-                        }
+                            }*/
                         txtCorreo.setText("El correo fue enviado");
                         edCarnet.setText("");
                         }
                     }
                 });
+                /*Fin Restablecer*/
             }
         });
     }
@@ -318,4 +353,5 @@ public class MainActivity extends AppCompatActivity {
         return new String(decodedBytes, "UTF-8");
     }
     /*Fin Role*/
+
 }

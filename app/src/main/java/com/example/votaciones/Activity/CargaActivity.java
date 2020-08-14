@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.votaciones.Api.ServicioApi;
@@ -19,6 +20,12 @@ import com.example.votaciones.R;
 import com.example.votaciones.objetos.Configuracion;
 import com.example.votaciones.objetos.Token;
 
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -142,5 +149,4 @@ public class CargaActivity extends AppCompatActivity {
             notificationManager.createNotificationChannel(channel);
         }
     }
-
 }

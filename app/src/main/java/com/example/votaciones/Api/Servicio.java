@@ -61,5 +61,7 @@ public interface Servicio {
     @POST("api/usuario/IniciarSesion")
     Call<Respuesta> VerificarPreInicio(@Body Usuario usuario);
 
+    @POST("api/usuario/restablecerContrasenia")
+    Call<Respuesta> Restablecer_Contrasenia(@Body Usuario usuario);
 
 }

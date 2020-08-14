@@ -149,12 +149,13 @@ public class UsuarioActivity extends AppCompatActivity {
                 if (contra){
                     Button btnCancelar,btnAceptar;
                     final TextView txtPassword;
+
                     AlertDialog.Builder builder=new AlertDialog.Builder(UsuarioActivity.this);
                     LayoutInflater inflater=getLayoutInflater();
                     View view =inflater.inflate(R.layout.confirmar_clave,null);
                     btnCancelar=view.findViewById(R.id.btnCancelar);
                     btnAceptar=view.findViewById(R.id.btnAceptar);
-                    txtPassword=view.findViewById(R.id.edCarnet);
+                    txtPassword=view.findViewById(R.id.edContrasena);
                     builder.setView(view);
                     final AlertDialog dialog=builder.create();
                     dialog.show();

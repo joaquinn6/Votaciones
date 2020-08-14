@@ -34,7 +34,12 @@ import com.github.pwittchen.swipe.library.rx2.Swipe;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.Serializable;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import retrofit2.Call;
@@ -332,4 +337,5 @@ public class InicioActivity extends AppCompatActivity {
         rvPlanchas.setLayoutManager(manager);
         rvPlanchas.setAdapter(adapter);
     }
+
 }
