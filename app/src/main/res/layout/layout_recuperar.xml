@@ -36,7 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:gravity="center"
-        android:text="Se le enviara un correo para restablecer su contraseña"
+        android:text="Se le enviará un correo para restablecer su contraseña"
         android:textColor="@color/colorPrimary" />
 
     <LinearLayout

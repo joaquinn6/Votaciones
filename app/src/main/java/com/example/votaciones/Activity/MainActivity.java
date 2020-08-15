@@ -61,6 +61,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences.Editor editor = getSharedPreferences(SESION, MODE_PRIVATE).edit();
+        editor.clear();
+        editor.apply();
+        editor.commit();
         setContentView(R.layout.activity_main);
         tvOlvide=findViewById(R.id.tvOlvide);
         cffv=new ComprobarFechaHoraFinalVotaciones(this);
@@ -72,10 +76,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(!(etCarnet.getText().toString().isEmpty() || etContrasena.getText().toString().isEmpty())){
-                    SharedPreferences.Editor editor = getSharedPreferences(SESION, MODE_PRIVATE).edit();
-                    editor.clear();
-                    editor.apply();
-                    editor.commit();
                     PreLogin(etCarnet.getText().toString(),md5(etContrasena.getText().toString()));
                 }
             }
