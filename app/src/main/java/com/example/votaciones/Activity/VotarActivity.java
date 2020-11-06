@@ -140,7 +140,7 @@ public class VotarActivity extends AppCompatActivity {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
                                                 voto=true;
-                                                Call<Respuesta> respuestaCall= ServicioApi.getInstancia(VotarActivity.this).votar(new Voto("",planchasList.get(Position).getNombrePlancha()));
+                                                Call<Respuesta> respuestaCall= ServicioApi.getInstancia(VotarActivity.this).votar(new Voto(planchasList.get(Position).getId(),planchasList.get(Position).getNombrePlancha()));
                                                 respuestaCall.enqueue(new Callback<Respuesta>() {
                                                     @Override
                                                     public void onResponse(Call<Respuesta> call, Response<Respuesta> response) {
@@ -172,7 +172,7 @@ public class VotarActivity extends AppCompatActivity {
                                                             }else
                                                                 Toast.makeText(VotarActivity.this, "No se pudo realizar el voto, intente de nuevo por favor.", Toast.LENGTH_SHORT).show();
                                                         }else {
-                                                            Toast.makeText(VotarActivity.this, "Hubo algun problema, intente d enuevo mas tarde", Toast.LENGTH_SHORT).show();
+                                                            Toast.makeText(VotarActivity.this, "Hubo algun problema, intente de nuevo mas tarde", Toast.LENGTH_SHORT).show();
                                                         }
                                                     }
 

@@ -168,4 +168,26 @@ public class ComprobarFechaHoraFinalVotaciones {
 
         return check;
     }
+    public Boolean fnAntesInscripcion(String fechaInscripcion){
+        boolean check = false;
+        Calendar fechaActual =Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        //Date dateHoraVotar,dateHoraActual;
+        fechaActual.set(Calendar.HOUR_OF_DAY,0);
+        fechaActual.set(Calendar.MINUTE,0);
+        fechaActual.set(Calendar.SECOND,0);
+        //SharedPreferences spFecha=context.getSharedPreferences(FECHA, MODE_PRIVATE);
+        String fechaWin=fechaInscripcion;
+        try {
+            Date strDate=sdf.parse(fechaWin);
+            if (fechaActual.getTime().before(strDate)){
+                check =true;
+            }
+            else check =false;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return check;
+    }
+    
 }

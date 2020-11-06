@@ -225,6 +225,7 @@ public class MainActivity extends AppCompatActivity {
                                         String horaFinalVota = confi.getHoraFinVotaciones();
                                         String fechaFinInscrip = confi.getFechaInscripcionFin().split("T")[0];
                                         String horaInicioVota = confi.getHoraInicioVotaciones();
+                                        String fechaIniInscripcion=confi.getFechaInscripcionInicio().split("T")[0] ;
                                         SharedPreferences sp = getSharedPreferences(FECHA, MODE_PRIVATE);
                                         SharedPreferences.Editor edit = sp.edit();
                                         edit.putString("fechaVotar", fechaVotar);
@@ -238,37 +239,41 @@ public class MainActivity extends AppCompatActivity {
                                         //noti(fechaVotar, horaFinalVota);
                                         //startService(new Intent(MainActivity.this, ServicioNotificacion.class));
                                         //inicio
-                                        if (cffv.fnFechaInscripcion(fechaFinInscrip)) {
-                                            if (cffv.fnMostrarGanador(fechaVotar, horaFinalVota)) {
-                                                SharedPreferences.Editor editor = getSharedPreferences(SESION, MODE_PRIVATE).edit();
-                                                editor.putString("carnet", etCarnet.getText().toString());
-                                                editor.putString("pass",etContrasena.getText().toString());
-                                                editor.putString("token", tokenResponse.getToken());
-                                                editor.apply();
-                                                intent[0] = new Intent(MainActivity.this, GanadorActivity.class);
-                                                //Intent is used to switch from one activity to another.
-                                                //i.putExtra("carnet", usuario.getCarnet());
-                                                startActivity(intent[0]);
-                                                //invoke the SecondActivity.
+                                        if (cffv.fnAntesInscripcion(fechaIniInscripcion)){
+                                            String[] fe=fechaIniInscripcion.split("-");
+                                            dialogInscripcion("Bienvenido, en este momento no hay acceso debido a que no a empezado la etapa de inscripción de planchas, vuelva el día  " + fe[2]+"-"+fe[1]+"-"+fe[0] + ".");
+                                        }else {
+                                            if (cffv.fnFechaInscripcion(fechaFinInscrip)) {
+                                                if (cffv.fnMostrarGanador(fechaVotar, horaFinalVota)) {
+                                                    SharedPreferences.Editor editor = getSharedPreferences(SESION, MODE_PRIVATE).edit();
+                                                    editor.putString("carnet", etCarnet.getText().toString());
+                                                    editor.putString("pass", etContrasena.getText().toString());
+                                                    editor.putString("token", tokenResponse.getToken());
+                                                    editor.apply();
+                                                    intent[0] = new Intent(MainActivity.this, GanadorActivity.class);
+                                                    //Intent is used to switch from one activity to another.
+                                                    //i.putExtra("carnet", usuario.getCarnet());
+                                                    startActivity(intent[0]);
+                                                    //invoke the SecondActivity.
 
-                                                finish();
-                                                //the current activity will get finished.
+                                                    finish();
+                                                    //the current activity will get finished.
+                                                } else {
+                                                    SharedPreferences.Editor editor = getSharedPreferences(SESION, MODE_PRIVATE).edit();
+                                                    editor.putString("carnet", etCarnet.getText().toString());
+                                                    editor.putString("pass", etContrasena.getText().toString());
+                                                    editor.putString("token", tokenResponse.getToken());
+                                                    editor.apply();
+
+                                                    intent[0] = new Intent(MainActivity.this, InicioActivity.class);
+                                                    startActivity(intent[0]);
+                                                    finish();
+                                                }
                                             } else {
-                                                SharedPreferences.Editor editor = getSharedPreferences(SESION, MODE_PRIVATE).edit();
-                                                editor.putString("carnet", etCarnet.getText().toString());
-                                                editor.putString("pass",etContrasena.getText().toString());
-                                                editor.putString("token", tokenResponse.getToken());
-                                                editor.apply();
-
-                                                intent[0] = new Intent(MainActivity.this, InicioActivity.class);
-                                                startActivity(intent[0]);
-                                                finish();
+                                                String[] fe = fechaFinInscrip.split("-");
+                                                dialogInscripcion("Bienvenido, en este momento no hay acceso debido a que estamos en etapa de inscripción de planchas, vuelva el día  " + fe[2] + "-" + fe[1] + "-" + fe[0] + ".");
                                             }
-                                        } else {
-                                            String[] fe=fechaFinInscrip.split("-");
-                                            dialogInscripcion("Bienvenido, en este momento no hay acceso debido a que estamos en etapa de inscripción de planchas, vuelva el día  " + fe[2]+"-"+fe[1]+"-"+fe[0] + ".");
                                         }
-
 
                                     }
                                 }

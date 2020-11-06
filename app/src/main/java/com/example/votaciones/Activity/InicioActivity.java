@@ -23,6 +23,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.votaciones.Api.ServicioApi;
 import com.example.votaciones.Class.ComprobarFechaHoraFinalVotaciones;
 import com.example.votaciones.R;
@@ -30,6 +31,7 @@ import com.example.votaciones.RecyclerViews.RvAdaptadorPlancha;
 import com.example.votaciones.objetos.Integrante;
 import com.example.votaciones.objetos.Plancha;
 import com.example.votaciones.objetos.Planchas;
+import com.example.votaciones.objetos.Usuario;
 import com.github.pwittchen.swipe.library.rx2.Swipe;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -41,6 +43,7 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -59,12 +62,14 @@ public class InicioActivity extends AppCompatActivity {
     String fechaWin,horaVotar,horaInicio;
     TextView txtFechaVotacion;
     Menu menuRecargar=null;
+    private Boolean voto=false;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio);
+        validarVoto();
         SharedPreferences spFecha=getSharedPreferences(FECHA, MODE_PRIVATE);
         fechaWin=spFecha.getString("fechaVotar","");
         horaVotar=spFecha.getString("horaVotar","");
@@ -121,6 +126,10 @@ public class InicioActivity extends AppCompatActivity {
             else
                 mnGrafica.setVisible(false);
         }
+        if (voto){
+            mnGrafica.setVisible(true);
+        }else
+            mnGrafica.setVisible(false);
         menuRecargar=menu;
         return super.onCreateOptionsMenu(menu);
     }
@@ -201,9 +210,11 @@ public class InicioActivity extends AppCompatActivity {
         super.onResume();
         fnCargarRecyclerView();
         fnBotonGanador_Menu();
+        validarVoto();
     }
 
-    private void fnCargarRecyclerView() {fnCargando();
+    private void fnCargarRecyclerView() {
+        fnCargando();
         planchasList.clear();
         Bundle extras= getIntent().getExtras();
         if(extras!=null){
@@ -336,6 +347,32 @@ public class InicioActivity extends AppCompatActivity {
         GridLayoutManager manager = new GridLayoutManager(this, 1);
         rvPlanchas.setLayoutManager(manager);
         rvPlanchas.setAdapter(adapter);
+    }
+    private void validarVoto(){
+        String carnetLogeado="";
+
+        SharedPreferences spSesion=getSharedPreferences("VariabesDeSesion", MODE_PRIVATE);
+        Map<String, ?> recuperarTexto = spSesion.getAll();
+        if(!((Map) recuperarTexto).isEmpty()) {
+            carnetLogeado=spSesion.getString("carnet", null);
+        }else
+            Toast.makeText(this, "ERROR de sharedPreferences", Toast.LENGTH_SHORT).show();
+
+        Call<Usuario> usuarioCall = ServicioApi.getInstancia(this).obtenerUsuarioCarnet(carnetLogeado);
+        usuarioCall.enqueue(new Callback<Usuario>() {
+            @Override
+            public void onResponse(Call<Usuario> call, Response<Usuario> response) {
+                if(response.isSuccessful()){
+                    voto=response.body().isVoto();
+                }else
+                    Toast.makeText(InicioActivity.this, "succesful pero error", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<Usuario> call, Throwable t) {
+                Toast.makeText(InicioActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 }
