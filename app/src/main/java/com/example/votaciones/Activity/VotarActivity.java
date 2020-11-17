@@ -140,7 +140,7 @@ public class VotarActivity extends AppCompatActivity {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
                                                 voto=true;
-                                                Call<Respuesta> respuestaCall= ServicioApi.getInstancia(VotarActivity.this).votar(new Voto(planchasList.get(Position).getId(),planchasList.get(Position).getNombrePlancha()));
+                                                Call<Respuesta> respuestaCall= ServicioApi.getInstancia(VotarActivity.this).votar(new Voto(planchasList.get(Position).getId(),planchasList.get(Position).getColor()));
                                                 respuestaCall.enqueue(new Callback<Respuesta>() {
                                                     @Override
                                                     public void onResponse(Call<Respuesta> call, Response<Respuesta> response) {

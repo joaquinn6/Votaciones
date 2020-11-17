@@ -1,30 +1,29 @@
 package com.example.votaciones.objetos;
 
 public class Voto {
-    private String id;
-    private String nombrePlancha;
+    private String plancha;
+    private String color;
 
-    public Voto(String id, String nombrePlancha) {
-        this.id = id;
-        this.nombrePlancha = nombrePlancha;
+    public Voto(String idPlancha, String colorPlancha) {
+        this.color = colorPlancha;
+        this.plancha = idPlancha;
     }
-
     public Voto() {
     }
 
-    public String getId() {
-        return id;
+    public String getPlancha() {
+        return plancha;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public String getColor() {
+        return color;
     }
 
-    public String getNombrePlancha() {
-        return nombrePlancha;
+    public void setPlancha(String plancha) {
+        this.plancha = plancha;
     }
 
-    public void setNombrePlancha(String nombrePlancha) {
-        this.nombrePlancha = nombrePlancha;
+    public void setColor(String color) {
+        this.color = color;
     }
 }
