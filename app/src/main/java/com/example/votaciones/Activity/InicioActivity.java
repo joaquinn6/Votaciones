@@ -69,7 +69,7 @@ public class InicioActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio);
-        validarVoto();
+        //validarVoto();
         SharedPreferences spFecha=getSharedPreferences(FECHA, MODE_PRIVATE);
         fechaWin=spFecha.getString("fechaVotar","");
         horaVotar=spFecha.getString("horaVotar","");
@@ -111,6 +111,7 @@ public class InicioActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_inicial, menu);
         MenuItem mnVoto=menu.findItem(R.id.mnVoto);
         MenuItem mnGrafica=menu.findItem(R.id.mnGrafica);
+        validarVoto();
         if (cffv.fnVerificarFechaHora(fechaWin,horaVotar,horaInicio)){
             if(cffv.fnMostrarGanador(fechaWin,horaVotar)){
                 mnGrafica.setVisible(true);
@@ -208,9 +209,9 @@ public class InicioActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        validarVoto();
         fnCargarRecyclerView();
         fnBotonGanador_Menu();
-        validarVoto();
     }
 
     private void fnCargarRecyclerView() {

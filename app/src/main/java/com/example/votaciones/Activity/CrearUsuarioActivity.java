@@ -36,13 +36,13 @@ public class CrearUsuarioActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);etRepetirContrasena
         setContentView(R.layout.activity_crear_usuario);
 
         etCarnet = findViewById(R.id.etCarnet);
         etPin = findViewById(R.id.etPin);
         etContrasena = findViewById(R.id.etContrasena);
-        etRepetirC = findViewById(R.id.etRepetirContrasena);
+        etRepetirC = findViewById(R.id.);
         Button btnCrearUsuario = findViewById(R.id.btnSesion);
 
         btnCrearUsuario.setOnClickListener(new View.OnClickListener() {
