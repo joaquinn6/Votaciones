@@ -9,6 +9,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -111,7 +112,8 @@ public class InicioActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_inicial, menu);
         MenuItem mnVoto=menu.findItem(R.id.mnVoto);
         MenuItem mnGrafica=menu.findItem(R.id.mnGrafica);
-        validarVoto();
+        //validarVoto();
+        //fnBotonGanador_Menu();
         if (cffv.fnVerificarFechaHora(fechaWin,horaVotar,horaInicio)){
             if(cffv.fnMostrarGanador(fechaWin,horaVotar)){
                 mnGrafica.setVisible(true);
@@ -129,8 +131,45 @@ public class InicioActivity extends AppCompatActivity {
         }
         if (voto){
             mnGrafica.setVisible(true);
-        }else
+            mnVoto.setVisible(false);
+        }else{
             mnGrafica.setVisible(false);
+            mnVoto.setVisible(true);
+        }
+        /**/
+        String carnetLogeado="";
+        SharedPreferences spSesion=getSharedPreferences("VariabesDeSesion", MODE_PRIVATE);
+        Map<String, ?> recuperarTexto = spSesion.getAll();
+        if(!((Map) recuperarTexto).isEmpty()) {
+            carnetLogeado=spSesion.getString("carnet", null);
+        }else
+            Toast.makeText(this, "ERROR de sharedPreferences", Toast.LENGTH_SHORT).show();
+
+        Call<Usuario> usuarioCall = ServicioApi.getInstancia(this).obtenerUsuarioCarnet(carnetLogeado);
+        final MenuItem finalMnGrafica = mnGrafica;
+        final MenuItem finalMnVoto = mnVoto;
+        usuarioCall.enqueue(new Callback<Usuario>() {
+            @Override
+            public void onResponse(Call<Usuario> call, Response<Usuario> response) {
+                if(response.isSuccessful()){
+                    if (response.body().isVoto()){
+                        finalMnGrafica.setVisible(true);
+                        finalMnVoto.setVisible(false);
+                    }else{
+                        finalMnGrafica.setVisible(false);
+                        finalMnVoto.setVisible(true);
+                    }
+                }else
+                    Toast.makeText(InicioActivity.this, "succesful pero error", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<Usuario> call, Throwable t) {
+                Toast.makeText(InicioActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        /**/
+
         menuRecargar=menu;
         return super.onCreateOptionsMenu(menu);
     }
@@ -179,6 +218,8 @@ public class InicioActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
     private void fnBotonGanador_Menu(){
+        Context context=this;
+        validarVoto();
         MenuItem mnGrafica=null,mnVoto=null;
         if (menuRecargar!=null) {
             mnGrafica = menuRecargar.findItem(R.id.mnGrafica);
@@ -196,6 +237,47 @@ public class InicioActivity extends AppCompatActivity {
                 txtFechaVotacion.setVisibility(View.VISIBLE);
                 mnGrafica.setVisible(true);
             }
+            if (voto){
+                mnGrafica.setVisible(true);
+                mnVoto.setVisible(false);
+            }else{
+                mnGrafica.setVisible(false);
+                mnVoto.setVisible(true);
+            }
+            /**/
+            /*String carnetLogeado="";
+            SharedPreferences spSesion=getSharedPreferences("VariabesDeSesion", MODE_PRIVATE);
+            Map<String, ?> recuperarTexto = spSesion.getAll();
+            if(!((Map) recuperarTexto).isEmpty()) {
+                carnetLogeado=spSesion.getString("carnet", null);
+            }else
+                Toast.makeText(this, "ERROR de sharedPreferences", Toast.LENGTH_SHORT).show();
+
+            Call<Usuario> usuarioCall = ServicioApi.getInstancia(this).obtenerUsuarioCarnet(carnetLogeado);
+            final MenuItem finalMnGrafica = mnGrafica;
+            final MenuItem finalMnVoto = mnVoto;
+            usuarioCall.enqueue(new Callback<Usuario>() {
+                @Override
+                public void onResponse(Call<Usuario> call, Response<Usuario> response) {
+                    if(response.isSuccessful()){
+                        if (response.body().isVoto()){
+                            finalMnGrafica.setVisible(true);
+                            finalMnVoto.setVisible(false);
+                        }else{
+                            finalMnGrafica.setVisible(false);
+                            finalMnVoto.setVisible(true);
+                        }
+                    }else
+                        Toast.makeText(InicioActivity.this, "succesful pero error", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onFailure(Call<Usuario> call, Throwable t) {
+                    Toast.makeText(InicioActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+            /**/
+
         } else {
             if (cffv.fnMostrarGanador(fechaWin, horaVotar)) {
                 txtFechaVotacion.setVisibility(View.INVISIBLE);
@@ -204,12 +286,12 @@ public class InicioActivity extends AppCompatActivity {
                 botonGanador.hide();
                 txtFechaVotacion.setVisibility(View.VISIBLE);
             }
-        }    }
+        }
+    }
 
     @Override
     protected void onResume() {
         super.onResume();
-        validarVoto();
         fnCargarRecyclerView();
         fnBotonGanador_Menu();
     }
@@ -351,7 +433,6 @@ public class InicioActivity extends AppCompatActivity {
     }
     private void validarVoto(){
         String carnetLogeado="";
-
         SharedPreferences spSesion=getSharedPreferences("VariabesDeSesion", MODE_PRIVATE);
         Map<String, ?> recuperarTexto = spSesion.getAll();
         if(!((Map) recuperarTexto).isEmpty()) {
